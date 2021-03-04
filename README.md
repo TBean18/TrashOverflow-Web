@@ -17,11 +17,13 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-|AddUser.php | FirstName, LastName, Username, Password| error, id
-|Login.php | Username, Password | FirstName, LastName, id 
-| AddContact.php | Name, Phone, Email, UserID, Address | error
-| SearchContact.php | Search, UserID | `"results": [{ "Name", Phone":, "Email":, "Address":, "ID":}], "error":`
-| DeleteContact.php | ContactID | info, error
-| UpdateContact.php | Name, Phone, Email, Address, ID | error
+|Register.js | FirstName, LastName, Username, Password| id, error
+|Login.js | Username, Password | id, firstName, lastName, error
+| CreateHome.js | TBD | error
+| AddRoommate.js | TBD | error
+| AddChore.js | TBD | error
+| DeleteHome.js | TBD | error
+| DeleteRoomate.js | TBD | error
+| SearchUser.js | TBD | error
 
 ***

@@ -17,13 +17,16 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-|Register.js | FirstName, LastName, Username, Password| id, error
-|Login.js | Username, Password | id, firstName, lastName, error
+| Register.js | FirstName, LastName, Username, Password| id, error
+| Login.js | Username, Password | id, firstName, lastName, error
 | CreateHome.js | TBD | error
-| AddRoommate.js | TBD | error
-| AddChore.js | TBD | error
+| EditHome.js | TBD | error
 | DeleteHome.js | TBD | error
+| AddRoommate.js | TBD | error
+| EditRoomate.js | TBD | error
 | DeleteRoomate.js | TBD | error
-| SearchUser.js | TBD | error
+| AddChore.js | TBD | error
+| EditChore.js | TBD | error
+| DeleteChore.js | TBD | error
 
 ***

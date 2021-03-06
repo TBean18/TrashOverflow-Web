@@ -1,4 +1,4 @@
-# COP4331-LargeProject
+# COP4331-LargeProject - Trash Overflow
 
 ## Requirements
 - [ ] Email Verification
@@ -9,7 +9,15 @@
   - [ ] OAUTH
   - [ ] FireBase
   - [ ] Cognito
-
+- [ ] Invitation to HouseHold System
+  - [ ] Add / Remove Admins
+  - [ ] Creator is permanate Admin
+- [ ] Register / Log in
+- [ ] Creation of Households
+- [ ] Creation of Chores
+- [ ] Scheduleing of Chores
+  - [ ] Add / Remove User to Chores
+- [ ] Dark Mode
 
 ## API Endpoints (API Team Please Change)
 
@@ -25,3 +33,11 @@
 | UpdateContact.php | Name, Phone, Email, Address, ID | error
 
 ***
+
+## Strech Goals
+- [ ] Barcode scanner
+- [ ] QR Code Compleation
+- [ ] Link Invitation
+- [ ] Chore tracker / statistics 
+- [ ] Add to the End / Sprinkle Throughout system for adding users to groups
+- [ ] Hand over admin status

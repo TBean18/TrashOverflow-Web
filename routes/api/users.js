@@ -32,4 +32,15 @@ router.post('/', (req, res) => {
 });
 
 
+// ROUTE    GET api/users/login
+// DESC     GET Login User Info
+// ACCESS   Public
+router.get('/login', (req, res) => {
+    user.find({email: req.body.email, password_hash: req.body.password_hash})
+        .then(items => res.json(items))
+        .catch(err => console.log(err))
+});
+
+
+
 module.exports = router;

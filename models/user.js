@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
+const GroupPlaceHolder = require('./GroupPlaceHolder');
 const Schema = mongoose.Schema;
-
-const GroupPlaceHolder = new Schema({
-  group_ID: Schema.Types.ObjectID,
-  group_name: String
-})
 
 const UserSchema = new Schema({
   name:{
@@ -20,7 +16,8 @@ const UserSchema = new Schema({
   },
   email:{
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   email_verified:{
     type: Boolean,
@@ -31,11 +28,11 @@ const UserSchema = new Schema({
     default: Date.now
   },
   groups:{
-    type: [GroupPlaceHolder]
+    type: [GroupPlaceHolder.GroupPlaceHolderSchema]
   }
 
 })
 
 
-
-module.exports = User = mongoose.model('user', UserSchema);
+const User = mongoose.model('user', UserSchema); 
+module.exports = User;

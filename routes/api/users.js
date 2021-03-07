@@ -26,7 +26,7 @@ router.post('/register', (req, res) => {
     });
 
     newUser.save()
-        .then( item => res.json(item))
+        .then(item => res.json(item))
         .catch(err => console.log(err))
 
 });
@@ -36,8 +36,10 @@ router.post('/register', (req, res) => {
 // DESC     GET Login User Info
 // ACCESS   Public
 router.get('/login', (req, res) => {
-    user.find({email: req.body.email, password_hash: req.body.password_hash})
-        .then(items => res.json(items))
+    user.find({
+        email : req.body.email,
+        password_hash : req.body.password_hash
+    })  .then(items => res.json(items))
         .catch(err => console.log(err))
 });
 

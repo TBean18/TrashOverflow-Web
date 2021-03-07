@@ -25,8 +25,8 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-| Register.js | FirstName, LastName, Username, Password| id, error
-| Login.js | Username, Password | id, firstName, lastName, error
+| users/register | FirstName, LastName, Username, Password| id, error
+| users/login | Username, Password | id, firstName, lastName, error
 | CreateHome.js | TBD | error
 | EditHome.js | TBD | error
 | DeleteHome.js | TBD | error

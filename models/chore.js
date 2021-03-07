@@ -2,22 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const GroupMember = require('./groupMember');
 
-const ScheduleSchema = new Schema({
-  schedule_due_date: Date,
-  schedule_user_rotation_type: {
-    type: String,
-    default: 'iterate'
-  },
-  schedule_recurrence_type: {
-    type: String,
-    default: 'weekly'
-  },
-  date_created:{
-    type: Date,
-    default: Date.now
-  }
-
-})
 
 const ChoreSchema = new Schema({
   chore_assigned_user:{

@@ -46,3 +46,7 @@
 - [ ] Chore tracker / statistics 
 - [ ] Add to the End / Sprinkle Throughout system for adding users to groups
 - [ ] Hand over admin status
+- [ ] Icons for chores
+- [ ] Expanded View / List View Toggle
+- [ ] About Page 
+- [ ] Group Color Theme

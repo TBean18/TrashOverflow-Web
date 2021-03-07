@@ -15,9 +15,9 @@ router.get('/', (req, res) => {
 });
 
 // ROUTE    POST api/users
-// DESC     ADD A new User
+// DESC     Register a user
 // ACCESS   Public
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
     const newUser = new user({
         name: req.body.name,
         password_hash: req.body.password_hash,

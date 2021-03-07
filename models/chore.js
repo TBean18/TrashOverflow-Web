@@ -4,9 +4,13 @@ const GroupMember = require('./groupMember');
 
 
 const ChoreSchema = new Schema({
-  chore_assigned_user:{
-      type: GroupMember.GroupMemberSchema,
+  chore_assigned_users:{
+      type: [GroupMember.GroupMemberSchema],
       required: true
+  },
+  chore_num_assigned_users: {
+    type: Number, 
+    default: 1
   },
   chore_user_pool:{
     type: [GroupMember.GroupMemberSchema],

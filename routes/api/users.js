@@ -48,13 +48,18 @@ router.post('/edit', (req, res) => {
 
 });
 
-// ROUTE    POST api/users/delete
+// ROUTE    DELETE api/users/
 // DESC     Deletes the users account
 // ACCESS   Public
-router.post('/delete', (req, res) => {
-    user.deleteOne({ _id : req.body._id })
-        .then(() => console.log("User Deleted"))
-        .catch(err => console.log(err));
+router.delete('/:id', (req, res) => {
+    var email;
+    user.findById(req.params.id)
+        .then(item => {
+            email = {"email": item.email, "delete_success": true};
+            item.remove()
+                .then(() => res.json(email))
+        })
+        .catch(err => res.status(404).json({error: "ID Not Found"}))
 });
 
 module.exports = router;

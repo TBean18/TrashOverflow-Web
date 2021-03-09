@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
         .catch(err => console.log(err));
 });
 
-// ROUTE    POST api/users
+// ROUTE    POST api/users/register
 // DESC     Register a user
 // ACCESS   Public
 router.post('/register', (req, res) => {
@@ -48,8 +48,13 @@ router.post('/edit', (req, res) => {
 
 });
 
+// ROUTE    POST api/users/delete
+// DESC     Deletes the users account
+// ACCESS   Public
 router.post('/delete', (req, res) => {
-
+    user.deleteOne({ _id : req.body._id })
+        .then(() => console.log("User Deleted"))
+        .catch(err => console.log(err));
 });
 
 module.exports = router;

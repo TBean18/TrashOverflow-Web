@@ -1,8 +1,8 @@
-//SET UP THE ROUTES FOR ALL USER RELATED API ENDPOINTS
+// SET UP THE ROUTES FOR ALL USER RELATED API ENDPOINTS
 const express = require('express');
 const router = express.Router();
 
-//Item Model
+// Item Model
 const user = require('../../models/user');
 
 // ROUTE    GET api/users
@@ -11,13 +11,13 @@ const user = require('../../models/user');
 router.get('/', (req, res) => {
     user.find()
         .then(items => res.json(items))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 });
 
-// ROUTE    POST api/users
-// DESC     ADD A new User
+// ROUTE    POST api/users/register
+// DESC     Register a user
 // ACCESS   Public
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
     const newUser = new user({
         name: req.body.name,
         password_hash: req.body.password_hash,
@@ -26,8 +26,8 @@ router.post('/', (req, res) => {
     });
 
     newUser.save()
-        .then( item => res.json(item))
-        .catch(err => console.log(err))
+        .then(item => res.json(item))
+        .catch(err => console.log(err));
 
 });
 
@@ -36,11 +36,30 @@ router.post('/', (req, res) => {
 // DESC     GET Login User Info
 // ACCESS   Public
 router.get('/login', (req, res) => {
-    user.find({email: req.body.email, password_hash: req.body.password_hash})
+    user.find({
+            email: req.body.email,
+            password_hash: req.body.password_hash
+        })
         .then(items => res.json(items))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 });
 
+router.post('/edit', (req, res) => {
 
+});
+
+// ROUTE    DELETE api/users/
+// DESC     Deletes the users account
+// ACCESS   Public
+router.delete('/:id', (req, res) => {
+    var email;
+    user.findById(req.params.id)
+        .then(item => {
+            email = {"email": item.email, "delete_success": true};
+            item.remove()
+                .then(() => res.json(email))
+        })
+        .catch(err => res.status(404).json({error: "ID Not Found"}))
+});
 
 module.exports = router;

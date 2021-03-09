@@ -25,9 +25,9 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-| Register.js | FirstName, LastName, Username, Password| id, error
-| Login.js | Username, Password | id, firstName, lastName, error
-| CreateHome.js | TBD | error
+| users/register | name, password_hash, phone_number, email | TBA
+| users/login | email, password_hash | TBA
+| groups/createGroup | TBD | error
 | EditHome.js | TBD | error
 | DeleteHome.js | TBD | error
 | AddRoommate.js | TBD | error

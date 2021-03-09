@@ -31,7 +31,6 @@ router.post('/register', (req, res) => {
 
 });
 
-
 // ROUTE    GET api/users/login
 // DESC     GET Login User Info
 // ACCESS   Public
@@ -44,10 +43,25 @@ router.get('/login', (req, res) => {
         .catch(err => console.log(err));
 });
 
+// ROUTE    POST api/users/edit
+// DESC     Change Login User Info 
+// ACCESS   Public
 router.post('/edit', (req, res) => {
-
+    user.findByIdAndUpdate(req.body._id, {
+            name: req.body.name,
+            password_hash: req.body.password_hash,
+            phone_number: req.body.phone_number,
+            email: req.body.email.toLowerCase()
+        }, {
+            new: true
+        })
+        .then(items => res.json(items))
+        .catch(err => console.log(err));
 });
 
+// ROUTE    
+// DESC     
+// ACCESS   Public
 router.post('/delete', (req, res) => {
 
 });

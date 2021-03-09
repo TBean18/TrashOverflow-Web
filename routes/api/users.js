@@ -1,8 +1,8 @@
-//SET UP THE ROUTES FOR ALL USER RELATED API ENDPOINTS
+// SET UP THE ROUTES FOR ALL USER RELATED API ENDPOINTS
 const express = require('express');
 const router = express.Router();
 
-//Item Model
+// Item Model
 const user = require('../../models/user');
 
 // ROUTE    GET api/users
@@ -11,7 +11,7 @@ const user = require('../../models/user');
 router.get('/', (req, res) => {
     user.find()
         .then(items => res.json(items))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 });
 
 // ROUTE    POST api/users
@@ -27,7 +27,7 @@ router.post('/register', (req, res) => {
 
     newUser.save()
         .then(item => res.json(item))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 
 });
 
@@ -37,12 +37,19 @@ router.post('/register', (req, res) => {
 // ACCESS   Public
 router.get('/login', (req, res) => {
     user.find({
-        email : req.body.email,
-        password_hash : req.body.password_hash
-    })  .then(items => res.json(items))
-        .catch(err => console.log(err))
+            email: req.body.email,
+            password_hash: req.body.password_hash
+        })
+        .then(items => res.json(items))
+        .catch(err => console.log(err));
 });
 
+router.post('/edit', (req, res) => {
 
+});
+
+router.post('/delete', (req, res) => {
+
+});
 
 module.exports = router;

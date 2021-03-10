@@ -36,7 +36,7 @@ const UserSchema = new Schema({
 })
 //A PRE-METHOD that fires before every user.save() call
 //Checks to ensure that the  passwrod was not changed, if it has, then we need to recompute the hash
-UserSchema.pre(save, function(next) {
+UserSchema.pre('save', function(next) {
   var user = this;
 
   // only hash the password if it has been modified (or is new)
@@ -73,8 +73,20 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     group_name: newGroup.group_name
   }
   const newGroupHolder = new GroupPlaceHolder.GroupPlaceHolder(data);
-  this.groups.push(newGroupHolder);
-  this.save(cb)
+  //Check for duplicate group
+  var unique = true;
+  this.groups.forEach(g => {
+    if(g.group_ID.equals(newGroupHolder.group_ID)){
+      unique = false;
+      // console.log('Same');
+    }
+  })
+  //If unique add the new group
+  if(unique){
+    this.groups.push(newGroupHolder)
+    this.save(cb)
+  }
+  console.log(newGroupHolder);
 }
 
 

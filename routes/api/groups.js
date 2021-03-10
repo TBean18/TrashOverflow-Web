@@ -4,7 +4,20 @@ const router = express.Router();
 
 const group = require('../../models/group');
 
-// Route        POST api/groups/
+// Route        GET api/groups/
+// Description  Get all Groups
+// Access       Public
+router.get('/', (req, res) => {
+    // =Retrieve all group objects
+    group.find()
+        .then(items => res.json(items))
+        .catch(err => {
+            console.log(err);
+            res.status(401).json(err);
+        })
+});
+
+// Route        POST api/groups/new
 // Description  Create a new group
 // Access       Public
 router.post('/new', (req, res) => {
@@ -43,4 +56,36 @@ router.delete('/deleteGroup', (req, res) => {
 
 });
 
+
+router.post('/join', (req, res) => {
+    var newGroupMember = {
+        user_ID: req.body.user_ID,
+        user_name: req.body.user_name
+    }
+    group.findById(req.body.group_ID)
+        .then(item => {
+            item.group_members.push(newGroupMember)
+            item.group_member_count = item.group_members.length;
+            var groupName = item.group_name;
+            var groupMembers = item.group_members;
+            //Save the changes
+            item.save()
+                // Once save is complete send the res
+                .then(res.json({
+                    groupName,
+                    groupMembers
+                }))
+                // Catch a failed save
+                .catch(err => {
+                    console.log(err);
+                    res.status(401).json(err);
+                })
+
+        })
+        //Catch a failed findByID
+        .catch(err => {
+            console.log(err);
+            res.status(401).json(err);
+        })
+})
 module.exports = router;

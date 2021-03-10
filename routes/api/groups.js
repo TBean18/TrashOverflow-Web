@@ -2,12 +2,12 @@
 const express = require("express");
 const router = express.Router();
 
-const group = require("../../models/group");
+const group = require('../../models/group');
 
 // Route        POST api/groups/
 // Description  Create a new group
 // Access       Public
-router.post('/createGroup', (req, res) => {
+router.post('/new', (req, res) => {
     // Create new payload. Only add description and chore list
     // if the items were filled out.
     const payload = {
@@ -23,7 +23,10 @@ router.post('/createGroup', (req, res) => {
     const newGroup = new group(payload);
     newGroup.save()
         .then(item => res.json(item))
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.status(401).json(err);
+        });
 });
 
 // Route        POST api/groups

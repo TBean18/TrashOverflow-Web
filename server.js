@@ -23,7 +23,7 @@ mongoose.connect(secrets.mongoURI, {useNewUrlParser: true, useUnifiedTopology: t
 
 // USE API ROUTES
 app.use('/api/user', user)
-app.use('/api/group', group)
+app.use('/api/groups', group)
 
 const port = process.env.PORT || 5000;
 

@@ -25,11 +25,13 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-| users/register | name, password_hash, phone_number, email | TBA
-| users/login | email, password_hash | TBA
+| users/register | name, password_hash, phone_number, email | _id, name, password_hash, phone_number, email
+| users/login | email, password_hash | _id, name, password_hash, phone_number, email
+| users/edit | name, password_hash, phone_number, email | TBD
+| users/delete | TBD | TBD
 | groups/createGroup | TBD | error
-| EditHome.js | TBD | error
-| DeleteHome.js | TBD | error
+| groups/editGroup | TBD | error
+| groups/deleteGroup | TBD | error
 | AddRoommate.js | TBD | error
 | EditRoomate.js | TBD | error
 | DeleteRoomate.js | TBD | error

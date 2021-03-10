@@ -33,8 +33,8 @@ const GroupSchema = new Schema({
     type: [Chore.ChoreSchema]
   }
 
-})
+});
 
 
-const model = mongoose.model('group', GroupSchema)
-module.exports = model
+const Group = mongoose.model('group', GroupSchema);
+module.exports = Group;

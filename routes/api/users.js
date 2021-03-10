@@ -59,13 +59,8 @@ router.post('/edit', (req, res) => {
         .catch(err => console.log(err));
 });
 
-<<<<<<< HEAD
-// ROUTE    
-// DESC     
-=======
 // ROUTE    POST api/users/delete
 // DESC     Deletes the users account
->>>>>>> 43379a000197c6f2bf61d666efed592c6172de12
 // ACCESS   Public
 router.post('/delete', (req, res) => {
     user.deleteOne({ _id : req.body._id })

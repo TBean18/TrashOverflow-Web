@@ -17,6 +17,6 @@ const GroupMemberSchema = new Schema({
 
 })
 
-const model = mongoose.model('group', GroupMemberSchema);
+const model = mongoose.model('groupMember', GroupMemberSchema);
 
 module.exports = {model, GroupMemberSchema}

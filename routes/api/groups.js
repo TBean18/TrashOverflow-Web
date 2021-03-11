@@ -60,53 +60,46 @@ router.delete('/deleteGroup', (req, res) => {
 // Route        POST api/groups/join
 // Description  join a group
 // Access       Public
-router.post('/join', (req, res) => {
+router.post('/join', async (req, res) => {
     //Since the group needs to be added to the User aswell we need to find the user first
     //Find User
-    user.findById(req.body.user_ID)
-        .then(foundUser => {
-            // We have found our user
-            //Temp GroupMemeber data payload
-            var newGroupMember = {
-                user_ID: foundUser._id,
-                user_name: foundUser.name
-            }
-            //Find the group
-            group.findById(req.body.group_ID)
-                .then(foundGroup => {
-                    //Update Group data
-                    foundGroup.group_members.push(newGroupMember)
-                    foundGroup.group_member_count = foundGroup.group_members.length;
+    const foundUser = await user.findById(req.body.user_ID).exec().catch(err => {
+        console.log(err);
+        res.status(404).json(err);
+    });
+    // We have found our user
+    //Temp GroupMemeber data payload
+    var newGroupMember = {
+        user_ID: foundUser._id,
+        user_name: foundUser.name
+    }
 
+    //Find the Group
+    const foundGroup = await group.findById(req.body.group_ID).exec().catch(err => {
+        console.log(err);
+        res.status(404).json(err);
+    })
 
-                    //update the User's Group
-                    foundUser.addGroup(foundGroup, (err) => {
-                        if(err) console.log(err);
-                    })
+    //Update Group data
+    foundGroup.group_members.push(newGroupMember)
+    foundGroup.group_member_count = foundGroup.group_members.length;
 
-                    //Send Response
-                    foundGroup.save()
-                        .then(res.json({
-                            user: foundUser,
-                            group: foundGroup
-                        }))
-                        //Catch a failed groupSave
-                        .catch(err => {
-                            console.log(err);
-                            res.status(404).json(err);
-                        })
-                })
-                //Catch the group Does not Exist case
-                .catch(err => {
-                    console.log(err);
-                    res.status(404).json(err);
-                })
-        })
-        //Catch the User does not exist case
-        .catch(err => {
-            console.log(err);
-            res.status(404).json(err);
-        })
+    //update the User's Group
+    foundUser.addGroup(foundGroup, (err) => {
+        if(err) console.log(err);
+    })
+
+    //Send Response
+    foundGroup.save()
+    .then(res.json({
+        user: foundUser,
+        group: foundGroup
+    }))
+    //Catch a failed groupSave
+    .catch(err => {
+        console.log(err);
+        res.status(404).json(err);
+    })
 });
 
 module.exports = router;

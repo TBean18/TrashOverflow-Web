@@ -37,7 +37,27 @@ const GroupSchema = new Schema({
 
 //Add a user to the group_members []
 GroupSchema.methods.addGroupMember = function(newMember, cb){
+  //Format input data
+  const data = {
+    user_ID: newMember._id,
+    user_name: newMember.name
+  }
+  const newGroupMember = new GroupMember.model(data);
   
+  //Check for duplicate group
+  var unique = true;
+  this.group_members.every(member => {
+    if(member.user_ID.equals(newGroupMember.user_ID)){ 
+      unique = false;
+      return false;
+    }
+    return true;
+  })
+  //If unique add
+  if(unique){
+    this.group_members.push(newGroupMember)
+    this.save(cb);
+  }
 }
 
 

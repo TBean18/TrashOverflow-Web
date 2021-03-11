@@ -35,6 +35,11 @@ const GroupSchema = new Schema({
 
 });
 
+//Add a user to the group_members []
+GroupSchema.methods.addGroupMember = function(newMember, cb){
+  
+}
+
 
 const Group = mongoose.model('group', GroupSchema);
 module.exports = Group;

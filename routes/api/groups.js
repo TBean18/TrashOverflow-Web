@@ -63,10 +63,15 @@ router.delete('/deleteGroup', (req, res) => {
 router.post('/join', async (req, res) => {
     //Since the group needs to be added to the User aswell we need to find the user first
     //Find User
-    const foundUser = await user.findById(req.body.user_ID).exec().catch(err => {
+    var foundUser;
+    try{
+        foundUser = await user.findById(req.body.user_ID).exec();
+    }catch(err){
         console.log(err);
+        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
         res.status(404).json(err);
-    });
+        return
+    }
     // We have found our user
     //Temp GroupMemeber data payload
     var newGroupMember = {
@@ -75,31 +80,42 @@ router.post('/join', async (req, res) => {
     }
 
     //Find the Group
-    const foundGroup = await group.findById(req.body.group_ID).exec().catch(err => {
+    var foundGroup
+    try{
+        foundGroup = await group.findById(req.body.group_ID).exec()
+    }catch(err) {
         console.log(err);
         res.status(404).json(err);
-    })
+        return;
+    }
 
-    //Update Group data
-    foundGroup.group_members.push(newGroupMember)
-    foundGroup.group_member_count = foundGroup.group_members.length;
+    //Try to update data
+    try{
+        //Update Group data
+        foundGroup.group_members.push(newGroupMember)
+        foundGroup.group_member_count = foundGroup.group_members.length;
 
-    //update the User's Group
-    foundUser.addGroup(foundGroup, (err) => {
-        if(err) console.log(err);
-    })
+        //update the User's Group
+        foundUser.addGroup(foundGroup, (err) => {
+            if(err) console.log(err);
+        })
 
-    //Send Response
-    foundGroup.save()
-    .then(res.json({
-        user: foundUser,
-        group: foundGroup
-    }))
-    //Catch a failed groupSave
-    .catch(err => {
+         //Send Response
+        foundGroup.save()
+        .then(res.json({
+            user: foundUser,
+            group: foundGroup
+        }))
+        //Catch a failed groupSave
+        .catch(err => {
+            console.log(err);
+            res.status(404).json(err);
+        })
+    }catch(err){
         console.log(err);
         res.status(404).json(err);
-    })
+        return;
+    }
 });
 
 module.exports = router;

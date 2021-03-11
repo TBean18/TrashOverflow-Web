@@ -86,7 +86,6 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     this.groups.push(newGroupHolder)
     this.save(cb)
   }
-  console.log(newGroupHolder);
 }
 
 

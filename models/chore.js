@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const GroupMember = require('./groupMember');
-
+const Schedule = require('./schedule')
 
 const ChoreSchema = new Schema({
   chore_assigned_users:{
@@ -30,7 +30,7 @@ const ChoreSchema = new Schema({
   chore_point_value: {
     type: Number
   },
-  chore_schedule: ScheduleSchema
+  chore_schedule: Schedule.ScheduleSchema
 })
 
 

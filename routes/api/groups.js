@@ -47,14 +47,32 @@ router.post('/new', (req, res) => {
 // Description  Edit a group
 // Access       Public
 router.post('/editGroup', (req, res) => {
-
+    group.findByIdAndUpdate(req.body._id, {
+            group_name : req.body.group_name,
+            group_admins : req.body.group_admins,
+            group_description : req.body.group_description
+        }, {
+            new: true
+        })
+        .then(items => res.json(items))
+        .catch(err => console.log(err));
 });
 
 // Route        POST api/groups
 // Description  delete a group
 // Access       Public
 router.delete('/deleteGroup', (req, res) => {
-
+    group.findById(req.params.id)
+        .then(g => {
+            let name = {
+                "name" : g.group_name,
+                "delete_success" : true
+            }
+            g.remove().then(() => res.json(name))
+        })
+        .catch(err => res.status(404).json({
+            "error" : "Could not delete group"
+        }));
 });
 
 // Route        POST api/groups/join

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const GroupPlaceHolder = require('./GroupPlaceHolder');
+const GroupPlaceHolder = require('./groupPlaceHolder');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;

@@ -7,10 +7,20 @@ require('dotenv').config()
 const user = require('./routes/api/users')
 const group = require('./routes/api/groups')
 
+// MERN B notes / heroku deployment
+const path = require('path');
+const port = process.env.PORT || 5000;
 const app = express()
 
 //Bodyparser
 app.use(express.json())
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('frontend/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+    });
+}
 
 //Connecting to DataBase
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -24,7 +34,5 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 // USE API ROUTES
 app.use('/api/user', user)
 app.use('/api/groups', group)
-
-const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

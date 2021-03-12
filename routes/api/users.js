@@ -5,6 +5,9 @@ const router = express.Router();
 // Item Model
 const user = require('../../models/user');
 
+//JSON Web Token
+const jwt = require('../../util/jwt')
+
 // ROUTE    GET api/users
 // DESC     GET All Users
 // ACCESS   Public
@@ -35,12 +38,23 @@ router.post('/register', (req, res) => {
 // DESC     GET Login User Info
 // ACCESS   Public
 router.get('/login', (req, res) => {
-    user.find({
+    user.findOne({
             email: req.body.email,
             password_hash: req.body.password_hash
         })
-        .then(items => res.json(items))
-        .catch(err => console.log(err));
+        .then(item => {
+            let token = jwt.createToken({item});
+            if('error' in token) throw 'Error Creating JWT';
+            let output = {
+                user: item,
+                token: token.accessToken
+            }
+            res.json(output)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json(err)
+        });
 });
 
 // ROUTE    POST api/users/edit

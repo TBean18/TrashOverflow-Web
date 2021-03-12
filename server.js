@@ -1,9 +1,9 @@
 //Import NPM Packages
 const express = require('express')
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 //Import Self-Defined Files
-const secrets = require('./config/secrets')
 const user = require('./routes/api/users')
 const group = require('./routes/api/groups')
 
@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 
 //Connecting to DataBase
-mongoose.connect(secrets.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         console.log('MongoDB Connected!')
     })

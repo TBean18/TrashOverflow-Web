@@ -25,14 +25,18 @@
 
 | EndPoint | Input Parameters | Return Parameters
 | -------- | ---------------- | --------------
-| users/register | name, password_hash, phone_number, email | TBA
-| users/login | email, password_hash | TBA
+| users/register | name, password_hash, phone_number, email | _id, name, password_hash, phone_number, email
+| users/login | email, password_hash | _id, name, password_hash, phone_number, email
+| users/edit | name, password_hash, phone_number, email | TBD
+| users/delete | TBD | TBD
 | groups/createGroup | TBD | error
-| EditHome.js | TBD | error
-| DeleteHome.js | TBD | error
+| groups/editGroup | TBD | error
+| groups/deleteGroup | TBD | error
+| groups/join | group_ID, user_ID | user, group, OR error
+| groups/leave | group_ID, user_ID | user, group, OR error
+| chores/add | group_ID, newChore: {chore_assigned_users, chore_user_pool, chore_name, chore_description, chore_completion_status, chore_point_value, chore_schedule} | chore, group_chore_list, OR error
 | AddRoommate.js | TBD | error
 | EditRoomate.js | TBD | error
-| DeleteRoomate.js | TBD | error
 | AddChore.js | TBD | error
 | EditChore.js | TBD | error
 | DeleteChore.js | TBD | error

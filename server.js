@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 //Import Self-Defined Files
 const secrets = require('./config/secrets')
 const user = require('./routes/api/users')
+const group = require('./routes/api/groups')
 
 const app = express()
 
@@ -20,8 +21,9 @@ mongoose.connect(secrets.mongoURI, {useNewUrlParser: true, useUnifiedTopology: t
         console.log(err);
     })
 
-//USE API ROUTES
+// USE API ROUTES
 app.use('/api/user', user)
+app.use('/api/groups', group)
 
 const port = process.env.PORT || 5000;
 

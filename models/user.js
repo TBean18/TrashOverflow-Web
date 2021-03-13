@@ -72,20 +72,37 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     group_ID: newGroup._id,
     group_name: newGroup.group_name
   }
-  const newGroupHolder = new GroupPlaceHolder.GroupPlaceHolder(data);
-  //Check for duplicate group
-  var unique = true;
-  this.groups.forEach(g => {
-    if(g.group_ID.equals(newGroupHolder.group_ID)){
-      unique = false;
-      // console.log('Same');
-    }
-  })
-  //If unique add the new group
-  if(unique){
-    this.groups.push(newGroupHolder)
-    this.save(cb)
+
+  const added = this.groups.addToSet(data)
+  if(added.length == 0){
+    let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
+    return cb(err)
   }
+  this.save()
+
+  // //Check for duplicate group
+  // var unique = true;
+  // this.groups.forEach(g => {
+  //   if(g.group_ID.equals(newGroupHolder.group_ID)){
+  //     unique = false;
+  //     // console.log('Same');
+  //   }
+  // })
+  // //If unique add the new group
+  // if(unique){
+  //   this.groups.push(newGroupHolder)
+  //   this.save(cb)
+  // }else{
+  //   let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
+  //   return cb(err)
+  // }
+}
+
+//Removes a group from the User's groups [] 
+// curGroupID is the groupPlaceHolderID
+UserSchema.methods.leaveGroup = function(curGroupID, cb){
+  this.groups.pull(curGroupID);
+  this.save(cb)
 }
 
 

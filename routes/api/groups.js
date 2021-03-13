@@ -134,7 +134,69 @@ router.post('/join', async (req, res) => {
         return;
     }
 
+});
+
+
+// Route        POST api/groups/leave
+// Description  Endpoint hit when a user wants to leave a group they are already in
+// Access       Public
+router.post('/leave', async (req, res) => {
+    //Verify that the supplied user_id is the same as the user_id on the token
+    try{
+        jwt.verifyID(req.body.token, req.body.user_ID)
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
+    //Locate data objects
+    var foundUser, foundGroup;
+    try{
+        [foundUser, foundGroup] = await Promise.all([user.findById(req.body.user_ID).exec(), group.findById(req.body.group_ID).exec()]);
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return
+    }
+   
+    //Try to update data
+    try{
+
+
+        //Set up an error variable to be passed thorugh both update functions
+        var error = '';
+        //Update Group data
+        foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
+
+        // foundGroup.group_members.push(newGroupMember)
+        // foundGroup.group_member_count = foundGroup.group_members.length;
+
+        //update the User's Group and send responce 
+        foundUser.leaveGroup(req.body.group_place_holder_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+            res.json({
+                user_groups: foundUser.groups,
+                group: foundGroup.group_members,
+                error: err
+            })
+        })
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return;
+    }
+
     //Compose Response
 });
+
 
 module.exports = router;

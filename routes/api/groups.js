@@ -1,6 +1,7 @@
 // Set up routes for all group related end points.
 const express = require("express");
 const router = express.Router();
+const jwt = require('../../util/jwt')
 
 const group = require('../../models/group');
 const user = require('../../models/user');
@@ -76,9 +77,18 @@ router.delete('/deleteGroup', (req, res) => {
 });
 
 // Route        POST api/groups/join
-// Description  join a group
+// Description  Endpoint hit when a user wants to join an existing group
 // Access       Public
 router.post('/join', async (req, res) => {
+    //Verify that the supplied user_id is the same as the user_id on the token
+    try{
+        jwt.verifyID(req.body.token, req.body.user_ID)
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
     //Since the group needs to be added to the User aswell we need to find the user first
     //Find User
     var foundUser, foundGroup;

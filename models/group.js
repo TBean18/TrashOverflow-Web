@@ -40,8 +40,19 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
   //Format input data
   const data = {
     user_ID: newMember._id,
-    user_name: newMember.name
+    user_name: newMember.name,
+    completed_tasks: 0,
+    point_balance: 0
   }
+
+
+
+  // const added = this.group_members.addToSet(data)
+  // if(added.length == 0){
+  //   let err = `User: ${data.user_name} is already a member of Group: ${this.group_name}`
+  //   return cb(err)
+  // }
+
   const newGroupMember = new GroupMember.model(data);
   
   //Check for duplicate group
@@ -57,7 +68,18 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
   if(unique){
     this.group_members.push(newGroupMember)
     this.save(cb);
+    return
+  }else{
+    let err = `User: ${data.user_name} is already a member of Group: ${this.group_name}`
+    return cb(err)
   }
+
+}
+
+//Remove a group member from the group_members []
+GroupSchema.methods.removeGroupMember = function(curMemberID, cb) {
+  this.group_members.pull(curMemberID);
+  this.save(cb)
 }
 
 

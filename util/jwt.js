@@ -59,12 +59,13 @@ exports.verifyID = function( token, user_ID) {
     var valid = jwt.verify(token, process.env.JWT_SECRET, (err, verifiedJwt) => {
         //Token expired error check
         if(err){
-            return false;
+            throw err;
         }
         //If the user_ID matches the one in the token the user is verified
         if(verifiedJwt.user_ID == user_ID){
             return true;
         }
+        return false;
     });
     return valid;
 }

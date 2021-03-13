@@ -18,7 +18,7 @@ exports.createToken = function ( res )
                       ‘365d’
       */
 
-      var ret = {accessToken:accessToken};
+      var ret = {accessToken, error: ''};
     }
     catch(e)
     {
@@ -51,4 +51,20 @@ exports.refresh = function( token )
   var ud = jwt.decode(token,{complete:true});
 
   return createToken(ud.payload);
+}
+
+// Verifies a supplied user_ID with the user_ID in a token
+// Returns a Boolean value
+exports.verifyID = function( token, user_ID) {
+    var valid = jwt.verify(token, process.env.JWT_SECRET, (err, verifiedJwt) => {
+        //Token expired error check
+        if(err){
+            return false;
+        }
+        //If the user_ID matches the one in the token the user is verified
+        if(verifiedJwt.user_ID == user_ID){
+            return true;
+        }
+    });
+    return valid;
 }

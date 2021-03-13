@@ -44,7 +44,7 @@ router.get('/login', (req, res) => {
         })
         .then(item => {
             let token = jwt.createToken({item});
-            if('error' in token) throw 'Error Creating JWT';
+            if(token.error !== '') throw token.error;
             let output = {
                 user: item,
                 token: token.accessToken

@@ -1,9 +1,10 @@
 import React from 'react';
+import "./PageTitle.css";
 
 function PageTitle()
 {
    return(
-     <h1 id="title">Trash Overflow</h1>
+     <h1 className="Title" id="title">Trash Overflow</h1>
    );
 };
 

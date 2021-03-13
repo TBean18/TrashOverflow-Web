@@ -1,4 +1,5 @@
 import React from 'react';
+import "./Login.css";
 
 function Login()
 {
@@ -7,11 +8,11 @@ function Login()
     {
         event.preventDefault();
 
-        alert('doIt()');
+        // alert('doIt()');
     };
 
     return(
-      <div id="loginDiv">
+      <div className="LoginArea" id="loginDiv">
         <form onSubmit={doLogin}>
         <span id="inner-title">PLEASE LOG IN</span><br />
         <input type="text" id="loginName" placeholder="Username" /><br />

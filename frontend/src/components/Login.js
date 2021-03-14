@@ -9,18 +9,27 @@ function Login()
 
     const [message,setMessage] = useState('');
 
-
+    //Login function called when login button is pressed
     const doLogin = async event => 
     {
+        //I do not know what this line does, Phil?!?
         event.preventDefault();
+
+        //Make the login API call
         axios.post('/api/user/login', {
           email: email.value,
           password_hash: password_hash.value
-        }).then(res => {
-          console.log(res)
+        })
+        //Display Message
+        .then(res => {
+          console.log(res);
           setMessage(res.data.user.name);
         })
-          .catch(error => console.log(error))
+        //Display error if error is caught
+        .catch(error => {
+          console.log(error);
+          setMessage(error);
+        })
     };
 
 

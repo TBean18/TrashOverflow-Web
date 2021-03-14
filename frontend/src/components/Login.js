@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import "./Login.css";
+import { GlobalContext } from '../context/GlobalState'
 const axios = require('axios').default;
 
 function Login()
 {
+    //Bring in the userState form the global context
+    const [user, setUser] = useContext(GlobalContext).userState;
+
     let email;
     let password_hash;
 
@@ -23,6 +27,8 @@ function Login()
         //Display Message
         .then(res => {
           console.log(res);
+          //Set the user for the globalState
+          setUser(res.data.user);
           setMessage(res.data.user.name);
         })
         //Display error if error is caught

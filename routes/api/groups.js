@@ -62,7 +62,7 @@ router.post('/editGroup', (req, res) => {
 // Route        POST api/groups
 // Description  delete a group
 // Access       Public
-router.delete('/deleteGroup', (req, res) => {
+router.delete('/:id', (req, res) => {
     group.findById(req.params.id)
         .then(g => {
             let name = {
@@ -112,9 +112,6 @@ router.post('/join', async (req, res) => {
                 error.concat((' ' + err));
             }
         })
-
-        // foundGroup.group_members.push(newGroupMember)
-        // foundGroup.group_member_count = foundGroup.group_members.length;
 
         //update the User's Group and send responce 
         foundUser.addGroup(foundGroup, (err) => {
@@ -173,9 +170,6 @@ router.post('/leave', async (req, res) => {
                 error += err + ' '
             }
         });
-
-        // foundGroup.group_members.push(newGroupMember)
-        // foundGroup.group_member_count = foundGroup.group_members.length;
 
         //update the User's Group and send responce 
         foundUser.leaveGroup(req.body.group_place_holder_ID, (err) => {

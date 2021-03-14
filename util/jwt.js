@@ -5,6 +5,7 @@ require("dotenv").config();
 // Returns a STRING
 exports.createToken = function ( res )
 {
+    var ret;
     try
     {
       const accessToken =  jwt.sign( res, process.env.JWT_SECRET);
@@ -18,11 +19,11 @@ exports.createToken = function ( res )
                       ‘365d’
       */
 
-      var ret = {accessToken, error: ''};
+      ret = {accessToken, error: ''};
     }
     catch(e)
     {
-      var ret = {error:e.message};
+      ret = {error:e.message};
     }
     return ret;
 }

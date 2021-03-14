@@ -37,7 +37,7 @@ router.post('/register', (req, res) => {
 // ROUTE    GET api/users/login
 // DESC     GET Login User Info
 // ACCESS   Public
-router.get('/login', (req, res) => {
+router.post('/login', (req, res) => {
     user.findOne({
             email: req.body.email,
             password_hash: req.body.password_hash

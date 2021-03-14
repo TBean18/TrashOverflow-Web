@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "./Login.css";
+const axios = require('axios').default;
 
 function Login()
 {
@@ -12,8 +13,14 @@ function Login()
     const doLogin = async event => 
     {
         event.preventDefault();
-
-        alert('doIt() ' + email.value + ' ' + password_hash.value );
+        axios.post('/api/user/login', {
+          email: email.value,
+          password_hash: password_hash.value
+        }).then(res => {
+          console.log(res)
+          setMessage(res.data.user.name);
+        })
+          .catch(error => console.log(error))
     };
 
 

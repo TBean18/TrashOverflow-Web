@@ -8,7 +8,7 @@ exports.createToken = function ( res )
     var ret;
     try
     {
-      const accessToken =  jwt.sign( res, process.env.JWT_SECRET);
+      const accessToken =  jwt.sign( res, process.env.JWT_SECRET, {expiresIn: '1h'});
 
       // In order to exoire with a value other than the default, use the 
        // following

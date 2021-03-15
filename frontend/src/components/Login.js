@@ -6,13 +6,13 @@ const axios = require('axios').default;
 function Login()
 {
     //Bring in the userState form the global context
-    const {logIn, user} = useContext(GlobalContext);
+    const {logIn, user, storeJWT} = useContext(GlobalContext);
 
     let email;
     let password_hash;
 
     const [message,setMessage] = useState('');
-    
+
     //Check to see if we have a logged in user in our state
     if(user !== '' && message !== user.name){
       setMessage(user.name);
@@ -34,6 +34,7 @@ function Login()
           console.log(res);
           //Set the user for the globalState
           logIn(res.data.user);
+          storeJWT(res.data.token);
           setMessage(res.data.user.name);
         })
         //Display error if error is caught

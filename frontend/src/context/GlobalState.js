@@ -1,7 +1,10 @@
 import React, { createContext, useReducer, useState} from 'react';
 import AppReducer from './AppReducer'
 //Initial State
-const initialState = {};
+const initialState = {
+    user: JSON.parse(localStorage.getItem('user')) || '',
+    group: JSON.parse(localStorage.getItem('group')) || ''
+};
 
 //Create a new Context
 export const GlobalContext = createContext(initialState);
@@ -10,34 +13,39 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = function (props) {
 
 
-    const [state, dispatch] = useReducer(AppReducer, initialState);
+    // const [state, dispatch] = useReducer(AppReducer, initialState);
 
-    //Actions
-    
-    const [user, setUser] = useState();
+    //Create the user State
+    const [user, setUser] = useState(initialState.user);
 
-
+    //ACTIONS
     //Login function used to store userData in global state
-    function LogIn(userObject){
-        dispatch({
-            type: 'LOGIN',
-            payload: userObject
-        });
+    function logIn(userObject){
+        setUser(userObject);
+        localStorage.setItem('user', JSON.stringify(userObject)); 
+        // dispatch({
+        //     type: 'LOGIN',
+        //     payload: userObject
+        // });
     }
 
     //Logout function used to remove user data from global state
-    function LogOut(id){
-        dispatch({
-            type: 'LOGOUT',
-            payload: id
-        });
+    function logOut(id){
+        localStorage.setItem('user', '');
+        setUser('');
+        // dispatch({
+        //     type: 'LOGOUT',
+        //     payload: id
+        // });
     }
 
 
     //What the GlobalProvider componet 'renders'
     return(
         <GlobalContext.Provider value = {{
-            userState: [user, setUser]
+            user: user,
+            logIn,
+            logOut
         }}>
             {props.children}
         </GlobalContext.Provider>

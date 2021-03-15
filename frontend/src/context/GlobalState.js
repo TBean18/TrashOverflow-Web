@@ -43,8 +43,8 @@ export const GlobalProvider = function (props) {
     }
 
     //Function used to store the JWT token from the API responce
-    function storeJWT(jwt){
-        localStorage.setItem('JWT', JSON.stringify(jwt));
+    function storeJWT(webToken){
+        localStorage.setItem('JWT', JSON.stringify(webToken));
         setJWT(jwt);
     } 
 

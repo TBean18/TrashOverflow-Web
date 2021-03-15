@@ -22,12 +22,18 @@ export const GlobalProvider = function (props) {
     const [jwt, setJWT] = useState(initialState.jwt);
 
     //ACTIONS
+
+    //Function used to store the JWT token from the API responce
+    function storeJWT(webToken){
+        localStorage.setItem('JWT', JSON.stringify(webToken));
+        setJWT(jwt);
+    } 
+
     //Login function used to store userData in global state
     function logIn(userObject, webToken){
         setUser(userObject);
         localStorage.setItem('user', JSON.stringify(userObject));
-        localStorage.setItem('JWT', JSON.stringify(webToken));
-        setJWT(jwt);
+        storeJWT(webToken)
         // dispatch({
         //     type: 'LOGIN',
         //     payload: userObject
@@ -44,11 +50,6 @@ export const GlobalProvider = function (props) {
         // });
     }
 
-    //Function used to store the JWT token from the API responce
-    function storeJWT(webToken){
-        localStorage.setItem('JWT', JSON.stringify(webToken));
-        setJWT(jwt);
-    } 
 
 
     //What the GlobalProvider componet 'renders'

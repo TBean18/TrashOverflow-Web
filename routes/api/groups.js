@@ -241,6 +241,15 @@ router.post('/leave', async (req, res) => {
     try{
         //Set up an error variable to be passed thorugh both update functions
         var error = '';
+
+        let groupUser = foundGroup.group_members.filter(mem => (mem.user_ID == req.body.user_ID));
+        let admins = foundGroup.group_members.filter(mem => (mem.admin === true));
+        // We need to randomly promote a user to admin before removing this one as they are the last admin
+        if (groupUser.admin === true && admins.length === 1) {
+            // TODO: Call /promote endpoint from here??
+        }
+        // Else user is not an admin, so we can remove without further consideration
+
         //Update Group data
         foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
             if(err) {
@@ -264,6 +273,7 @@ router.post('/leave', async (req, res) => {
                 error: err
             })
         })
+
     }catch(err){
         console.log(err);
         res.status(404).json(err);
@@ -271,7 +281,61 @@ router.post('/leave', async (req, res) => {
     }
 });
 
-// Set admin
+// Route        POST api/groups/promote
+// Description  Endpoint hit when a user wants to join an existing group
+// Access       Public
+router.post('/promote', async (req, res) => {
+    //Verify that the supplied user_id is the same as the user_id on the token
+    try{
+        jwt.verifyID(req.body.token, req.body.user_ID)
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
+    //Since the group needs to be added to the User aswell we need to find the user first
+    //Find User
+    var foundUser, foundGroup;
+    try{
+        [foundUser, foundGroup] = await Promise.all([user.findById(req.body.user_ID).exec(), group.findById(req.body.group_ID).exec()]);
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return
+    }
+    // We have found our user
+
+    //Try to update data
+    try{
+        //Set up an error variable to be passed thorugh both update functions
+        var error = '';
+        //Update Group data
+        foundGroup.addGroupMember(foundUser, (err) => {
+            if(err) {
+                console.log(err);
+                error.concat((' ' + err));
+            }
+        })
+
+        //update the User's Group and send response
+        foundUser.addGroup(foundGroup, (err) => {
+            if(err) {
+                console.log(err);
+                error.concat((' ' + err))
+            }
+            res.json({
+                user_groups: foundUser.groups,
+                group: foundGroup.group_members,
+                error: err
+            })
+        })
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return;
+    }
+});
 
 
 module.exports = router;

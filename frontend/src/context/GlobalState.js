@@ -3,7 +3,8 @@ import AppReducer from './AppReducer'
 //Initial State
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')) || '',
-    group: JSON.parse(localStorage.getItem('group')) || ''
+    group: JSON.parse(localStorage.getItem('group')) || '',
+    jwt: JSON.parse(localStorage.getItem('JWT')) || ''
 };
 
 //Create a new Context
@@ -17,6 +18,8 @@ export const GlobalProvider = function (props) {
 
     //Create the user State
     const [user, setUser] = useState(initialState.user);
+    //Create the JWT state
+    const [jwt, setJWT] = useState(initialState.jwt);
 
     //ACTIONS
     //Login function used to store userData in global state
@@ -39,13 +42,21 @@ export const GlobalProvider = function (props) {
         // });
     }
 
+    //Function used to store the JWT token from the API responce
+    function storeJWT(jwt){
+        localStorage.setItem('JWT', JSON.stringify(jwt));
+        setJWT(jwt);
+    } 
+
 
     //What the GlobalProvider componet 'renders'
     return(
         <GlobalContext.Provider value = {{
             user: user,
+            jwt: jwt,
             logIn,
-            logOut
+            logOut,
+            storeJWT
         }}>
             {props.children}
         </GlobalContext.Provider>

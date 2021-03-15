@@ -23,9 +23,11 @@ export const GlobalProvider = function (props) {
 
     //ACTIONS
     //Login function used to store userData in global state
-    function logIn(userObject){
+    function logIn(userObject, webToken){
         setUser(userObject);
-        localStorage.setItem('user', JSON.stringify(userObject)); 
+        localStorage.setItem('user', JSON.stringify(userObject));
+        localStorage.setItem('JWT', JSON.stringify(webToken));
+        setJWT(jwt);
         // dispatch({
         //     type: 'LOGIN',
         //     payload: userObject

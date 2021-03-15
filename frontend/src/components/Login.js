@@ -33,8 +33,7 @@ function Login()
         .then(res => {
           console.log(res);
           //Set the user for the globalState
-          logIn(res.data.user);
-          storeJWT(res.data.token);
+          logIn(res.data.user, res.data.token);
           setMessage(res.data.user.name);
         })
         //Display error if error is caught

@@ -50,7 +50,6 @@ router.post('/new', (req, res) => {
 router.post('/editGroup', (req, res) => {
     group.findByIdAndUpdate(req.body._id, {
             group_name : req.body.group_name,
-            group_admins : req.body.group_admins,
             group_description : req.body.group_description
         }, {
             new: true
@@ -100,7 +99,7 @@ router.post('/join', async (req, res) => {
         return
     }
     // We have found our user
-   
+
     //Try to update data
     try{
         //Set up an error variable to be passed thorugh both update functions
@@ -130,9 +129,90 @@ router.post('/join', async (req, res) => {
         res.status(404).json(err);
         return;
     }
-
 });
 
+
+// Route        POST api/groups/removeUser
+// Description  Endpoint hit when a admin wants to remove a user from the group
+// Access       Public
+router.post('/removeUser', async (req, res) => {
+    //Verify that the supplied user_id is the same as the user_id on the token
+    try{
+        jwt.verifyID(req.body.token, req.body.admin_user_ID)
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
+    //Find Group
+    var foundGroup;
+    try{
+        foundGroup = group.findById(req.body.group_ID).exec();
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
+    //Find the relevant groupmembers
+    var foundAdmin, foundUser;
+    try{
+        //Find the relevant group Members
+        let results = foundGroup.group_members.filter(member => (member.user_ID == req.body.admin_user_ID ||
+                                                                 member.user_ID == req.body.group_member_ID));
+
+        //Set the vars
+        foundAdmin = results.filter(mem => member.user_ID == req.body.admin_user_ID);
+        foundUser = results.filter(mem => member.user_ID == req.body.group_member_ID) || '';
+
+        //Verify User Info
+        if(foundAdmin == '') throw `Admin user not found for Group: ${req.body.group_ID}`;
+        if(foundAdmin.admin !== true) throw `${foundAdmin.user_name}: Is not an Admin for Group: ${req.body.group_ID}`;
+        if(foundUser == '') throw `${req.body.group_member_ID}: Is not a member for Group: ${req.body.group_ID}`;
+
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return
+    }
+
+    //Try to update data
+    try{
+        //Set up an error variable to be passed thorugh both update functions
+        var error = '';
+        //Update Group data
+        foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
+
+        //update the User's Group and send responce
+        foundUser.leaveGroup(req.body.group_place_holder_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+            res.json({
+                user_groups: foundUser.groups,
+                group: {
+                    name: foundGroup.group_name,
+                    members: foundGroup.group_members
+                },
+                error: err
+            })
+        })
+    }catch(err){
+        console.log(err);
+        res.status(404).json(err);
+        return;
+    }
+
+    //Compose Response
+
+});
 
 // Route        POST api/groups/leave
 // Description  Endpoint hit when a user wants to leave a group they are already in
@@ -156,11 +236,9 @@ router.post('/leave', async (req, res) => {
         res.status(404).json(err);
         return
     }
-   
+
     //Try to update data
     try{
-
-
         //Set up an error variable to be passed thorugh both update functions
         var error = '';
         //Update Group data
@@ -179,7 +257,10 @@ router.post('/leave', async (req, res) => {
             }
             res.json({
                 user_groups: foundUser.groups,
-                group: foundGroup.group_members,
+                group: {
+                    name: foundGroup.group_name,
+                    members: foundGroup.group_members
+                },
                 error: err
             })
         })
@@ -188,9 +269,9 @@ router.post('/leave', async (req, res) => {
         res.status(404).json(err);
         return;
     }
-
-    //Compose Response
 });
+
+// Set admin
 
 
 module.exports = router;

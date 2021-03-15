@@ -47,13 +47,14 @@ router.post('/login', (req, res) => {
             if(token.error !== '') throw token.error;
             let output = {
                 user: item,
-                token: token.accessToken
+                token: token.accessToken,
+                error: ''
             }
             res.json(output)
         })
         .catch(err => {
             console.log(err);
-            res.status(404).json(err)
+            res.status(404).json({error: err})
         });
 });
 

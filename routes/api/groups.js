@@ -10,7 +10,7 @@ const user = require('../../models/user');
 // Description  Get all Groups
 // Access       Public
 router.get('/', (req, res) => {
-    // =Retrieve all group objects
+    // Retrieve all group objects
     group.find()
         .then(items => res.json(items))
         .catch(err => {

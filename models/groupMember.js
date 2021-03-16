@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 const GroupMemberSchema = new Schema({
   user_ID: Schema.Types.ObjectID,
   user_name: String,
+  admin: {
+    type: Boolean,
+    default: false
+  },
   completed_tasks: {
     type: Number,
     default: 0,

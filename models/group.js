@@ -17,10 +17,6 @@ const GroupSchema = new Schema({
     type: Number,
     default: 1
   },
-  group_admins:{
-    type: [GroupMember.GroupMemberSchema],
-    required: true
-  },
   group_description:{
     type: String,
     default: 'Our Great Group'

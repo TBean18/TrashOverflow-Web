@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import "./Login.css";
+import "./Register.css";
 import { GlobalContext } from '../context/GlobalState'
 const axios = require('axios').default;
 
@@ -8,8 +8,10 @@ function Login()
     //Bring in the userState form the global context
     const {logIn, user, storeJWT} = useContext(GlobalContext);
 
-    let email;
+    let name;
     let password_hash;
+    let phone_number;
+    let email;
 
     const [message,setMessage] = useState('');
 
@@ -18,17 +20,20 @@ function Login()
       setMessage(user.name);
     }
 
-    //Login function called when login button is pressed
-    const doLogin = async event => 
+    // Register function called when register button is pressed
+    const doRegister = async event => 
     {
         // I do not know what this line does, Phil?!?
         // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
         event.preventDefault();
 
         //Make the login API call
-        axios.post('/api/user/login', {
-          email: email.value,
-          password_hash: password_hash.value
+        axios.post('/api/user/register', {
+            
+            name: name.value,
+            password_hash: password_hash.value,
+            phone_number: phone_number.value,
+            email: email.value
         })
         //Display Message
         .then(res => {
@@ -46,17 +51,22 @@ function Login()
 
 
     return(
-      <div className="LoginArea" id="loginDiv">
-        <form onSubmit={doLogin}>
-        <span id="inner-title">PLEASE LOG IN</span><br />
+      <div className="RegisterArea" id="registerDiv">
+        <form onSubmit={doRegister}>
+        <span id="inner-title">Please Sign Up</span><br />
+        <input type="text" id="name" placeholder="Name" 
+          ref={(c) => name = c} />
+        <input type="text" id="phone_number" placeholder="Phone Number" 
+          ref={(c) => phone_number = c} />
         <input type="text" id="email" placeholder="Email" 
           ref={(c) => email = c} />
         <input type="password" id="password_hash" placeholder="Password" 
           ref={(c) => password_hash = c} />
-        <input type="submit" id="loginButton" class="buttons" value = "Log In"
-          onClick={doLogin} />
+          <br></br>
+        <input type="submit" id="loginButton" class="buttons" value = "Sign Up"
+          onClick={doRegister} />
         </form>
-        <span id="loginResult">{message}</span>
+        <span id="registerResult">{message}</span>
      </div>
     );
 };

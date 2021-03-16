@@ -4,6 +4,7 @@ import './App.css';
 
 import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
+import RegisterPage from './pages/RegisterPage';
 import { GlobalProvider } from './context/GlobalState';
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
           </Route>
           <Route path="/cards" exact>
             <CardPage />
+          </Route>
+          <Route path="/register" exact>
+            <RegisterPage />
           </Route>
           <Redirect to="/" />
         </Switch>  

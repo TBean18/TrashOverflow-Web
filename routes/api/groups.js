@@ -281,6 +281,8 @@ router.post('/leave', async (req, res) => {
     }
 });
 
+
+// STILL NEEDS TO BE WRITTEN
 // Route        POST api/groups/promote
 // Description  Endpoint hit when a user wants to join an existing group
 // Access       Public

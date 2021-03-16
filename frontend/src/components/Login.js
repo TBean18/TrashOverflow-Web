@@ -21,7 +21,8 @@ function Login()
     //Login function called when login button is pressed
     const doLogin = async event => 
     {
-        //I do not know what this line does, Phil?!?
+        // I do not know what this line does, Phil?!?
+        // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
         event.preventDefault();
 
         //Make the login API call

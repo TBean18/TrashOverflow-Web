@@ -3,7 +3,7 @@ import "./Register.css";
 import { GlobalContext } from '../context/GlobalState'
 const axios = require('axios').default;
 
-function Login()
+function Register()
 {
     //Bring in the userState form the global context
     const {logIn, user, storeJWT} = useContext(GlobalContext);
@@ -27,7 +27,7 @@ function Login()
         // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
         event.preventDefault();
 
-        //Make the login API call
+        //Make the register API call
         axios.post('/api/user/register', {
             
             name: name.value,
@@ -71,4 +71,4 @@ function Login()
     );
 };
 
-export default Login;
+export default Register;

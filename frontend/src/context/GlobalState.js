@@ -3,7 +3,7 @@ import AppReducer from './AppReducer'
 //Initial State
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')) || '',
-    group: JSON.parse(localStorage.getItem('group')) || '',
+    groups: JSON.parse(localStorage.getItem('groups')) || '',
     jwt: JSON.parse(localStorage.getItem('JWT')) || ''
 };
 
@@ -20,6 +20,8 @@ export const GlobalProvider = function (props) {
     const [user, setUser] = useState(initialState.user);
     //Create the JWT state
     const [jwt, setJWT] = useState(initialState.jwt);
+    //Create the Groups State
+    const [groups, setGroups] = useState(initialState.groups)
 
     //ACTIONS
 
@@ -34,6 +36,14 @@ export const GlobalProvider = function (props) {
         setUser(userObject);
         localStorage.setItem('user', JSON.stringify(userObject));
         storeJWT(webToken)
+        
+        //Gather the group info from 
+        let curGroups = []
+        userObject.groups.map(g =>{
+            curGroups.push(g.group_ID);
+        });
+        storeGroups(curGroups);
+
         // dispatch({
         //     type: 'LOGIN',
         //     payload: userObject
@@ -50,6 +60,11 @@ export const GlobalProvider = function (props) {
         // });
     }
 
+    function storeGroups(curGroups){
+        localStorage.setItem('groups', JSON.stringify(curGroups));
+        setGroups(curGroups);
+    }
+
 
 
     //What the GlobalProvider componet 'renders'
@@ -57,9 +72,11 @@ export const GlobalProvider = function (props) {
         <GlobalContext.Provider value = {{
             user: user,
             jwt: jwt,
+            groups,
             logIn,
             logOut,
-            storeJWT
+            storeJWT,
+            storeGroups
         }}>
             {props.children}
         </GlobalContext.Provider>

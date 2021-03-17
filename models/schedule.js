@@ -33,15 +33,19 @@ const ScheduleSchema = new Schema({
 //Schema Functions ----------------------------------
 //Function used to set the new due date based off of the reccurance_type property
 ScheduleSchema.methods.setNewDueDate = function(cb){
+  const currentDate = new Date(this.schedule_due_date);
   switch(this.schedule_recurrence_type.reccurence_name){
     case 'DAILY':
-      this.schedule_due_date = this.schedule_due_date + 1;
+      currentDate.setDate(currentDate.getDate() + 1);
+      this.schedule_due_date = currentDate;
       break;
     case 'WEEKLY':
-      this.schedule_due_date = this.schedule_due_date + 7;
+      currentDate.setDate(currentDate.getDate() + 7);
+      this.schedule_due_date = currentDate;
       break;
     case 'MONTHLY':
-      this.schedule_due_date = this.schedule_due_date + 31;
+      currentDate.setDate(currentDate.getDate() + 31);
+      this.schedule_due_date = currentDate;
       break;
   }
   this.save(cb);

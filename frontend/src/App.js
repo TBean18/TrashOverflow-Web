@@ -1,19 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom';
 import './App.css';
 
 import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
 import { GlobalProvider } from './context/GlobalState';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <GlobalProvider>
-      <Router >
+      <Router>
         <Switch>
           <Route path="/" exact>
-            <LoginPage />
+            <Navbar />
           </Route>
           <Route path="/cards" exact>
             <CardPage />
@@ -22,7 +28,7 @@ function App() {
             <RegisterPage />
           </Route>
           <Redirect to="/" />
-        </Switch>  
+        </Switch>
       </Router>
     </GlobalProvider>
   );

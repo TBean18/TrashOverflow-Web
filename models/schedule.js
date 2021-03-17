@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const GroupMember = require('./groupMember');
 
 function validateReccurenceType(t){
-  const legalVals = new Set(['daily', 'weekly', 'monthly']);
+  const legalVals = new Set(['DAILY', 'WEEKLY', 'MONTHLY']);
   return legalVals.has(t.reccurence_name);
 }
 const recurrenceValidator = [validateReccurenceType, '{PATH} does not support value of {VALUE}']
@@ -29,6 +29,28 @@ const ScheduleSchema = new Schema({
   }
 
 })
+
+//Schema Functions ----------------------------------
+//Function used to set the new due date based off of the reccurance_type property
+ScheduleSchema.methods.setNewDueDate = function(cb){
+  const currentDate = new Date(this.schedule_due_date);
+  switch(this.schedule_recurrence_type.reccurence_name){
+    case 'DAILY':
+      currentDate.setDate(currentDate.getDate() + 1);
+      this.schedule_due_date = currentDate;
+      break;
+    case 'WEEKLY':
+      currentDate.setDate(currentDate.getDate() + 7);
+      this.schedule_due_date = currentDate;
+      break;
+    case 'MONTHLY':
+      currentDate.setDate(currentDate.getDate() + 31);
+      this.schedule_due_date = currentDate;
+      break;
+  }
+  this.save(cb);
+  return
+}
 
 
 

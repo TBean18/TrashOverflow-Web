@@ -1,7 +1,9 @@
 import React, {useState, useContext} from 'react'
+import { GlobalContext } from '../context/GlobalState'
+const axios = require('axios').default;
 
 
-export default function groupItem(props) {
+export default function GroupItem(props) {
 
 //Bring in the userState form the global context
 const {user, jwt, storeJWT, storeGroups} = useContext(GlobalContext);

@@ -2,7 +2,7 @@ import React, {useState, useContext} from 'react'
 import { GlobalContext } from '../context/GlobalState'
 const axios = require('axios').default;
 
-
+//Capitalization
 export default function GroupItem(props) {
 
 //Bring in the userState form the global context

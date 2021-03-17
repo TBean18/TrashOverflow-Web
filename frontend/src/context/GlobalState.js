@@ -36,6 +36,14 @@ export const GlobalProvider = function (props) {
         setUser(userObject);
         localStorage.setItem('user', JSON.stringify(userObject));
         storeJWT(webToken)
+        
+        //Gather the group info from 
+        let curGroups = []
+        userObject.groups.map(g =>{
+            curGroups.push(g.group_ID);
+        });
+        storeGroups(curGroups);
+
         // dispatch({
         //     type: 'LOGIN',
         //     payload: userObject

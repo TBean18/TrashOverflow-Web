@@ -52,9 +52,9 @@ export const GlobalProvider = function (props) {
         // });
     }
 
-    function storeGroups(groups){
-        localStorage.setItem('groups', JSON.stringify(groups));
-        setGroups(groups);
+    function storeGroups(curGroups){
+        localStorage.setItem('groups', JSON.stringify(curGroups));
+        setGroups(curGroups);
     }
 
 

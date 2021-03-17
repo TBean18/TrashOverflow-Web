@@ -1,6 +1,8 @@
 import React, {useState, useContext} from 'react'
 
 
+export default function groupItem(props) {
+
 //Bring in the userState form the global context
 const {user, jwt, storeJWT, storeGroups} = useContext(GlobalContext);
 
@@ -24,7 +26,6 @@ function leaveGroup(group_ID){
     return;
 }
 
-export default function groupItem(props) {
     return (
         <>
             <h2>{props.group.group_name}</h2>

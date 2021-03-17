@@ -24,6 +24,9 @@ function App() {
           <Route path="/cards" exact>
             <CardPage />
           </Route>
+          <Route path="/signin" exact>
+            <LoginPage />
+          </Route>
           <Route path="/register" exact>
             <RegisterPage />
           </Route>

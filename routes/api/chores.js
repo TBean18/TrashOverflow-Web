@@ -22,7 +22,7 @@ router.get('/:group_ID', (req, res) => {
             })
         })
         .catch(err => {
-            console.loof(err);
+            console.log(err);
             res.status(404).json({error: err})
         })
 });

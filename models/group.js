@@ -31,6 +31,17 @@ const GroupSchema = new Schema({
 
 });
 
+//A PRE-METHOD that fires before every user.save() call
+//Checks to ensure that the  passwrod was not changed, if it has, then we need to recompute the hash
+GroupSchema.pre('save', function(next) {
+  var group = this;
+
+  // only hash the password if it has been modified (or is new)
+  if (!group.isModified('group_members')) return next();
+  if(group.group_members.length === 0)
+    Group.remove({_id: this._id})
+});
+
 //Add a user to the group_members []
 GroupSchema.methods.addGroupMember = function(newMember, cb){
   //Format input data
@@ -100,8 +111,8 @@ GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
 }
 
 // Returns user if user is a member of this group, empty string otherwise
-GroupSchema.methods.verifyUser = function(curMemberID, cb) {
-  let res = this.group_members.filter(mem => curMemberID === mem.user_ID);
+GroupSchema.methods.verifyUser = function(curUserID, cb) {
+  let res = this.group_members.filter(mem => curUserID === mem.user_ID);
   // should just be length 1 if user found, but just in case...
   return (res.length >= 1) ? res : '';
 }

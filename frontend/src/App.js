@@ -10,8 +10,8 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
+import LandingPage from './pages';
 import { GlobalProvider } from './context/GlobalState';
-import Navbar from './components/Navbar';
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" exact>
-            <Navbar />
+            <LandingPage />
           </Route>
           <Route path="/cards" exact>
             <CardPage />

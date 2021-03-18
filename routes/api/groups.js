@@ -250,16 +250,18 @@ router.post('/leave', async (req, res) => {
 
     //Try to update data
     try{
-        //Set up an error variable to be passed thorugh both update functions
+        //Set up an error variable to be passed through both update functions
         var error = '';
 
-        let groupUser = foundGroup.group_members.filter(mem => (mem.user_ID == req.body.user_ID));
+        let isMember = foundGroup.verifyUser(req.body.group_member_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' ';
+            }
+        });
+        if (isMember === '') throw `${req.body.group_member_ID}: Is not a member for Group: ${req.body.group_ID}`;
+        //let groupUser = foundGroup.group_members.filter(mem => (mem.user_ID == req.body.user_ID));
         let admins = foundGroup.group_members.filter(mem => (mem.admin === true));
-        // We need to randomly promote a user to admin before removing this one as they are the last admin
-        if (groupUser.admin === true && admins.length === 1) {
-            // TODO: Call /promote endpoint from here??
-        }
-        // Else user is not an admin, so we can remove without further consideration
 
         //Update Group data
         foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
@@ -268,6 +270,11 @@ router.post('/leave', async (req, res) => {
                 error += err + ' '
             }
         });
+
+        // We need to randomly promote a user to admin after removing this one as they were the last admin
+        if (groupUser.admin === true && admins.length === 1) {
+            // TODO: Call /promote endpoint from here??
+        }
 
         //update the User's Group and send responce
         foundUser.leaveGroup(req.body.group_place_holder_ID, (err) => {

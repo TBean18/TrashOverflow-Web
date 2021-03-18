@@ -92,6 +92,20 @@ GroupSchema.methods.demoteGroupMember = function(curMemberID, cb) {
   this.save(cb);
 }
 
+// Returns admin if admin is a member of this group, empty string otherwise
+GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
+  let res = this.group_members.filter(mem => curMemberID === mem.user_ID && mem.admin === true);
+  // should just be length 1 if admin found, but just in case...
+  return (res.length >= 1) ? res : '';
+}
+
+// Returns user if user is a member of this group, empty string otherwise
+GroupSchema.methods.verifyUser = function(curMemberID, cb) {
+  let res = this.group_members.filter(mem => curMemberID === mem.user_ID);
+  // should just be length 1 if user found, but just in case...
+  return (res.length >= 1) ? res : '';
+}
+
 
 const Group = mongoose.model('group', GroupSchema);
 module.exports = Group;

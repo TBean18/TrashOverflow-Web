@@ -42,6 +42,14 @@ router.post('/login', (req, res) => {
             email: req.body.email,
             password_hash: req.body.password_hash
         })
+        // Populates the user's groupPlaceHolders with the group infomation 
+        .populate({
+            path: 'groups',
+            populate:{
+                path: 'group_ID',
+                model: 'group'
+            }
+        })
         .then(item => {
             let token = jwt.createToken({item});
             if(token.error !== '') throw token.error;
@@ -77,7 +85,7 @@ router.post('/edit', (req, res) => {
 // ROUTE    DELETE api/users/
 // DESC     Deletes the users account
 // ACCESS   Public
-router.delete('/:id', (req, res) => {
+router.delete('/:id/:token', (req, res) => {
     var email;
     user.findById(req.params.id)
         .then(item => {

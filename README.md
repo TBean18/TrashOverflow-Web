@@ -12,8 +12,13 @@
 - [ ] Register / Log in
 - [ ] Creation of Households
 - [ ] Creation of Chores
+  - [ ] Pool of Users
+  - [ ] A user responsible for the chore during the given iteration
 - [ ] Scheduleing of Chores
   - [ ] Add / Remove User to Chores
+  - [ ] Set How Often the Chore Reccurs
+    - [ ] If it even Reccurs
+  - [ ] What do we do with Finished chores that still have time until the due date
 - [ ] Dark Mode
 
 ## API Endpoints (API Team Please Change)
@@ -64,3 +69,4 @@
 - [ ] Expanded View / List View Toggle
 - [ ] About Page 
 - [ ] Group Color Theme
+- [ ] Add More than 1 person to a given chore

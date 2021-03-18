@@ -323,18 +323,31 @@ router.post('/promote', async (req, res) => {
     }
 
     //Find the relevant groupmembers
-    var foundAdmin, foundUser, foundGroup;
+    var foundAdmin, foundUser;
     try{
-        let results = foundGroup.group_members.filter(member => (member.user_ID == req.body.admin_user_ID ||
-                                                                 member.user_ID == req.body.group_member_ID));
+        //Set up an error variable to be passed through verification functions
+        var error = '';
+        //Find the relevant group Members
+        //let results = foundGroup.group_members.filter(member => (member.user_ID == req.body.admin_user_ID ||
+        //                                                         member.user_ID == req.body.group_member_ID));
 
         //Set the vars
-        foundAdmin = results.filter(mem => member.user_ID == req.body.admin_user_ID);
-        foundUser = results.filter(mem => member.user_ID == req.body.group_member_ID) || '';
+        foundAdmin = foundGroup.verifyAdmin(req.body.admin_user_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
+        foundUser = foundGroup.verifyUser(req.body.group_member_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
 
         //Verify User Info
-        if(foundAdmin == '') throw `Admin user not found for Group: ${req.body.group_ID}`;
-        if(foundAdmin.admin !== true) throw `${foundAdmin.user_name}: Is not an Admin for Group: ${req.body.group_ID}`;
+        if(foundAdmin == '') throw `Admin user not found for (Group: ${req.body.group_ID}) or is not an Admin`;
+        //if(foundAdmin.admin !== true) throw `${foundAdmin.user_name}: Is not an Admin for Group: ${req.body.group_ID}`;
         if(foundUser == '') throw `${req.body.group_member_ID}: Is not a member for Group: ${req.body.group_ID}`;
 
     }catch(err){
@@ -356,7 +369,7 @@ router.post('/promote', async (req, res) => {
         })
 
         //update the User's Group and send response
-        foundUser.addGroup(foundGroup, (err) => {
+        /*foundUser.addGroup(foundGroup, (err) => {
             if(err) {
                 console.log(err);
                 error.concat((' ' + err))
@@ -366,7 +379,7 @@ router.post('/promote', async (req, res) => {
                 group: foundGroup.group_members,
                 error: err
             })
-        })
+        })*/
     }catch(err){
         console.log(err);
         res.status(404).json(err);
@@ -387,17 +400,49 @@ router.post('/demote', async (req, res) => {
         return
     }
 
-    //Since the group needs to be added to the User aswell we need to find the user first
-    //Find User
-    var foundUser, foundGroup;
+    //Find Group
+    var foundGroup;
     try{
-        [foundUser, foundGroup] = await Promise.all([user.findById(req.body.user_ID).exec(), group.findById(req.body.group_ID).exec()]);
+        foundGroup = group.findById(req.body.group_ID).exec();
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return
+    }
+
+    //Find the relevant groupmembers
+    var foundAdmin, foundUser;
+    try{
+        //Set up an error variable to be passed through verification functions
+        var error = '';
+        //Find the relevant group Members
+        //let results = foundGroup.group_members.filter(member => (member.user_ID == req.body.admin_user_ID ||
+        //                                                         member.user_ID == req.body.group_member_ID));
+
+        //Set the vars
+        foundAdmin = foundGroup.verifyAdmin(req.body.admin_user_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
+        foundUser = foundGroup.verifyUser(req.body.group_member_ID, (err) => {
+            if(err) {
+                console.log(err);
+                error += err + ' '
+            }
+        });
+
+        //Verify User Info
+        if(foundAdmin == '') throw `Admin user not found for (Group: ${req.body.group_ID}) or is not an Admin`;
+        //if(foundAdmin.admin !== true) throw `${foundAdmin.user_name}: Is not an Admin for Group: ${req.body.group_ID}`;
+        if(foundUser == '') throw `${req.body.group_member_ID}: Is not a member for Group: ${req.body.group_ID}`;
+
     }catch(err){
         console.log(err);
         res.status(404).json(err);
         return
     }
-    // We have found our user
 
     //Try to update data
     try{
@@ -412,7 +457,7 @@ router.post('/demote', async (req, res) => {
         })
 
         //update the User's Group and send response
-        foundUser.addGroup(foundGroup, (err) => {
+        /*foundUser.addGroup(foundGroup, (err) => {
             if(err) {
                 console.log(err);
                 error.concat((' ' + err))
@@ -422,7 +467,7 @@ router.post('/demote', async (req, res) => {
                 group: foundGroup.group_members,
                 error: err
             })
-        })
+        })*/
     }catch(err){
         console.log(err);
         res.status(404).json(err);

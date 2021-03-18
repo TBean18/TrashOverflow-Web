@@ -75,7 +75,21 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
 //Remove a group member from the group_members []
 GroupSchema.methods.removeGroupMember = function(curMemberID, cb) {
   this.group_members.pull(curMemberID);
-  this.save(cb)
+  this.save(cb);
+}
+
+// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// Promotes a group member to admin
+GroupSchema.methods.promoteGroupMember = function(curMemberID, cb) {
+  this.group_members[curMemberID].admin = true;
+  this.save(cb);
+}
+
+// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// Demotes a group member from admin
+GroupSchema.methods.demoteGroupMember = function(curMemberID, cb) {
+  this.group_members[curMemberID].admin = false;
+  this.save(cb);
 }
 
 

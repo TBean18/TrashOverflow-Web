@@ -27,3 +27,17 @@ router.get('/:group_ID', (req, res) => {
         })
 });
 
+// add chore
+
+// delete chore (and schedule)
+
+// edit chore (name)
+
+// assign user to chore queue
+
+// remove user from chore queue
+
+// update chore status
+
+// 
+

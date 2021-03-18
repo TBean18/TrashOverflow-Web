@@ -158,6 +158,8 @@ router.post('/removeUser', async (req, res) => {
     //Find the relevant groupmembers
     var foundAdmin, foundUser;
     try{
+        //Set up an error variable to be passed through verification functions
+        var error = '';
         //Find the relevant group Members
         //let results = foundGroup.group_members.filter(member => (member.user_ID == req.body.admin_user_ID ||
         //                                                         member.user_ID == req.body.group_member_ID));

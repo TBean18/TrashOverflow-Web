@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
@@ -15,6 +16,7 @@ const LandingPage = () => {
     <>
       <Sidebar isOpen={isOpen} toggle={toggle} />
       <Navbar toggle={toggle} />
+      <Hero />
     </>
   );
 };

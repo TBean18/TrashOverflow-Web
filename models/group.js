@@ -107,14 +107,22 @@ GroupSchema.methods.demoteGroupMember = function(curMemberID, cb) {
 GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
   let res = this.group_members.filter(mem => curMemberID === mem.user_ID && mem.admin === true);
   // should just be length 1 if admin found, but just in case...
-  return (res.length >= 1) ? res : '';
+  return (res.length >= 1) ? res[0] : '';
 }
 
-// Returns user if user is a member of this group, empty string otherwise
-GroupSchema.methods.verifyUser = function(curUserID, cb) {
-  let res = this.group_members.filter(mem => curUserID === mem.user_ID);
+// Returns member if member is a member of this group, empty string otherwise
+GroupSchema.methods.verifyMember = function(curMemberID, cb) {
+  let res = this.group_members.filter(mem => curMemberID === mem.user_ID);
   // should just be length 1 if user found, but just in case...
-  return (res.length >= 1) ? res : '';
+  return (res.length >= 1) ? res[0] : '';
+}
+
+GroupSchema.methods.ERROR_ADMIN = function(curMemberID, cb) {
+  return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_ID}) or is not an admin`;
+}
+
+GroupSchema.methods.ERROR_MEMBER = function(curMemberID, cb) {
+  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_ID})`;
 }
 
 

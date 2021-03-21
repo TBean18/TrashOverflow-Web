@@ -30,16 +30,17 @@ router.post('/create', (req, res) => {
             const newSched = new schedule(payload);
             // Save the schedule into the database.
             newSched.save()
-                .then(item => res.json(item));
+                .then(item => {
+                    res.json(item);
+                    // Link the schedule to the chore.
+                    c.chore_schedule = newSched;
+                })
             .catch(err => {
                 console.log(err);
                 res.json({
                     error: err
                 });
             });
-
-            // Link the schedule to the chore.
-            c.chore_schedule = newSched;
         })
         .catch(err => {
             console.log(err);

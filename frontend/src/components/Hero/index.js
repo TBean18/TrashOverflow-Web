@@ -1,7 +1,24 @@
-import React from 'react';
-import { HeroContainer, HeroBackground, VideoBackground } from './HeroElements';
+import React, { useState } from 'react';
+import {
+  HeroContainer,
+  HeroBackground,
+  VideoBackground,
+  HeroContent,
+  HeroH1,
+  HeroP,
+  HeroButtonWrapper,
+  ArrowForward,
+  ArrowRight
+} from './HeroElements';
+import { Button } from '../ButtonElement';
 
 const Hero = () => {
+  const [hover, setHover] = useState(false);
+
+  const onHover = () => {
+    setHover(!hover);
+  };
+
   return (
     <HeroContainer>
       <HeroBackground>
@@ -13,6 +30,23 @@ const Hero = () => {
           type="video"
         />
       </HeroBackground>
+      <HeroContent>
+        <HeroH1>The Dishes are Still in the Sink</HeroH1>
+        <HeroP>
+          Because we all know your roommate isn't going to do it, anyway.
+        </HeroP>
+        <HeroButtonWrapper>
+          <Button
+            to="signup"
+            onMouseEnter={onHover}
+            onMouseLeave={onHover}
+            primary="true"
+            dark="true"
+          >
+            Get started {hover ? <ArrowForward /> : <ArrowRight />}
+          </Button>
+        </HeroButtonWrapper>
+      </HeroContent>
     </HeroContainer>
   );
 };

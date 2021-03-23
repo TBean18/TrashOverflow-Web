@@ -31,6 +31,17 @@ const GroupSchema = new Schema({
 
 });
 
+//A PRE-METHOD that fires before every user.save() call
+//Checks to ensure that the  passwrod was not changed, if it has, then we need to recompute the hash
+GroupSchema.pre('save', function(next) {
+  var group = this;
+
+  // only hash the password if it has been modified (or is new)
+  if (!group.isModified('group_members')) return next();
+  if(group.group_members.length === 0)
+    Group.remove({_id: this._id})
+});
+
 //Add a user to the group_members []
 GroupSchema.methods.addGroupMember = function(newMember, cb){
   //Format input data
@@ -75,7 +86,43 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
 //Remove a group member from the group_members []
 GroupSchema.methods.removeGroupMember = function(curMemberID, cb) {
   this.group_members.pull(curMemberID);
-  this.save(cb)
+  this.save(cb);
+}
+
+// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// Promotes a group member to admin
+GroupSchema.methods.promoteGroupMember = function(curMemberID, cb) {
+  this.group_members[curMemberID].admin = true;
+  this.save(cb);
+}
+
+// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// Demotes a group member from admin
+GroupSchema.methods.demoteGroupMember = function(curMemberID, cb) {
+  this.group_members[curMemberID].admin = false;
+  this.save(cb);
+}
+
+// Returns admin if admin is a member of this group, empty string otherwise
+GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
+  let res = this.group_members.filter(mem => curMemberID === mem.user_ID && mem.admin === true);
+  // should just be length 1 if admin found, but just in case...
+  return (res.length >= 1) ? res[0] : '';
+}
+
+// Returns member if member is a member of this group, empty string otherwise
+GroupSchema.methods.verifyMember = function(curMemberID, cb) {
+  let res = this.group_members.filter(mem => curMemberID === mem.user_ID);
+  // should just be length 1 if user found, but just in case...
+  return (res.length >= 1) ? res[0] : '';
+}
+
+GroupSchema.methods.ERROR_ADMIN = function(curMemberID, cb) {
+  return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_ID}) or is not an admin`;
+}
+
+GroupSchema.methods.ERROR_MEMBER = function(curMemberID, cb) {
+  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_ID})`;
 }
 
 

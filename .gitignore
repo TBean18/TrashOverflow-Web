@@ -2,3 +2,4 @@ node_modules
 .env
 config/secrets.js
 .DS_Store
+.prettierrc

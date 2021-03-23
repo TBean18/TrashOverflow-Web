@@ -109,7 +109,7 @@ UserSchema.methods.leaveGroup = function(curGroupID, cb){
 }
 
 UserSchema.statics.leaveGroup = function(user_ID, group_ID){
-  this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
+  return this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
 }
 
 

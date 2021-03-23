@@ -10,15 +10,7 @@ const user = require('../../models/user');
 // Description  Get all Groups for the given user
 // Access       Public
 // Parameters   user_ID
-router.post('/', (req, res) => {
-    //JWT Verification
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        return res.status(401).json({error: err||""});
-    }
+router.post('/', jwt.authenticateUser, (req, res) => {
 
     //Find the user and the groups for that user
     user.findById(req.body.user_ID)
@@ -33,7 +25,8 @@ router.post('/', (req, res) => {
     .then(curUser => {
         let groups = curUser.getGroup_IDArray();
         res.json({
-            groups
+            groups,
+            error: ''
         })
     })
     .catch(err => {

@@ -51,7 +51,7 @@ router.post('/login', (req, res) => {
             }
         })
         .then(item => {
-            let token = jwt.createToken({item});
+            let token = jwt.createToken({user_ID: item._id});
             if(token.error !== '') throw token.error;
             let output = {
                 user: item,

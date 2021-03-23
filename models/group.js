@@ -111,17 +111,24 @@ GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
 }
 
 // Returns member if member is a member of this group, empty string otherwise
+// curMemberID is the member_ID 
 GroupSchema.methods.verifyMember = function(curMemberID, cb) {
-  let res = this.group_members.filter(mem => curMemberID === mem.user_ID);
+  let res = this.group_members.filter(mem => curMemberID === mem._id);
   // should just be length 1 if user found, but just in case...
   return (res.length >= 1) ? res[0] : '';
 }
 
-GroupSchema.methods.ERROR_ADMIN = function(curMemberID, cb) {
+//Find the group member with the supplied user_id in group_id
+GroupSchema.statics.findMember = async function (user_ID, group_ID){
+  let member = await GroupMember.model.find({user_ID, group_ID}).exec();
+  return member;
+}
+
+GroupSchema.methods.ERROR_ADMIN = function(curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_ID}) or is not an admin`;
 }
 
-GroupSchema.methods.ERROR_MEMBER = function(curMemberID, cb) {
+GroupSchema.methods.ERROR_MEMBER = function(curMemberID) {
   return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_ID})`;
 }
 

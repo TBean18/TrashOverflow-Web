@@ -39,7 +39,7 @@ router.post('/', jwt.authenticateUser, (req, res) => {
 // Route        POST api/groups/new
 // Description  Create a new group
 // Access       Public
-router.post('/new', (req, res) => {
+router.post('/new', jwt.authenticateUser, (req, res) => {
     // Create new payload. Only add description and chore list
     // if the items were filled out.
     const payload = {
@@ -64,7 +64,7 @@ router.post('/new', (req, res) => {
 // Route        POST api/groups
 // Description  Edit a group
 // Access       Public
-router.post('/editGroup', (req, res) => {
+router.post('/editGroup', jwt.authenticateUser, (req, res) => {
     group.findByIdAndUpdate(req.body._id, {
             group_name : req.body.group_name,
             group_description : req.body.group_description
@@ -78,7 +78,7 @@ router.post('/editGroup', (req, res) => {
 // Route        POST api/groups
 // Description  delete a group
 // Access       Public
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwt.authenticateUser, (req, res) => {
     group.findById(req.params.id)
         .then(g => {
             let name = {
@@ -98,16 +98,7 @@ router.delete('/:id', (req, res) => {
 // Parameters
 //      user_ID:    String - ID of current user
 //      group_ID:   String - ID of group to join
-router.post('/join', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
-
+router.post('/join', jwt.authenticateUser, async (req, res) => {
     //Since the group needs to be added to the User aswell we need to find the user first
     //Find User
     var foundUser, foundGroup;
@@ -162,16 +153,7 @@ router.post('/join', async (req, res) => {
 //      admin_ID:   String - ID of admin (current user) who will remove the other member
 //      group_ID:   String - ID of group where removal will take place
 //      member_ID:  String - ID of member to be removed
-router.post('/removeUser', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
-
+router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     //Find Group
     var foundGroup;
     try{
@@ -266,16 +248,7 @@ router.post('/removeUser', async (req, res) => {
 //      user_ID:    String - ID of current user
 //      member_ID:  String - ID of member that will leave group (current user)
 //      group_ID:   String - ID of group to leave
-router.post('/leave', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
-
+router.post('/leave', jwt.authenticateUser, async (req, res) => {
     //Locate data objects
     var foundGroup;
     try{
@@ -358,16 +331,7 @@ router.post('/leave', async (req, res) => {
 //      admin_ID:   String - ID of admin (current user) who will demote the other member
 //      group_ID:   String - ID of group where demotion will take place
 //      member_ID:  String - ID of member to be demoted
-router.post('/promote', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return;
-    }
-
+router.post('/promote', jwt.authenticateUser, async (req, res) => {
     //Find Group
     var foundGroup;
     try{
@@ -446,16 +410,7 @@ router.post('/promote', async (req, res) => {
 //      admin_ID:   String - ID of admin (current user) who will demote the other member
 //      group_ID:   String - ID of group where demotion will take place
 //      member_ID:  String - ID of member to be demoted
-router.post('/demote', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return;
-    }
-
+router.post('/demote', jwt.authenticateUser, async (req, res) => {
     //Find Group
     var foundGroup;
     try{

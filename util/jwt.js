@@ -70,3 +70,34 @@ exports.verifyID = function( token, user_ID) {
     });
     return valid;
 }
+
+// Authentication function that decodes the supplied token from req.body.token or req.header('x-auth-token')
+// and then ensures the supplied user_ID in the body is the same as the one in the token
+// NOTE: I am considering just passing the decoded user_ID from the authentication
+// Instead of having the client need to send it for every request
+exports.authenticateUser = function (req, res, next){
+  const token = req.header('x-auth-token') || req.body.token;
+    // No Token Case
+    if(!token){
+      return res.status(401).json({error: 'JWT Token Required'})
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      //No supplied user_ID case
+      if(!req.body.user_ID){
+        //pass the decoded user_ID into the req.body
+        req.body.user_ID = decoded.user_ID
+        return next();
+      }
+
+      //Incorrect user_ID case
+      if(req.body.user_ID !== decoded.user_ID){
+        return res.status(401).json({error: 'JWT is NOT registered to the user_id supplied in the request'})
+      }
+      next();
+    } catch (e) {
+      //Expired / Corrupted Case
+      return res.status(400).json({error: 'JWT Token is invalid. Please login again'})
+    }
+}

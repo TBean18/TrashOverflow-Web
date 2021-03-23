@@ -1,0 +1,35 @@
+:root {
+    --main-color: #f1f2f5;
+    --main-color-dark: #1E1E1E;
+
+    --header-color: white;
+    --header-color-dark: #161616;
+
+    --header-input-color: #eff2f5;
+    --header-input-color-dark: #252526;
+
+    --header-input-text: black;
+    --header-input-text-dark: #eff2f5;
+
+    --header-icon-color: gray;
+    --header-icon-color-dark: #eff2f5;
+
+    --sidebarrow-hover: lightgray;
+    --sidebarrow-hover-dark: #161616;
+
+    --post-color: white;
+    --post-color-dark: #161616;
+
+    --post-text-color: black;
+    --post-text-color-dark: white;
+}
+
+.app {
+    background-color: var(--main-color-dark);
+}
+
+.app__body {
+    display: flex;
+}
+
+

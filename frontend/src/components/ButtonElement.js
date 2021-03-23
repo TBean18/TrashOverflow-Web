@@ -4,7 +4,8 @@ import { Link } from 'react-scroll';
 
 export const Button = styled(Link)`
   border-radius: 50px;
-  background: ${({ primary }) => (primary ? '#01BF71' : '#010606')};
+  // Buttons are either orange or black.
+  background: ${({ primary }) => (primary ? '#feb054' : '#010606')};
   white-space: nowrap;
   padding: ${({ big }) => (big ? '14px 48px' : '12px 30px')};
   color: ${({ dark }) => (dark ? '#010606' : '#fff')};
@@ -19,6 +20,7 @@ export const Button = styled(Link)`
 
   &:hover {
     transition: all 0.2s ease-in-out;
-    background: ${({ primary }) => (primary ? '#fff' : '#01BF71')};
+    // background of buttons changes from white to orange or vise versa
+    background: ${({ primary }) => (primary ? '#fff' : '#feb054')};
   }
 `;

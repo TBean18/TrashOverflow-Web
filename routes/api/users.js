@@ -6,7 +6,7 @@ const router = express.Router();
 const user = require('../../models/user');
 
 //JSON Web Token
-const jwt = require('../../util/jwt')
+const jwt = require('../../util/jwt');
 
 // ROUTE    GET api/users
 // DESC     GET All Users

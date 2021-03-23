@@ -1,11 +1,17 @@
 import React, { createContext, useReducer, useState} from 'react';
 import AppReducer from './AppReducer'
+const axios = require('axios').default;
+
 //Initial State
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')) || '',
     groups: JSON.parse(localStorage.getItem('groups')) || '',
     jwt: JSON.parse(localStorage.getItem('JWT')) || ''
 };
+
+// Use the Initial State decs to set the default 'x-auth-token' header
+axios.defaults.headers.common['x-auth-token'] = initialState.jwt;
+
 
 //Create a new Context
 export const GlobalContext = createContext(initialState);
@@ -28,7 +34,8 @@ export const GlobalProvider = function (props) {
     //Function used to store the JWT token from the API responce
     function storeJWT(webToken){
         localStorage.setItem('JWT', JSON.stringify(webToken));
-        setJWT(jwt);
+        axios.defaults.headers.common['x-auth-token'] = webToken;
+        setJWT(webToken);
     } 
 
     //Login function used to store userData in global state

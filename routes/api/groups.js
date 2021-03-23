@@ -246,81 +246,53 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
 // Access       Public
 // Parameters
 //      user_ID:    String - ID of current user
-//      member_ID:  String - ID of member that will leave group (current user)
 //      group_ID:   String - ID of group to leave
 router.post('/leave', jwt.authenticateUser, async (req, res) => {
+    const {group_ID, user_ID} = req.body;
     //Locate data objects
+    //Find Group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     }catch(err){
         console.log(err);
-        res.status(404).json(err);
+        res.status(404).json({error: err});
         return
     }
+    //Find group Member
+    let foundGroupMember = group.findMember(user_ID, group_ID)
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(user_ID)})
+    
+    //remove the found group member
+    let prevMemCount = foundGroup.group_members.length;
+    foundGroup.removeGroupMember(foundGroupMember._id)
 
-    //Try to update data
-    var foundMember;
-    try{
-        //Set up an error variable to be passed through both update functions
-        var error = '';
-
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
+    if(prevMemCount !== 1){
+        //If the removed member was an admin check to see if the group is left with 0 admins
+        if(foundGroupMember.admin){
+            //find admins in the group 
+            let admins = foundGroup.group_members.filter(mem => (mem.admin === true));
+            //There was no admins case
+            if(admins.length < 1){
+                //promote the next groupMember
+                foundGroup.promoteGroupMember(foundGroup.group_members[0])
             }
-        });
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
         }
-
-        let admins = foundGroup.group_members.filter(mem => (mem.admin === true));
-
-        //Update Group data
-        foundGroup.removeGroupMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        // We need to randomly promote a user to admin after removing this one as they were the last admin
-        // If this user is the last in the group, group will be automatically deleted by pre method anyway
-        if (foundMember.admin === true && admins.length === 1 && foundGroup.group_members.length > 1) {
-            let members = foundGroup.group_members.filter(mem => (mem.user_ID !== foundMember.user_ID));
-            foundGroup.promoteGroupMember(members[0].user_ID, (err) => {
-                if(err) {
-                    console.log(err);
-                    error.concat((err + '; '));
-                }
-            });
-        }
-
-        //update the User's Group and send response
-        foundMember.leaveGroup(req.body.group_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                user_groups: foundMember.groups,
-                group: {
-                    name: foundGroup.group_name,
-                    members: foundGroup.group_members
-                },
-                error: err
-            })
-        })
-
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
     }
+    //Remove the group form the user's list
+    user.leaveGroup(user_ID, group_ID)
+        .then(foundUser => {
+        res.json({
+            groups: foundUser.groups,
+            error: ''
+        })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({error: err})
+        });
+
+    //The Group preSave function will take carte of the empty group case
 });
 
 // Route        POST api/groups/promote

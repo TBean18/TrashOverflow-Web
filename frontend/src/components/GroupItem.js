@@ -17,7 +17,7 @@ function leaveGroup(group_ID){
         group_ID
     })
     .then(res => {
-        if(res.data.error == '') throw res.data.error
+        if(res.data.error !== '') throw res.data.error
         console.log(res);
         storeJWT(res.data.token);
         storeGroups(res.data.user_groups);

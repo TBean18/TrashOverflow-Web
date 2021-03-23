@@ -7,16 +7,40 @@ const group = require('../../models/group');
 const user = require('../../models/user');
 
 // Route        GET api/groups/
-// Description  Get all Groups
+// Description  Get all Groups for the given user
 // Access       Public
-router.get('/', (req, res) => {
-    // Retrieve all group objects
-    group.find()
-        .then(items => res.json(items))
-        .catch(err => {
-            console.log(err);
-            res.status(401).json(err);
+// Parameters   user_ID
+router.post('/', (req, res) => {
+    //JWT Verification
+    //Verify that the supplied user_id is the same as the user_id on the token
+    try{
+        jwt.verifyID(req.body.token, req.body.user_ID)
+    }catch(err){
+        console.log({err});
+        return res.status(401).json({error: err||""});
+    }
+
+    //Find the user and the groups for that user
+    user.findById(req.body.user_ID)
+    //Populate the users groups aswell
+    .populate({
+        path: 'groups',
+        populate:{
+            path: 'group_ID',
+            model: 'group'
+        }
+    })
+    .then(curUser => {
+        let groups = curUser.getGroup_IDArray();
+        res.json({
+            groups
         })
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(401).json({error: err});
+    });
+
 });
 
 // Route        POST api/groups/new

@@ -33,7 +33,7 @@ function leaveGroup(group_ID){
             <h2>{props.group.group_name}</h2>
             <p>{props.group.group_description}</p>
             {/* remove the group on click of this button */}
-            <button onClick={() => leaveGroup(props.group.group_ID)}>x</button>
+            <button onClick={() => leaveGroup(props.group._id)}>x</button>
         </>
     )
 }

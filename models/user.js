@@ -112,5 +112,16 @@ UserSchema.statics.leaveGroup = function(user_ID, group_ID){
   this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
 }
 
+
+// Returns an array of the Users group.group_ID objects
+// Mainly for use when we use the .populate() command
+UserSchema.methods.getGroup_IDArray = function(cb){
+  let groups = []
+  this.groups.map(g =>{
+    groups.push(g.group_ID);
+  });
+  return groups
+}
+
 const User = mongoose.model('user', UserSchema); 
 module.exports = User;

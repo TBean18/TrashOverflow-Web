@@ -40,9 +40,9 @@ export const homeObjTwo = {
 
 export const homeObjThree = {
   id: 'services',
-  lightBg: false,
-  lightText: true,
-  lightTextDesc: true,
+  lightBg: true,
+  lightText: false,
+  lightTextDesc: false,
   topLine: 'Top Line 3',
   headline: 'Headline 3 Goes Here',
   description: 'Make sure to put a description here.',
@@ -50,7 +50,7 @@ export const homeObjThree = {
   imgStart: false,
   img: require('../../images/svg-1.svg').default,
   alt: 'Laptop',
-  dark: true,
-  primary: true,
-  darkText: false
+  dark: false,
+  primary: false,
+  darkText: true
 };

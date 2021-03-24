@@ -16,6 +16,7 @@ export const homeObjOne = {
 };
 
 export const homeObjTwo = {
+  // The id must match the id name in /Navbar/index.js
   id: 'discover',
   // Controls the background of the section. True is white
   lightBg: true,
@@ -38,7 +39,7 @@ export const homeObjTwo = {
 };
 
 export const homeObjThree = {
-  id: 'thirdThing',
+  id: 'services',
   lightBg: false,
   lightText: true,
   lightTextDesc: true,

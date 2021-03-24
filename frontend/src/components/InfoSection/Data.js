@@ -16,6 +16,7 @@ export const homeObjOne = {
 };
 
 export const homeObjTwo = {
+  // The id must match the id name in /Navbar/index.js
   id: 'discover',
   // Controls the background of the section. True is white
   lightBg: true,
@@ -38,18 +39,18 @@ export const homeObjTwo = {
 };
 
 export const homeObjThree = {
-  id: 'about',
-  lightBg: false,
-  lightText: true,
-  lightTextDesc: true,
-  topLine: 'Top Line 3',
-  headline: 'Headline 3 Goes Here',
-  description: 'Make sure to put a description here.',
-  buttonLabel: 'Get Started',
+  id: 'signup',
+  lightBg: true,
+  lightText: false,
+  lightTextDesc: false,
+  topLine: 'Sign up for a new account today',
+  headline: 'Easier than taking out the trash',
+  description: "It will also look like you're doing something.",
+  buttonLabel: 'Sign Up',
   imgStart: false,
   img: require('../../images/svg-1.svg').default,
   alt: 'Laptop',
-  dark: true,
-  primary: true,
-  darkText: false
+  dark: false,
+  primary: false,
+  darkText: true
 };

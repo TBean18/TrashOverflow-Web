@@ -7,6 +7,7 @@ import {
   homeObjTwo
 } from '../components/InfoSection/Data';
 import Navbar from '../components/Navbar';
+import Services from '../components/Services';
 import Sidebar from '../components/Sidebar';
 
 const LandingPage = () => {
@@ -25,6 +26,7 @@ const LandingPage = () => {
       <Hero />
       <InfoSection {...homeObjOne} />
       <InfoSection {...homeObjTwo} />
+      <Services />
       <InfoSection {...homeObjThree} />
     </>
   );

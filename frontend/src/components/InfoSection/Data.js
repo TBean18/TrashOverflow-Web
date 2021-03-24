@@ -39,14 +39,14 @@ export const homeObjTwo = {
 };
 
 export const homeObjThree = {
-  id: 'services',
+  id: 'signup',
   lightBg: true,
   lightText: false,
   lightTextDesc: false,
-  topLine: 'Top Line 3',
-  headline: 'Headline 3 Goes Here',
-  description: 'Make sure to put a description here.',
-  buttonLabel: 'Get Started',
+  topLine: 'Sign up for a new account today',
+  headline: 'Easier than taking out the trash',
+  description: "It will also look like you're doing something.",
+  buttonLabel: 'Sign Up',
   imgStart: false,
   img: require('../../images/svg-1.svg').default,
   alt: 'Laptop',

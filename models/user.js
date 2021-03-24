@@ -40,7 +40,7 @@ UserSchema.pre('save', function(next) {
   var user = this;
 
   // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) return next();
+  if (!user.isModified('password_hash')) return next();
 
   // generate a salt
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -101,10 +101,16 @@ UserSchema.methods.addGroup = function(newGroup, cb){
 //Removes a group from the User's groups [] 
 // curGroupID is the groupPlaceHolderID
 UserSchema.methods.leaveGroup = function(curGroupID, cb){
+  //Manuallly find the index of the group we want to remove
+  //remove that index form the groupPlaceHolders arrray
+  //Save the result
   this.groups.pull(curGroupID);
   this.save(cb)
 }
 
+UserSchema.statics.leaveGroup = function(user_ID, group_ID){
+  this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
+}
 
 const User = mongoose.model('user', UserSchema); 
 module.exports = User;

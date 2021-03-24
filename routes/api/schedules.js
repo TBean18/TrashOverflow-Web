@@ -1,3 +1,4 @@
+
 // Set up routes for all schedule related end points.
 const express = require("express");
 const router = express.Router();
@@ -86,3 +87,7 @@ router.post('/edit', (req, res) => {
             });
         });
 });
+
+// create schedule
+
+// update schedule

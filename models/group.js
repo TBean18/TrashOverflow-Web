@@ -40,6 +40,7 @@ GroupSchema.pre('save', function(next) {
   if (!group.isModified('group_members')) return next();
   if(group.group_members.length === 0)
     Group.remove({_id: this._id})
+  return next();
 });
 
 //Add a user to the group_members []
@@ -112,8 +113,8 @@ GroupSchema.methods.verifyAdmin = function(curMemberID, cb) {
 
 // Returns member if member is a member of this group, empty string otherwise
 // curMemberID is the member_ID 
-GroupSchema.methods.verifyMember = function(curMemberID, cb) {
-  let res = this.group_members.filter(mem => curMemberID === mem._id);
+GroupSchema.methods.findMemberByUser_ID = function(user_ID, cb) {
+  let res = this.group_members.filter(mem => user_ID == mem.user_ID);
   // should just be length 1 if user found, but just in case...
   return (res.length >= 1) ? res[0] : '';
 }
@@ -125,11 +126,11 @@ GroupSchema.statics.findMember = async function (user_ID, group_ID){
 }
 
 GroupSchema.methods.ERROR_ADMIN = function(curMemberID) {
-  return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_ID}) or is not an admin`;
+  return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 }
 
 GroupSchema.methods.ERROR_MEMBER = function(curMemberID) {
-  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_ID})`;
+  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_name})`;
 }
 
 

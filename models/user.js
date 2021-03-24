@@ -66,6 +66,7 @@ UserSchema.methods.comparePassword = function(inputPassword, cb){
 };
 
 //Add a group to the users.groups []
+// Checks for duplicates before doing so
 UserSchema.methods.addGroup = function(newGroup, cb){
   //Format the data from the input model 
   const data = {
@@ -75,29 +76,25 @@ UserSchema.methods.addGroup = function(newGroup, cb){
 
   // So aparantly addToSet will not with with documents unless the enplicit _id is the same too
   // Thus, we should copy the groups add Group member function
-  const added = this.groups.addToSet(data)
-  if(added.length == 0){
-    let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
-    return cb(err)
-  }
-  this.save(cb)
 
-  // //Check for duplicate group
-  // var unique = true;
-  // this.groups.forEach(g => {
-  //   if(g.group_ID.equals(newGroupHolder.group_ID)){
-  //     unique = false;
-  //     // console.log('Same');
-  //   }
-  // })
-  // //If unique add the new group
-  // if(unique){
-  //   this.groups.push(newGroupHolder)
-  //   this.save(cb)
-  // }else{
-  //   let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
-  //   return cb(err)
-  // }
+  //Check for duplicates
+  let unique = true;
+  this.groups.every(group => {
+    if(group.group_ID.equals(data.group_ID)){
+      unique = false
+      return false;
+    }
+    return true;
+  })
+  //Add groupPlaceHolder if unique
+  if(unique){
+    this.groups.push(data);
+    this.save(cb);
+    return
+  }else{
+    let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
+    return cb(err);
+  }
 }
 
 //Removes a group from the User's groups [] 

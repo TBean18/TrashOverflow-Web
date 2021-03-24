@@ -33,6 +33,7 @@ export const GlobalProvider = function (props) {
 
     //Function used to store the JWT token from the API responce
     function storeJWT(webToken){
+        if(webToken == undefined) return;
         localStorage.setItem('JWT', JSON.stringify(webToken));
         axios.defaults.headers.common['x-auth-token'] = webToken;
         setJWT(webToken);
@@ -40,6 +41,7 @@ export const GlobalProvider = function (props) {
 
     //Login function used to store userData in global state
     function logIn(userObject, webToken){
+        if(userObject == undefined) return;
         setUser(userObject);
         localStorage.setItem('user', JSON.stringify(userObject));
         storeJWT(webToken)
@@ -50,11 +52,6 @@ export const GlobalProvider = function (props) {
             curGroups.push(g.group_ID);
         });
         storeGroups(curGroups);
-
-        // dispatch({
-        //     type: 'LOGIN',
-        //     payload: userObject
-        // });
     }
 
     //Logout function used to remove user data from global state

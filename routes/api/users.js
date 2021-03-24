@@ -11,16 +11,21 @@ const jwt = require('../../util/jwt');
 // ROUTE    GET api/users
 // DESC     GET All Users
 // ACCESS   Public
-router.get('/', (req, res) => {
-    user.find()
-        .then(items => res.json(items))
-        .catch(err => console.log(err));
-});
+
+// Currently Disabled as there is no need for retreivng all users
+// router.get('/', (req, res) => {
+//     user.find()
+//         .then(items => res.json(items))
+//         .catch(err => console.log(err));
+// });
 
 // ROUTE    POST api/users/register
 // DESC     Register a user
 // ACCESS   Public
+// PARAMS   name, password_hash, phone_number, email
+// RETURNS  user, token, error
 router.post('/register', (req, res) => {
+    //Create new user Payload
     const newUser = new user({
         name: req.body.name,
         password_hash: req.body.password_hash,
@@ -29,7 +34,13 @@ router.post('/register', (req, res) => {
     });
 
     newUser.save()
-        .then(item => res.json({user: item, error: ''}))
+        .then(item => {
+            //Make a new JSON Web Token
+            let token = jwt.createToken({user_ID: item._id})
+            if(token.error !== '') throw token.error
+            //Send Responce
+            res.json({user: item, token: token.accessToken, error: ''})
+        })
         .catch(err => {
             console.log(err);
             res.status(404).json({error: err});

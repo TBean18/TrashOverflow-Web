@@ -23,48 +23,63 @@ router.get('/:group_ID', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(404).json({error: err})
+            res.status(404).json({
+                error: err
+            })
         })
 });
 
 // Route        POST api/chores/
 // Description  Adds a chore to the group. 
 // Access       Public I think
+// Required Params      chore_assigned_user
+// ...............          type: GroupMember.GroupMemberSchema
+// ...............      chore_user_pool
+// ...............          type: [GroupMember.GroupMemberSchema]
+// ...............      chore_name
+// ...............          type: String
+// Optional Params      chore_description
+// ...............          type: String
+// ...............      chore_point_value
+// ...............          type: Number
+// ...............      chore_schedule
+// ...............          type: Schedule.ScheduleSchema
 router.post('/add', (req, res) => {
     // TODO: make sure user is admin.
 
     group.findById(req.bodyParser._id)
         .then(g => {
+
+            // Person to be assigned to the chore first and their index in the array.
+            const assigned_person = req.body.chore_assigned_user;
+            const assigned_index = req.body.chore_user_pool.indexOf(assignedPerson);
+
             // Create payload with required fields.
             const payload = {
-                chore_assigned_user: req.body.chore_assigned_user,
-                chore_assigned_user_index: req.body.chore_assigned_user_index,
-                chore_user_pool: req.body.chore,
-                chore_name: req.body.chore_name    
+                chore_assigned_user: assigned_person,
+                chore_assigned_user_index: assigned_index,
+                chore_user_pool: req.body.chore_user_pool,
+                chore_name: req.body.chore_name
             };
-            
+
             // Check if non-required fields were filled out and add to payload. 
             if (req.body.hasOwnProperty("chore_description"))
                 payload["chore_description"] = req.body["chore_description"];
-            if (req.body.hasOwnProperty("chore_completion_status"))
-                payload["chore_completion_status"] = req.body["chore_completion_status"];
             if (req.body.hasOwnProperty("chore_point_value"))
                 payload["chore_point_value"] = req.body["chore_point_value"];
             if (req.body.hasOwnProperty("chore_schedule"))
                 payload["chore_schedule"] = req.body["chore_schedule"];
 
-            chore.save(payload)
-                .then(item => {
-                    // Add new chore to group chore list.
-                    g.chore_list.push_back(item);
-                    res.json(item);
+            // Update the group by adding the new chore to the chore list.
+            const newChore = new chore(payload);
+            g.update({
+                    $push: {
+                        group_chore_list: newChore
+                    }
                 })
-                .catch(err => {
-                    console.log(err);
-                    res.json({
-                        error: err
-                    });
-                })
+                .then(res.json({
+                    "update_chore_list": g.group_chore_list
+                }));
         })
         .catch(err => {
             console.log(err);
@@ -79,19 +94,13 @@ router.post('/add', (req, res) => {
 // Access       Public
 router.delete('/:id/:token', (req, res) => {
     // TODO: make sure user is admin.
-    
+
     chore.findById(req.params.id)
         .then(item => {
             let deleted_chore = {
                 "chore_name": item.chore_name,
                 "delete_success": true
             };
-
-            // If we found the chore delete the associated schedule.
-            schedule.find({chore_id: req.params.id})
-                .then(sched => {
-                    sched.remove();
-                })
 
             item.remove()
                 .then(() => res.json(deleted_chore))
@@ -104,17 +113,25 @@ router.delete('/:id/:token', (req, res) => {
 // Route        POST api/chores
 // Description  Edit chore (name, description, point value)
 // Access       Public
+// Required Params      _id
+// ...............          type: Given by MongoDB
+// ...............      chore_name
+// ...............          type: String
+// ...............      chore_description
+// ...............          type: String
+// ...............      chore_point_value
+// ...............          type: Number
 router.post('/edit', (req, res) => {
     chore.findByIdAndUpdate(req.body._id, {
-        chore_name: req.body.chore_name,
-        chore_description: req.body.chore_description,
-        chore_point_value: req.body.chore_point_value
-    }, {
-        // Return updated changed with c in .then
-        new: true
-    })
-    .then(c => res.json(c))
-    .catch(err => console.log(err));
+            chore_name: req.body.chore_name,
+            chore_description: req.body.chore_description,
+            chore_point_value: req.body.chore_point_value
+        }, {
+            // Return updated changed with c in .then
+            new: true
+        })
+        .then(c => res.json(c))
+        .catch(err => console.log(err));
 })
 
 // Route        POST api/chores
@@ -139,8 +156,8 @@ router.post('/assignUser', (req, res) => {
             // The weird math for first splice param is to avoid getting a negative index.
             let pool_length = c.chore_user_pool.length;
             c.chore_user_pool.splice(
-                (c.chore_assigned_user_index + pool_length - 1) % pool_length++, 
-                0, 
+                (c.chore_assigned_user_index + pool_length - 1) % pool_length++,
+                0,
                 req.body.user_ID
             );
 
@@ -183,7 +200,7 @@ router.post('/removeUser', (req, res) => {
                 c.rotateAssignedUser(true, err => {
                     throw err;
                 });
-                
+
             // Remove the person from the array.
             const person = c.chore_user_pool.splice(personIndex, 1);
             // FIXME: this may be slow but it should work for testing.
@@ -209,7 +226,7 @@ router.post('/removeUser', (req, res) => {
             console.log(err);
             res.json(err);
         });
-}) 
+})
 
 // Route        POST api/chores
 // Description  Update user chore queue

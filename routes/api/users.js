@@ -29,8 +29,11 @@ router.post('/register', (req, res) => {
     });
 
     newUser.save()
-        .then(item => res.json(item))
-        .catch(err => console.log(err));
+        .then(item => res.json({user: item, error: ''}))
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({error: err});
+        });
 
 });
 

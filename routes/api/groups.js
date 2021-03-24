@@ -153,12 +153,12 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
-    const {admin_user_id, member_user_id, group_id} = req.body;
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
     // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(group_id).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
@@ -166,107 +166,31 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     }
 
     // find the relevant groupmembers
-    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_id);
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
     if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
     // check if current user is an admin
     if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
 
-    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_id);
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
     if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
 
-    // update group data and compose response
-    let promoteMemberStatus = await foundGroup.demoteGroupMember(foundGroupMember._id);
-    if(!promoteMemberStatus) return res.status(404).json({error: 'Could not promote user'});
+    // remove group member and check if successful
+    // TODO: afaik this doesn't return anything but would be nice if we start doing this for all our methods
+    // instead of try/catch blocks
+    let removedMemberStatus = foundGroup.removeGroupMember(foundGroupMember._id);
+    // TODO: turn error string into dedicated error method
+    if (!removedMemberStatus) return res.status(404).json({error: 'Could not remove member from group'});
+
+    let leaveGroupStatus = await user.leaveGroup(member_user_ID, group_ID);
+    // TODO: same as above
+    if(!leaveGroupStatus) return res.status(404).json({error: 'Could not remove/leave group from user'});
+
+    // compose response
+    let groupArray = updatedUser.getGroup_IDArray();
     res.json({
-        // TODO: what else should go here?
+        groups: groupArray,
         error: ''
     });
-
-    //Find Group
-    var foundGroup;
-    try{
-        foundGroup = group.findById(req.body.group_ID).exec();
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
-
-    //Find the relevant groupmembers
-    var foundAdmin, foundMember;
-    try{
-        //Set up an error variable to be passed through verification functions
-        var error = '';
-
-        foundAdmin = foundGroup.verifyAdmin(req.body.admin_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        //Verify User Info
-        if(foundAdmin === '') {
-            err = foundGroup.ERROR_ADMIN(req.body.admin_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-
-        // report error and exit function if any error was given
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return
-    }
-
-    //Try to update data
-    try{
-        //Set up an error variable to be passed thorugh both update functions
-        var error = '';
-        //Update Group data
-        foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        //update the User's Group and send responce
-        foundMember.leaveGroup(req.body.group_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                user_groups: foundMember.groups,
-                group: {
-                    name: foundGroup.group_name,
-                    members: foundGroup.group_members
-                },
-                error: err
-            })
-        })
-
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
-    }
-
-    //Compose Response
 });
 
 // Route        POST api/groups/leave

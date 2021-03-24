@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import "./Register.css";
 import { GlobalContext } from '../context/GlobalState'
 import { useForm } from '../hooks/useForm';
+import {useHistory} from 'react-router-dom';
+
 const axios = require('axios').default;
 
 function Register()
@@ -11,6 +13,8 @@ function Register()
     //Store all form input in a JSON where key == component name(prop)
     const [values, setValues] = useForm({name: '', password_hash: '', phone_number: '', email: ''});
     const [message, setMessage] = useState('');
+    const history = useHistory();
+
 
     let name;
     let password_hash;
@@ -36,7 +40,9 @@ function Register()
           if(res.data.error != '') throw res.data.error
           console.log(res);
           //Set the user for the globalState
-          logIn(res.data.user, res.data.token);
+          logIn(res.data.user, res.data.token); 
+          history.push("/cards");
+
         })
         //Display error if error is caught
         .catch(error => {

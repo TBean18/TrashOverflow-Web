@@ -33,6 +33,7 @@ function Register()
         })
         //Display Message
         .then(res => {
+          if(res.data.error != '') throw res.data.error
           console.log(res);
           //Set the user for the globalState
           logIn(res.data.user, res.data.token);
@@ -40,7 +41,7 @@ function Register()
         //Display error if error is caught
         .catch(error => {
           console.log(error);
-          setMessage(error);
+          setMessage(JSON.stringify(error));
         })
     };
 

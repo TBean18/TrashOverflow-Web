@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react';
 import "./Login.css";
 import { GlobalContext } from '../context/GlobalState'
+import {useHistory} from 'react-router-dom'
 const axios = require('axios').default;
 
 function Login()
 {
     //Bring in the userState form the global context
     const {logIn, user, storeJWT} = useContext(GlobalContext);
-
+    const history = useHistory();
     let email;
     let password_hash;
 
@@ -36,6 +37,7 @@ function Login()
           //Set the user for the globalState
           logIn(res.data.user, res.data.token);
           setMessage(res.data.user.name);
+          history.push("/cards")
         })
         //Display error if error is caught
         .catch(error => {

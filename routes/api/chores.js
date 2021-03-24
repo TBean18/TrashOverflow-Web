@@ -263,6 +263,8 @@ router.post('/updateStatus', (req, res) => {
         });
 })
 
+module.exports = router;
+
 // add chore
 
 // delete chore (and schedule)

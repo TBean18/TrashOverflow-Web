@@ -3,7 +3,8 @@ import { GlobalContext } from '../context/GlobalState';
 const axios = require('axios').default;
 
 export default function JoinGroup() {
-    const {isShown, setShown} = useState();
+    const [isShown, setShown] = useState();
+    const [inviteCode, setInviteCode] = useState();
     const {storeJWT, storeGroups } = useContext(GlobalContext)
 
     function showModal(){
@@ -12,7 +13,10 @@ export default function JoinGroup() {
 
     }
 
-    function joinGroup(inviteCode){
+    function joinGroup(event){
+        event.preventDefault();
+
+
         axios.post('/api/groups/join', {
             group_ID: inviteCode
         }).then(res => {
@@ -23,13 +27,19 @@ export default function JoinGroup() {
             storeGroups(res.data.groups)
         })
     }
+
+    function handleTextChange(event){
+        event.preventDefault();
+        setInviteCode(event.target.value)
+    }
+    
     
     return (
         <>
-            <form onSubmit={() => joinGroup()}>
+            <form onSubmit={joinGroup}>
                 <h2>Join Group By Invite Code</h2>
                 <label>Invite Code:</label>
-                <input type='text' name='inviteCode'></input>
+                <input type='text' name='inviteCode' onChange={handleTextChange}></input>
                 <input type='submit' name='submit'></input>
             </form>
         </>

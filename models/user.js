@@ -73,6 +73,8 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     group_name: newGroup.group_name
   }
 
+  // So aparantly addToSet will not with with documents unless the enplicit _id is the same too
+  // Thus, we should copy the groups add Group member function
   const added = this.groups.addToSet(data)
   if(added.length == 0){
     let err = `User: ${this.name} is already a member of Group: ${data.group_name}`

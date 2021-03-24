@@ -12,14 +12,13 @@ const {user, jwt, storeJWT, storeGroups} = useContext(GlobalContext);
 function leaveGroup(group_ID){
     //Make the login API call
     axios.post('/api/groups/leave', {
-        user_ID: user._id,
-        token: jwt,
         group_ID
     })
     .then(res => {
         if(res.data.error !== '') throw res.data.error
         console.log(res);
-        storeJWT(res.data.token);
+        if('token' in res.data)
+            storeJWT(res.data.token);
         storeGroups(res.data.user_groups);
     })
     .catch(err => {

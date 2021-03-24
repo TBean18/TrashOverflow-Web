@@ -19,7 +19,7 @@ function leaveGroup(group_ID){
         console.log(res);
         if('token' in res.data)
             storeJWT(res.data.token);
-        storeGroups(res.data.user_groups);
+        storeGroups(res.data.groups);
     })
     .catch(err => {
         console.log(err);

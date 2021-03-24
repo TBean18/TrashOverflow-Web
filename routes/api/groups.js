@@ -149,11 +149,39 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
 // Description  Endpoint hit when a admin wants to remove a user from the group
 // Access       Public
 // Parameters
-//      user_ID:    String - ID of current user
-//      admin_ID:   String - ID of admin (current user) who will remove the other member
-//      group_ID:   String - ID of group where removal will take place
-//      member_ID:  String - ID of member to be removed
+//      admin_user_ID:    String - ID of current user
+//      member_user_ID:   String - ID of user to be demoted
+//      group_ID:         String - ID of group where demotion will take place
 router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
+    const {admin_user_id, member_user_id, group_id} = req.body;
+
+    // find group
+    var foundGroup;
+    try{
+        foundGroup = group.findById(group_id).exec();
+    }catch(err){
+        console.log({err});
+        res.status(401).json({error: err});
+        return;
+    }
+
+    // find the relevant groupmembers
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_id);
+    if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
+    // check if current user is an admin
+    if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
+
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_id);
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
+
+    // update group data and compose response
+    let promoteMemberStatus = await foundGroup.demoteGroupMember(foundGroupMember._id);
+    if(!promoteMemberStatus) return res.status(404).json({error: 'Could not promote user'});
+    res.json({
+        // TODO: what else should go here?
+        error: ''
+    });
+
     //Find Group
     var foundGroup;
     try{
@@ -278,7 +306,7 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
         // ...check to see if group is left w/ 0 admins
         if(admins.length < 1){
             //promote the next group member
-            foundGroup.promoteGroupMember(foundGroup.group_members[0]);
+            foundGroup.promoteGroupMember(foundGroup.group_members[0]._id);
         }
     }
 
@@ -307,6 +335,7 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
     // the group preSave function will take care of the empty group case
 });
 
+// TODO: Consolidate /promote and /demote into one?
 // Route        POST api/groups/promote
 // Description  Endpoint hit when a admin wants to promote another user to admin
 // Access       Public
@@ -315,12 +344,12 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post('/promote', jwt.authenticateUser, async (req, res) => {
-    const {admin_user_id, member_user_id, group_id} = req.body;
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
     // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
@@ -328,12 +357,12 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
     }
 
     // find the relevant groupmembers
-    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_id);
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
     if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
     // check if current user is an admin
     if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
 
-    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_id);
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
     if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
 
     // update group data and compose response
@@ -353,12 +382,12 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post('/demote', jwt.authenticateUser, async (req, res) => {
-    const {admin_user_id, member_user_id, group_id} = req.body;
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
     // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
@@ -366,16 +395,16 @@ router.post('/demote', jwt.authenticateUser, async (req, res) => {
     }
 
     // find the relevant groupmembers
-    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_id);
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
     if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
     // check if current user is an admin
     if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
 
-    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_id);
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
     if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
 
     // update group data and compose response
-    let promoteMemberStatus = await foundGroup.demoteGroupMember(foundGroupMember._id);
+    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
     if(!promoteMemberStatus) return res.status(404).json({error: 'Could not promote user'});
     res.json({
         // TODO: what else should go here?

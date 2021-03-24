@@ -220,8 +220,8 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
     let prevMemCount = foundGroup.group_members.length;
 
     // remove group member and check if successful
-    let removedMemberStatus = foundGroup.removeGroupMember(foundGroupMember._id);
-    if (!removedMemberStatus) return res.status(404).json({error: 'Could not remove member from group'});
+    let removedMemberError = foundGroup.removeGroupMember(foundGroupMember._id);
+    if (removedMemberError) return res.status(404).json({error: removedMemberError});
 
     // if group not empty after removal and removed user not an admin...
     if(prevMemCount !== 1 && foundGroupMember.admin){
@@ -235,8 +235,8 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
     }
 
     // remove the group from the user's list and check if successful
-    let updatedUserStatus = await user.leaveGroup(user_ID, group_ID);
-    if(!updatedUserStatus) return res.status(404).json({error: 'Could not remove/leave group from user'});
+    let updatedUser = await user.leaveGroup(user_ID, group_ID);
+    if(!updatedUser) return res.status(404).json({error: 'Could not remove/leave group from user'});
 
     // compose response
     let groupArray = updatedUser.getGroup_IDArray();

@@ -78,7 +78,7 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
     return cb(err)
   }
-  this.save()
+  this.save(cb)
 
   // //Check for duplicate group
   // var unique = true;
@@ -104,12 +104,18 @@ UserSchema.methods.leaveGroup = function(curGroupID, cb){
   //Manuallly find the index of the group we want to remove
   //remove that index form the groupPlaceHolders arrray
   //Save the result
-  this.groups.pull(curGroupID);
-  this.save(cb)
+  this.groups.pull(curGroupID).then(this.save(cb));
+  // this.save(cb)
 }
 
 UserSchema.statics.leaveGroup = function(user_ID, group_ID){
-  return this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
+  return this.findOneAndUpdate({_id: user_ID}, {$pull: { groups: { group_ID: group_ID}}}, {new: true}).populate({
+    path: 'groups',
+    populate:{
+        path: 'group_ID',
+        model: 'group'
+    }
+}).exec()
 }
 
 

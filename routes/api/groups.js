@@ -260,7 +260,7 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
         return
     }
     //Find group Member
-    let foundGroupMember = group.findMember(user_ID, group_ID)
+    let foundGroupMember = foundGroup.findMemberByUser_ID(user_ID)
     if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(user_ID)})
     
     //remove the found group member
@@ -275,22 +275,29 @@ router.post('/leave', jwt.authenticateUser, async (req, res) => {
             //There was no admins case
             if(admins.length < 1){
                 //promote the next groupMember
-                foundGroup.promoteGroupMember(foundGroup.group_members[0])
+                foundGroup.promoteGroupMember(foundGroup.group_members[0]);
             }
         }
     }
     //Remove the group form the user's list
-    user.leaveGroup(user_ID, group_ID)
-        .then(foundUser => {
-        res.json({
-            groups: foundUser.groups,
-            error: ''
-        })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(404).json({error: err})
-        });
+    let updatedUser = await user.leaveGroup(user_ID, group_ID);
+    if(!updatedUser) return res.status(404).json({error: 'Error leaving the group on the user\'s side '});
+    let groupArray = updatedUser.getGroup_IDArray();
+    res.json({
+        groups: groupArray,
+        error: ''
+    });
+        // .then(foundUser => {
+        // console.log(foundUser)
+        // res.json({
+        //     groups: foundUser.groups,
+        //     error: 'test'
+        // })
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     res.status(404).json({error: err})
+        // });
 
     //The Group preSave function will take carte of the empty group case
 });

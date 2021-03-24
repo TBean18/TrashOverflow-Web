@@ -25,6 +25,8 @@ export default function JoinGroup() {
             if('token' in res.data) 
                 storeJWT(res.data.token)
             storeGroups(res.data.groups)
+        }).catch(err => {
+            console.log(err)
         })
     }
 

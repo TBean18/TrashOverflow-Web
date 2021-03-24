@@ -85,9 +85,15 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
 }
 
 //Remove a group member from the group_members []
+// RETURNS an error message | '' is no error
 GroupSchema.methods.removeGroupMember = function(curMemberID, cb) {
   this.group_members.pull(curMemberID);
-  this.save(cb);
+  this.save(cb).then(group => {
+    return '';
+  }).catch(err => {
+    console.log(err);
+    return err;
+  });
 }
 
 // ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***

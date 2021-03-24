@@ -4,13 +4,17 @@
 - [ ] Email Verification
 - [ ] Mobile App
   - [x] ReactNative
-- [ ] Security
+- [x] Security
   - [x] Java Web Token
 - [ ] Invitation to HouseHold System
   - [ ] Add / Remove Admins
-  - [ ] Creator is permanate Admin
-- [ ] Register / Log in
+  - [x] Creator is permanate Admin
+- [x] Register / Log in
 - [ ] Creation of Households
+- [ ] View of Housegold info
+  - [ ] Group Member
+  - [ ] Group Admins
+  - [ ] Score Leaderboard
 - [ ] Creation of Chores
   - [ ] Pool of Users
   - [ ] A user responsible for the chore during the given iteration
@@ -20,6 +24,25 @@
     - [ ] If it even Reccurs
   - [ ] What do we do with Finished chores that still have time until the due date
 - [ ] Dark Mode
+- [ ] For Wednesday's Meeting
+  - [ ] Group Menu
+    - [ ] Group Items
+      - [ ] Group Name
+      - [ ] Icon
+  - [ ] Group View (Opened From Clicking on Group Item)
+    - [ ] Chore List
+      - [ ] Chore Cards
+        - [ ] Chore Name
+        - [ ] Chore Description
+        - [ ] Chore Due Date
+        - [ ] Chore 
+    - [ ] Group List
+      - [ ] Group Cards
+        - [ ] Group Name
+        - [ ] Group Admins
+        - [ ] Group Members
+  - [ ] Finish and TEst Chores API
+  - [ ] Create the Unit Testing Thing
 
 ## API Endpoints (API Team Please Change)
 

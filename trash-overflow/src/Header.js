@@ -1,6 +1,8 @@
 import React from 'react'
 import logo from './logo.png'
 import "./Header.css"
+import { Link } from "react-router-dom";
+
 import SearchIcon from '@material-ui/icons/Search';
 import HomeIcon from '@material-ui/icons/Home';
 import FlagIcon from '@material-ui/icons/Flag';
@@ -29,10 +31,14 @@ function Header() {
 
         <div className="header__center">
             <div className="header__option header__option--active">
-                <HomeIcon fontSize="large" />
+                <Link to="/">
+                    <HomeIcon fontSize="large" />
+                </Link>
             </div>
             <div className="header__option">
-                <FlagIcon fontSize="large" />
+                <Link to="/groupview">
+                    <FlagIcon fontSize="large" />
+                </Link>
             </div>
             <div className="header__option">
                 <SubscriptionsOutlinedIcon fontSize="large" />

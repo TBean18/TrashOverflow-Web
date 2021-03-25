@@ -1,0 +1,110 @@
+.groupCardFront {
+    padding: 0 0 0 0 ;
+    width: 256px;
+    height: 250px;
+    margin: 15px 15px 15px 15px;
+    border-radius: 15px;
+    background-color: var(--post-color);
+    box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+    
+    justify-content: space-between;
+    transition: transform 100ms ease-in;
+    cursor: pointer;
+}
+
+.groupCardFront:hover {
+    transform: scale(1.07);
+}
+
+.groupCardFront__top {
+    display: flex;
+    height: 144px;
+
+    border-radius: 15px 15px 0 0;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    color: white;
+}
+
+.groupCardFront__top > img {
+    display: block;
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+}
+
+.groupCardFront__top > h3 {
+    position: relative;
+    left: 10px;
+    top: 110px;
+}
+
+.groupCardFront__body {
+    height: 110px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 0;
+}
+
+.groupCardFront__bodyInfoTop {
+    height: 25%;
+    width: 100%;
+}
+
+.groupCardFront__bodyInfoTop > p {
+    margin-top: 20px;
+    font-size: 15px;
+    margin-left: 12px;
+}
+
+.groupCardFront__bodyInfoBottom {
+    height: 75%;
+    width: 100%;
+    font-size: 13px;
+}
+
+.groupCardFront__admins {
+    margin-top: 30px;
+    margin-left: 13px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.groupCardFront__admins > ul {
+    padding: 0px 15px 0px 0px;
+}
+
+.groupCardFront__options {
+    padding-top: 10px;
+    border-top: 1px solid var(--header-input-color);
+    display: flex;
+    justify-content: space-evenly;
+    font-size: medium;
+    color: var(--header-icon-color);
+    cursor: pointer;
+    padding: 15px;
+}
+
+.groupCardFront__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    flex: 1;
+}
+
+.groupCardFront__option > p {
+    margin-left: 10px;
+}
+
+.groupCardFront__option:hover {
+    background-color: var(--header-input-color);
+    border-radius: 10px;
+}

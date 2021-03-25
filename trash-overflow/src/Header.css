@@ -4,7 +4,7 @@
     justify-content: space-between;
 
     position: sticky;
-    background-color: var(--header-color-dark);
+    background-color: var(--header-color);
     z-index: 100;
 
     top: 0;
@@ -19,8 +19,8 @@
 .header__input {
     display: flex;
     align-items: center;
-    background-color: var(--header-input-color-dark);
-    color: var(--header-input-text-dark);
+    background-color: var(--header-input-color);
+    color: var(--header-input-text);
     padding: 10px;
     margin-left: 10px;
     border-radius: 999px;
@@ -30,7 +30,7 @@
     border: none;
     background-color: transparent;
     outline-width: 0;
-    color: var(--header-input-text-dark);
+    color: var(--header-input-text);
 }
 
 .header__left > img {
@@ -44,7 +44,7 @@
 }
 
 .header__option > .MuiSvgIcon-root {
-    color: var(--header-icon-color-dark);
+    color: var(--header-icon-color);
 }
 
 .header__option:hover > .MuiSvgIcon-root {
@@ -67,7 +67,7 @@
 }
 
 .header__option:hover {
-    background-color: var(--header-input-color-dark);
+    background-color: var(--header-input-color);
     border-radius: 10px;
     align-items: center;
     padding: 0 30px;
@@ -85,9 +85,9 @@
 
 .header__right {
     display: flex;
-    color: var(--header-input-text-dark);
+    color: var(--header-input-text);
 }
 
 .header__right > .MuiIconButton-root {
-    color: var(--header-icon-color-dark);
+    color: var(--header-icon-color);
 }

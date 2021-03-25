@@ -3,11 +3,11 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    color: var(--header-input-text-dark)
+    color: var(--header-input-text)
 }
 
 .sidebarRow:hover {
-    background-color: var(--sidebarrow-hover-dark);
+    background-color: var(--sidebarrow-hover);
     border-radius: 10px;
 }
 

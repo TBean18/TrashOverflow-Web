@@ -1,43 +1,61 @@
-.post {
-    width: 100%;
-    margin-top: 15px;
+.groupCard {
+    width: 288px;
+    height: 256px;
+    margin: 15px 15px 15px 15px;
     border-radius: 15px;
     background-color: var(--post-color);
     box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
     color: var(--post-text-color);
+    justify-content: space-between;
+    transition: transform 100ms ease-in;
+    cursor: pointer;
 }
 
-.post__top {
+.groupCard:hover {
+    transform: scale(1.07);
+}
+
+.groupCard__top {
+    display: flex;
+    height: 50%;
+}
+
+.groupCard__topImage > img {
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+}
+
+.groupCard__body {
+    height: 125px;
     display: flex;
     position: relative;
     align-items: center;
     padding: 15px;
+    left: 30px;
 }
 
-.post__avatar {
-    margin-right: 10px;
+.groupCard__bodyInfo > p {
+    font-size: 13px;
 }
 
-.post__topInfo > h3 {
+.groupCard__bodyInfo > h3 {
     font-size: medium;
+    position: absolute;
+    top: 30px;    
 }
 
-.post__topInfo > p {
-    font-size: small;
-    color: gray;
-}
-
-.post__bottom {
+.groupCard__bottom {
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 15px 25px;
 }
 
-.post__image > img {
-    width: 100%;
+.groupCard__image > img {
+    width: 150px;
+    height: 150px;
 }
 
-.post__options {
+.groupCard__options {
     padding-top: 10px;
     border-top: 1px solid var(--header-input-color);
     display: flex;
@@ -48,7 +66,7 @@
     padding: 15px;
 }
 
-.post__option {
+.groupCard__option {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,11 +74,11 @@
     flex: 1;
 }
 
-.post__option > p {
+.groupCard__option > p {
     margin-left: 10px;
 }
 
-.post__option:hover {
+.groupCard__option:hover {
     background-color: var(--header-input-color);
     border-radius: 10px;
 }

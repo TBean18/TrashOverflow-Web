@@ -10,7 +10,7 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
-import LandingPage from './pages';
+import LandingPage from './pages/LandingPage';
 
 import { GlobalProvider } from './context/GlobalState';
 

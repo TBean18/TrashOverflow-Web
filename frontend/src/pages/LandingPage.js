@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import InfoSection from '../components/InfoSection';
+import InfoSection2 from '../components/InfoSection/index2';
 import {
   homeObjOne,
   homeObjThree,
@@ -28,7 +29,7 @@ const LandingPage = () => {
       <InfoSection {...homeObjOne} />
       <InfoSection {...homeObjTwo} />
       <Services />
-      <InfoSection {...homeObjThree} />
+      <InfoSection2 {...homeObjThree} />
       <Footer />
     </>
   );

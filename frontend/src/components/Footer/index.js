@@ -20,7 +20,8 @@ import {
   SocialLogo,
   WebsiteRights,
   SocialIcons,
-  SocialIconLink
+  SocialIconLink,
+  TeamMeet
 } from './FooterElements';
 
 const Footer = () => {
@@ -31,41 +32,70 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterWrap>
+        <TeamMeet /> Meet the Team
         <FooterLinksContainer>
           <FooterLinksWrapper>
             <FooterLinkItems>
-              <FooterLinkTitle>About us</FooterLinkTitle>
-              <FooterLink to="/signin">How it works</FooterLink>
-              <FooterLink to="/signin">Testimonials</FooterLink>
-              <FooterLink to="/signin">Careers</FooterLink>
-              <FooterLink to="/signin">Investors</FooterLink>
-              <FooterLink to="/signin">Terms of Service</FooterLink>
+              <FooterLinkTitle>Phillip Mitchell</FooterLinkTitle>
+              <FooterLink
+                to="//www.linkedin.com/in/phillipmitchell90/"
+                target="_blank"
+              >
+                LinkedIn
+              </FooterLink>
+              <FooterLink to="//www.facebook.com/philmitch" target="_blank">
+                FaceBook
+              </FooterLink>
+              <FooterLink to="//github.com/sheffield712" target="_blank">
+                GitHub
+              </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>About us</FooterLinkTitle>
-              <FooterLink to="/signin">How it works</FooterLink>
-              <FooterLink to="/signin">Testimonials</FooterLink>
-              <FooterLink to="/signin">Careers</FooterLink>
-              <FooterLink to="/signin">Investors</FooterLink>
-              <FooterLink to="/signin">Terms of Service</FooterLink>
+              <FooterLinkTitle>Alexa Keene</FooterLinkTitle>
+              <FooterLink
+                to="//www.linkedin.com/in/alexakeene/"
+                target="_blank"
+              >
+                LinkedIn
+              </FooterLink>
+              <FooterLink to="//github.com/keeneale" target="_blank">
+                GitHub
+              </FooterLink>
             </FooterLinkItems>
           </FooterLinksWrapper>
           <FooterLinksWrapper>
             <FooterLinkItems>
-              <FooterLinkTitle>About us</FooterLinkTitle>
-              <FooterLink to="/signin">How it works</FooterLink>
-              <FooterLink to="/signin">Testimonials</FooterLink>
-              <FooterLink to="/signin">Careers</FooterLink>
-              <FooterLink to="/signin">Investors</FooterLink>
-              <FooterLink to="/signin">Terms of Service</FooterLink>
+              <FooterLinkTitle>Adrian Cooper</FooterLinkTitle>
+              <FooterLink
+                to="//www.linkedin.com/in/adrian-cooper-ab38b2120/"
+                target="_blank"
+              >
+                LinkedIn
+              </FooterLink>
+              <FooterLink to="//github.com/adriancooper13" target="_blank">
+                GitHub
+              </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>About us</FooterLinkTitle>
-              <FooterLink to="/signin">How it works</FooterLink>
-              <FooterLink to="/signin">Testimonials</FooterLink>
-              <FooterLink to="/signin">Careers</FooterLink>
-              <FooterLink to="/signin">Investors</FooterLink>
-              <FooterLink to="/signin">Terms of Service</FooterLink>
+              <FooterLinkTitle>Taylor Bean</FooterLinkTitle>
+              <FooterLink to="//github.com/TBean18" target="_blank">
+                GitHub
+              </FooterLink>
+            </FooterLinkItems>
+            <FooterLinkItems>
+              <FooterLinkTitle>Conrad Smith</FooterLinkTitle>
+              <FooterLink to="//github.com/conradsmi" target="_blank">
+                GitHub
+              </FooterLink>
+            </FooterLinkItems>
+            <FooterLinkItems>
+              <FooterLinkTitle>Jo Johnson</FooterLinkTitle>
+              <FooterLink to="//github.com/jojohnson-jsj" target="_blank">
+                GitHub
+              </FooterLink>
+            </FooterLinkItems>
+            <FooterLinkItems>
+              <FooterLinkTitle>Sam Eslick</FooterLinkTitle>
             </FooterLinkItems>
           </FooterLinksWrapper>
         </FooterLinksContainer>

@@ -5,12 +5,24 @@ export const FooterContainer = styled.footer`
   background-color: #101522;
 `;
 export const FooterWrap = styled.div`
+  color: #fff;
   padding: 48px 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: 1100px;
+  margin: 0 auto;
+  font-size: 28px;
+`;
+
+export const TeamMeet = styled.div`
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1400px;
   margin: 0 auto;
 `;
 
@@ -26,7 +38,7 @@ export const FooterLinksContainer = styled.div`
 export const FooterLinksWrapper = styled.div`
   display: flex;
 
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 1350px) {
     flex-direction: column;
   }
 `;
@@ -75,6 +87,7 @@ export const SocialMediaWrap = styled.div`
   align-items: center;
   max-width: 1100px;
   margin: 40px auto 0 auto;
+  font-size: 14px;
 
   @media screen and (max-width: 820px) {
     flex-direction: column;

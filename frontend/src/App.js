@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/Login';
 import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
 import LandingPage from './pages/LandingPage';

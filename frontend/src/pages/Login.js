@@ -11,7 +11,6 @@ import {
   Icon
 } from './LoginElements';
 import React, { useState, useContext } from 'react';
-import './Login.css';
 import { GlobalContext } from '../context/GlobalState';
 import { useHistory } from 'react-router-dom';
 const axios = require('axios').default;

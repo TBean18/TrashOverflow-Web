@@ -10,6 +10,8 @@ const chore = require('../../models/chore');
 // Route        GET api/chores/:group_ID
 // Description  Get the Chore list for a given group
 // Access       Public
+// Required Params
+// ...............      group_id
 router.get('/:group_ID', (req, res) => {
     //Do we need to verify the user on a chorelist lookup?
 
@@ -29,10 +31,11 @@ router.get('/:group_ID', (req, res) => {
         })
 });
 
-// Route        POST api/chores/
-// Description  Adds a chore to the group. 
-// Access       Public I think
-// Required Params      chore_assigned_user
+// Route                POST api/chores/
+// Description          Adds a chore to the group. 
+// Access               Public I think
+// Required Params      
+// ...............      chore_assigned_user
 // ...............          type: GroupMember.GroupMemberSchema
 // ...............      chore_user_pool
 // ...............          type: [GroupMember.GroupMemberSchema]
@@ -89,9 +92,12 @@ router.post('/add', (req, res) => {
         })
 });
 
-// Route        DELETE api/chores/
-// Desc         Deletes the chore.
-// Access       Public
+// Route                DELETE api/chores/
+// Desc                 Deletes the chore.
+// Access               Public
+// Required Params      
+// ...............      id (of the chore)
+// ...............      token (jwt)
 router.delete('/:id/:token', (req, res) => {
     // TODO: make sure user is admin.
 
@@ -134,9 +140,12 @@ router.post('/edit', (req, res) => {
         .catch(err => console.log(err));
 })
 
-// Route        POST api/chores
-// Desc         Assigns a user to the chore queue.
-// Access       Public
+// Route                POST api/chores
+// Desc                 Assigns a user to the chore queue.
+// Access               Public
+// Required Params
+// ...............      _id (of the chore)
+// ...............      user_ID -> user to be assigned to the chore.
 router.post('/assignUser', (req, res) => {
     // TODO: only allow admin priviledges.
 
@@ -149,7 +158,7 @@ router.post('/assignUser', (req, res) => {
 
             // If findIndex ^ returns something other than -1, the user is in the pool.
             if (personIndex !== -1)
-                throw `${req.body.user_name} is already in the chore pool`;
+                throw `${c.chore_user_pool[personIndex].user_name} is already in the chore pool`;
 
             // Because this is a circular queue, we may have to add someone in the middle
             // of the array to add them at the end of the line.
@@ -177,13 +186,17 @@ router.post('/assignUser', (req, res) => {
         });
 })
 
-// Route        POST api/chores
-// Desc         Removes the user from the chore queue
-// Access       Public
+// Route                POST api/chores
+// Desc                 Removes the user from the chore queue
+// Access               Public
+// Required Params      
+// ...............      _id (of the chore)
+// ...............      user_ID -> id of user to be removed from the chore.
+// ...............      user_name -> name of user to be removed from the chore.
 router.post('/removeUser', (req, res) => {
     // TODO: only allow admin priviledges.
 
-    chore.findById(req.body.id)
+    chore.findById(req.body._id)
         .then(c => {
             // Find the index of the person to remove.
             const personIndex = c.chore_user_pool.findIndex(person => {
@@ -228,9 +241,11 @@ router.post('/removeUser', (req, res) => {
         });
 })
 
-// Route        POST api/chores
-// Description  Update user chore queue
-// Access       Public
+// Route                POST api/chores
+// Description          Update user chore queue
+// Access               Public
+// Required Params      
+// ...............      _id (of the chore)
 router.post('/updatePool', (req, res) => {
     chore.findById(req.body._id)
         .then(c => {
@@ -247,9 +262,11 @@ router.post('/updatePool', (req, res) => {
         })
 })
 
-// Route        POST api/chores
-// Description  Updates the chore status and rotates the user if chore is finished.
-// Access       Public
+// Route                POST api/chores
+// Description          Updates the chore status and rotates the user if chore is finished.
+// Access               Public
+// Required Params      
+// ...............      _id (of the chore)
 router.post('/updateStatus', (req, res) => {
     chore.findById(req.body._id)
         .then(c => {

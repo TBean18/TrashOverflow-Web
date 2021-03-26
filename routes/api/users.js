@@ -82,9 +82,12 @@ router.post('/edit', (req, res) => {
         .catch(err => console.log(err));
 });
 
-// ROUTE    DELETE api/users/
-// DESC     Deletes the users account
-// ACCESS   Public
+// ROUTE                DELETE api/users/
+// DESC                 Deletes the users account
+// ACCESS               Public
+// Required Params
+// ...............      id (of the user)
+// ...............      token (jwt)
 router.delete('/:id/:token', (req, res) => {
     var email;
     user.findById(req.params.id)

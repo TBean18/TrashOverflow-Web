@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
 import LandingPage from './pages';
+
 import { GlobalProvider } from './context/GlobalState';
 
 function App() {

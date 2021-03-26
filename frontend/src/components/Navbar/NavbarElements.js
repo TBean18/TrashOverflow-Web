@@ -5,7 +5,7 @@ import { Link as LinkS } from 'react-scroll';
 export const Nav = styled.nav`
   background: #000;
   height: 80px;
-  /* margin-top: -80px; */
+  margin-top: -80px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,7 +85,7 @@ export const NavLinks = styled(LinkS)`
   // this is an active class for the underlines under our links in the Navbar.
   &.active {
     // trim color
-    border-bottom: 3px solid #01bf71;
+    border-bottom: 3px solid #feb054;
   }
 `;
 
@@ -101,7 +101,7 @@ export const NavButton = styled.nav`
 export const NavButtonLink = styled(LinkR)`
   border-radius: 50px;
   // trim color
-  background: #01bf71;
+  background: #feb054;
   white-space: nowrap;
   padding: 10px 22px;
   color: #010606;

@@ -279,3 +279,19 @@ router.post('/updateStatus', (req, res) => {
             res.json(err);
         });
 })
+
+// add chore
+
+// delete chore (and schedule)
+
+// edit chore (name)
+
+// assign user to chore queue
+
+// remove user from chore queue
+
+// update chore status
+
+// 
+
+

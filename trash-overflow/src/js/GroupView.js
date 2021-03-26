@@ -1,5 +1,5 @@
 import React from 'react'
-import './GroupView.css'
+import '../css/GroupView.css'
 import Header from './Header'
 import GroupList from './GroupList'
 import Sidebar from './Sidebar'

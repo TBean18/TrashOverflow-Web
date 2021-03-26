@@ -1,5 +1,5 @@
 import React from 'react'
-import './GroupCardFront.css'
+import '../css/GroupCardFront.css'
 
 function GroupCardFront({ image, groupname }) {
     return (

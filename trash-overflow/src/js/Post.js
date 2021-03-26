@@ -1,7 +1,7 @@
 import { Avatar } from '@material-ui/core'
 import { AccountCircle, ChatBubbleOutlineOutlined, ExpandMoreOutlined, ThumbUp } from '@material-ui/icons'
 import React from 'react'
-import "./Post.css"
+import "../css/Post.css"
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 import NearMeIcon from '@material-ui/icons/NearMe';

@@ -1,6 +1,6 @@
 import React from 'react'
-import logo from './logo.png'
-import "./Header.css"
+import logo from '../images/logo.png'
+import "../css/Header.css"
 import { Link } from "react-router-dom";
 
 import SearchIcon from '@material-ui/icons/Search';

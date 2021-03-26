@@ -8,44 +8,78 @@ import NearMeIcon from '@material-ui/icons/NearMe';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 
-function Post({ profilePic, image, username, timestamp, message }) {
-    return (
-        <div className="post">
-            <div className="post__top">
-                <Avatar src={profilePic} className="post__avatar"/>
-                <div className="post__topInfo">
-                    <h3>{username}</h3>
-                    <p>"Timestamp...</p>
-                </div>
-            </div>
-            <div className="post__bottom">
-                <p>{message}</p>
-            </div>
+class Post extends React.Component {
 
-            <div className="post__image">
-                <img src={image} alt="" />
-            </div>
+    constructor(props) {
+        super(props)
+        this.state = {
+          expanded: false,
+        }
+        this.toggleExpanded = this.toggleExpanded.bind(this);
+      }
+      toggleExpanded() {
+        this.setState({ expanded: !this.state.expanded, });
+      }
 
-            <div className="post__options">
-                <div className="post__option">
-                    <ThumbUpIcon />
-                    <p>Like</p>
+    render() {
+        const {
+            profilePic, image, taskTitle, timestamp, message
+        } = this.props;
+
+        return (
+            <div 
+                className={`row ${this.state.expanded ? 'post-expanded' : 'post'}`}
+                >
+                <div className="post__top" onClick={this.toggleExpanded}>
+                    <div className="post__topTitle">                    
+                        <h3>{taskTitle}</h3> 
+                        <p>Points: 47</p>                              
+                    </div>
+                    <div className="post__topRight">
+                        <div className="post__topRightDate">
+                            <p>Due: 04/23/2021</p>
+                        </div>
+                        <div className="post__topRightPoints">
+                            <p>Repeats: Weekly</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="post__option">
-                    <ChatBubbleOutlineOutlinedIcon />
-                    <p>Comment</p>
+                <div className="post__body" onClick={this.toggleExpanded}>
+                    <div className="post__bodyDescription">
+                        <p>{message}</p>
+                    </div>
+                    <div className="post__bodyAssignedUsers">
+                        <ul>Jo Johnson</ul>
+                        <ul>Sam Eslick</ul>
+                        <ul>Philip</ul>
+                    </div>
                 </div>
-                <div className="post__option">
-                    <NearMeIcon />
-                    <p>Share</p>
+
+                <div className="post__image" onClick={this.toggleExpanded}>
+                    <img src={image} alt="" />
                 </div>
-                <div className="post__option">
-                    <AccountCircleIcon />
-                    <ExpandMoreOutlinedIcon />
+
+                <div className="post__options">
+                    <div className="post__option">
+                        <ThumbUpIcon />
+                        <p>Like</p>
+                    </div>
+                    <div className="post__option">
+                        <ChatBubbleOutlineOutlinedIcon />
+                        <p>Comment</p>
+                    </div>
+                    <div className="post__option">
+                        <NearMeIcon />
+                        <p>Share</p>
+                    </div>
+                    <div className="post__option">
+                        <AccountCircleIcon />
+                        <ExpandMoreOutlinedIcon />
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 export default Post

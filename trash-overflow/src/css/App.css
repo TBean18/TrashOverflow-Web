@@ -26,10 +26,17 @@
 
 .app {
     background-color: var(--main-color);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+
+    overflow: scroll;
 }
 
 .app__body {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

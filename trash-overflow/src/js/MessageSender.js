@@ -29,13 +29,14 @@ function MessageSender() {
                         onChange={(e) => setInput(e.target.value)}
                         type="text"
                         className="messageSender__input"
-                        placeholder={`What's on your mind?`}
+                        placeholder={`Task Name`}
                     />
 
                     <input
                         value={imgUrl} 
                         onChange={e => setImageUrl(e.target.value)}
                         placeholder="Image URL (Optional)" 
+                        className="messageSender__input"
                     />
 
                     <button onClick={handleSubmit} type="submit">

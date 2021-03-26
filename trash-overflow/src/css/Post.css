@@ -1,36 +1,85 @@
 .post {
-    width: 100%;
+    width: 600px;
+    height: auto;
     margin-top: 15px;
     border-radius: 15px;
     background-color: var(--post-color);
     box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
     color: var(--post-text-color);
+    display: flex;
+    flex-direction: column;
+
+    transition: transform 100ms ease-in;
+    cursor: pointer;
+}
+
+.post-expanded {
+    width: 600px;
+    height: 400px;
+    margin-top: 15px;
+    border-radius: 15px;
+    background-color: var(--post-color);
+    box-shadow: 0px 0px 14px -7px rgba(0, 0, 0, 0.75);
+    color: var(--post-text-color);
+    display: flex;
+    flex-direction: column;
+
+    transition: transform 100ms ease-in;
+    transform: scale(1.25);
+    cursor: pointer;
+
+    z-index: 1;
 }
 
 .post__top {
+    height: 30%;
     display: flex;
-    position: relative;
     align-items: center;
+    justify-content: space-between;
     padding: 15px;
+    border-bottom: 1px solid var(--header-input-color);
 }
 
-.post__avatar {
-    margin-right: 10px;
+.post__topTitle {
+    position: relative;
+    margin: 10px 0 0 10px;
 }
 
-.post__topInfo > h3 {
+.post__topTitle > h4 {
     font-size: medium;
 }
 
-.post__topInfo > p {
-    font-size: small;
-    color: gray;
+.post__topRight {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0 0 10px;
 }
 
-.post__bottom {
+.post__topRightDate {
+    font-size: medium;
+}
+
+.post__topRightPoints {
+    font-size: 13px;
+}
+
+.post__body {
+    height: 40%;
+    display: flex;
+    justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 15px 25px;
+}
+
+.post__bodyDescription {
+    width: 40%;
+}
+
+.post__bodyAssignedUsers {
+    height: 100%;
+    font-size: small;
+    margin-right: 45px;
 }
 
 .post__image > img {
@@ -38,6 +87,7 @@
 }
 
 .post__options {
+    height: 30%;
     padding-top: 10px;
     border-top: 1px solid var(--header-input-color);
     display: flex;

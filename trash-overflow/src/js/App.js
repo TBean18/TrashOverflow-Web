@@ -9,11 +9,12 @@ import Widgets from "./Widgets";
 function App() {
   return (
     // BEM naming convention
+
     <div className="app">
       <Header />
+      <Sidebar />
       
       <div className="app__body">
-        <Sidebar />
         <Feed />
         <Widgets />
       </div>

@@ -8,18 +8,24 @@ const user = require('../../models/user');
 //JSON Web Token
 const jwt = require('../../util/jwt')
 
-// ROUTE    GET api/users
-// DESC     GET All Users
-// ACCESS   Public
+// ROUTE                GET api/users
+// DESC                 GET All Users
+// ACCESS               Public
+// Required Params      None
 router.get('/', (req, res) => {
     user.find()
         .then(items => res.json(items))
         .catch(err => console.log(err));
 });
 
-// ROUTE    POST api/users/register
-// DESC     Register a user
-// ACCESS   Public
+// ROUTE                POST api/users/register
+// DESC                 Register a user
+// ACCESS               Public
+// Required Params      
+// ...............      name -> the name of the user
+// ...............      password_hash -> the hashed password the user will use to log in
+// ...............      phone_number -> the users phone number
+// ...............      email -> the email the user will use to log in
 router.post('/register', (req, res) => {
     const newUser = new user({
         name: req.body.name,
@@ -34,9 +40,12 @@ router.post('/register', (req, res) => {
 
 });
 
-// ROUTE    GET api/users/login
-// DESC     GET Login User Info
-// ACCESS   Public
+// ROUTE                GET api/users/login
+// DESC                 GET Login User Info
+// ACCESS               Public
+// Required Params     
+// ...............      email -> the email the user is logging in with.
+// ...............      password_hash -> the hashed password the user is logging in with. 
 router.post('/login', (req, res) => {
     user.findOne({
             email: req.body.email,
@@ -66,9 +75,17 @@ router.post('/login', (req, res) => {
         });
 });
 
-// ROUTE    POST api/users/edit
-// DESC     Change Login User Info 
-// ACCESS   Public
+// ROUTE                POST api/users/edit
+// DESC                 Change Login User Info 
+// ACCESS               Public
+// Required Params
+// ...............      _id (of the user)
+// ...............      name -> what the users name will be changed to.
+// ...............      password_hash -> the new password hash
+// ...............      phone_number -> the new phone number
+// ...............      email -> the new email
+// Note: some of these fields may not be changed, but it may be easier to just overwrite them
+// with the same thing. This can be changed if necessary.
 router.post('/edit', (req, res) => {
     user.findByIdAndUpdate(req.body._id, {
             name: req.body.name,

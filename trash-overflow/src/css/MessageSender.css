@@ -2,7 +2,7 @@
     display: flex;
     margin-top: 30px;
     flex-direction: column;
-    background-color: var(--post-color-dark);
+    background-color: var(--post-color);
     border-radius: 15px;
     box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
     width: 100%;
@@ -10,7 +10,7 @@
 
 .messageSender__top {
     display: flex;
-    border-bottom: 1px solid var(--header-input-color-dark);
+    border-bottom: 1px solid var(--header-input-color);
     padding-bottom: 15px;
     padding: 15px;
 }
@@ -28,8 +28,8 @@
     padding: 5px 20px;
     margin: 0 10px;
     border-radius: 999px;
-    background-color: var(--header-input-color-dark);
-    color: var(--header-input-text-dark)
+    background-color: var(--header-input-color);
+    color: var(--header-input-text)
 }
 
 .messageSender__top > form > button {
@@ -49,12 +49,12 @@
     padding: 20px;
     display: flex;
     align-items: center;
-    color: var(--header-icon-color-dark);
+    color: var(--header-icon-color);
     margin: 5px;
 }
 
 .messageSender__option:hover {
-    background-color: var(--header-input-color-dark);
+    background-color: var(--header-input-color);
     border-radius: 20px;
 }
 

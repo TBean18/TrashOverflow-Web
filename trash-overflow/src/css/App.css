@@ -25,7 +25,7 @@
 }
 
 .app {
-    background-color: var(--main-color-dark);
+    background-color: var(--main-color);
 }
 
 .app__body {

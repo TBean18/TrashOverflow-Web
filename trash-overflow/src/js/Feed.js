@@ -1,9 +1,9 @@
 import React from 'react'
-import "./Feed.css"
+import "../css/Feed.css"
 import MessageSender from './MessageSender'
 import Post from './Post'
 import StoryReel from './StoryReel'
-import JoIcon from './JoIcon.png'
+import JoIcon from '../images/JoIcon.png'
 
 function Feed() {
     return (

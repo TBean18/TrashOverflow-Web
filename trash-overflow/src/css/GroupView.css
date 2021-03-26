@@ -1,0 +1,11 @@
+.groupView {
+    background-color: var(--main-color);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
+
+.groupView__body {
+    display: flex;
+    height: 60%;
+}

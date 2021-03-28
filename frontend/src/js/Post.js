@@ -22,9 +22,17 @@ class Post extends React.Component {
           expanded: false,
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
+
+        this.state = {
+            showMembers: false,
+        }
+        this.toggleMembers = this.toggleMembers.bind(this)
       }
       toggleExpanded() {
         this.setState({ expanded: !this.state.expanded, });
+      }
+      toggleMembers() {
+        this.setState({ showMembers: !this.state.showMembers});
       }
 
     render() {
@@ -56,9 +64,10 @@ class Post extends React.Component {
                         <p>{message}</p>
                     </div>
                     <div className="post__bodyRight">
-                        <div className="post__bodyRightMembers">
+                        <div className="post__bodyRightMembers" onClick={this.toggleMembers}>
                             <PostOption Icon={AccountCircleOutlinedIcon} title="Members" color="grey"/>
                         </div>
+                        <MemberWindow shown={this.state.showMembers ? true : false}/>
                         {/*
                         <div className="post__bodyRightEdit">
                             <PostOption Icon={EditOutlinedIcon} title="Edit" color="grey"/>
@@ -83,8 +92,6 @@ class Post extends React.Component {
                 <div className="post__image" onClick={this.toggleExpanded}>
                     <img src={image} alt="" />
                 </div>
-
-                {/*<MemberWindow />*/}
             </div>
         )
     }

@@ -8,11 +8,13 @@ import {
 import './App.css';
 
 import LoginPage from './pages/Login';
-import CardPage from './pages/CardPage';
+// import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
 import LandingPage from './pages/LandingPage';
+import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
+import GroupView from './js/GroupView';
 
 function App() {
   return (
@@ -22,8 +24,11 @@ function App() {
           <Route path="/" exact>
             <LandingPage />
           </Route>
-          <Route path="/cards" exact>
-            <CardPage />
+          <Route path="/chores" exact>
+            <Main />
+          </Route>
+          <Route path="/groups" exact>
+            <GroupView />
           </Route>
           <Route path="/signin" exact>
             <LoginPage />

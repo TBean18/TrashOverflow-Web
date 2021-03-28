@@ -47,7 +47,7 @@ function Login() {
         //Set the user for the globalState
         logIn(res.data.user, res.data.token);
         setMessage(res.data.user.name);
-        history.push('/cards');
+        history.push('/chores');
       })
       //Display error if error is caught
       .catch((error) => {

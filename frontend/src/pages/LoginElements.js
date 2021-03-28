@@ -19,7 +19,7 @@ export const Container = styled.div`
 `;
 
 export const FormWrap = styled.div`
-  height: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,11 +31,12 @@ export const FormWrap = styled.div`
 
 export const Icon = styled(Link)`
   text-align: center;
-  margin-top: 100px;
+  margin-top: 200px;
   text-decoration: none;
+  // Trash overflow text color at top of sign in page.
   color: #fff;
   font-weight: 700;
-  font-size: 32px;
+  font-size: 42px;
 
   @media screen and (max-width: 480px) {
     margin-left: 16px;
@@ -56,7 +57,7 @@ export const FormContent = styled.div`
 
 export const Form = styled.form`
   // background color of login box. This color is black.
-  background: #010101;
+  background: #fff;
   max-width: 400px;
   height: auto;
   width: 100%;
@@ -64,7 +65,7 @@ export const Form = styled.form`
   display: grid;
   margin: 0 auto;
   padding: 80px 32px;
-  border-radius: 8px;
+  border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
   @media screen and (max-width: 400px) {
@@ -78,35 +79,49 @@ export const FormH1 = styled.h1`
   font-size: 20px;
   font-weight: 400;
   text-align: center;
+  // change color of sign into your account
+  color: #000;
 `;
 
 export const FormLabel = styled.label`
   margin-bottom: 8px;
   margin-left: 6px;
   font-size: 14px;
-  color: #fff;
+  // change email and password color above input boxes
+  color: #000;
 `;
 
 export const FormInput = styled.input`
+  // this is the input spot background color
+  background: var(--header-input-color);
+  // This is the font color when typing an email or password
+  color: #000;
   padding: 16px 16px;
   margin-bottom: 32px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
 `;
 
 export const FormButton = styled.button`
   background: #ea8b6c;
   padding: 16px 0;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   color: #fff;
   font-size: 20px;
   cursor: pointer;
+
+    &:hover {
+    transition: all 0.2s ease-in-out;
+    // background color of icon when you hover over it
+    background: #d17c60;
+    // text color of sign in button when you hover over it.
+    color: #fff;
 `;
 
 export const Text = styled.span`
   text-align: center;
   margin-top: 24px;
-  color: #fff;
+  color: #000;
   font-size: 14px;
 `;

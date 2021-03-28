@@ -1,0 +1,31 @@
+.memberWindowMember {
+    display: flex;
+    height: 20px;
+    width: auto;
+    align-items: center;
+    padding: 10px 5px;
+    cursor: pointer;
+    color: var(--header-input-text);
+}
+
+.memberWindowMember:hover {
+    background-color: var(--main-color);
+    border-radius: 5px;
+}
+
+.memberWindowMember > h4 {
+    margin-left: 20px;
+    font-weight: normal;
+    font-size: 15px;
+}
+
+.memberWindowMember > .MuiAvatar-root {
+    height: 30px;
+    width: auto;
+}
+
+.memberWindowMember > .MuiSvgIcon-root {
+    color: var(--header-icon-color);
+    margin-left: 60px;
+    font-size: 20px;
+}

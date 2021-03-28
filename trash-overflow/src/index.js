@@ -4,7 +4,8 @@ import './index.css';
 import reportWebVitals from './js/reportWebVitals';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import App from './js/App';
+import App './App'
+import Main from './js/Main';
 import GroupView from './js/GroupView'
 
 const rootElement = document.getElementById("root");
@@ -12,6 +13,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={App}/>
+      <Route exact path="/" component={Main}/>
       <Route path="/groupview" component={GroupView}/>
     </Switch>
   </BrowserRouter>,

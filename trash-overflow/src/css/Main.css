@@ -25,7 +25,7 @@
     --post-text-color-dark: white;
 }
 
-.app {
+.main {
     background-color: var(--main-color);
     position: fixed;
     height: 100%;
@@ -34,7 +34,7 @@
     overflow: scroll;
 }
 
-.app__body {
+.main__body {
     display: flex;
     justify-content: center;
     align-items: center;

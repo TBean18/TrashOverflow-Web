@@ -1,20 +1,20 @@
 import React from "react";
-import '../css/App.css';
+import '../css/Main.css';
 
 import Feed from "./Feed";
 import Header from './Header';
 import Sidebar from "./Sidebar";
 import Widgets from "./Widgets";
 
-function App() {
+function Main() {
   return (
     // BEM naming convention
 
-    <div className="app">
+    <div className="main">
       <Header />
       <Sidebar />
       
-      <div className="app__body">
+      <div className="main__body">
         <Feed />
         <Widgets />
       </div>
@@ -22,4 +22,4 @@ function App() {
   );
 }
 
-export default App;
+export default Main;

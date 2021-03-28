@@ -11,7 +11,7 @@ import LoginPage from './pages/Login';
 // import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
 import LandingPage from './pages/LandingPage';
-import Main from '../../trash-overflow/src/js/Main';
+import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
 

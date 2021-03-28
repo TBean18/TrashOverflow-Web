@@ -15,7 +15,7 @@
 
 .post-expanded {
     width: 600px;
-    height: 400px;
+    height: auto;
     margin-top: 15px;
     border-radius: 15px;
     background-color: var(--post-color);
@@ -26,18 +26,16 @@
 
     transition: transform 100ms ease-in;
     transform: scale(1.25);
-    cursor: pointer;
 
     z-index: 1;
 }
 
 .post__top {
-    height: 30%;
+    height: 25%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    border-bottom: 1px solid var(--header-input-color);
 }
 
 .post__topTitle {
@@ -64,16 +62,36 @@
 }
 
 .post__body {
-    height: 40%;
+    display: none;
+}
+.post__body-expanded {
+    border-top: 1px solid var(--header-input-color);
+    height: 75%;
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 15px 25px;
+    padding: 15px 0 15px 25px;
 }
 
 .post__bodyDescription {
-    width: 40%;
+    width: 400px;
+}
+
+.post__bodyDescription > p {
+    word-wrap: break-word;
+    font-size: 14px;
+}
+.post__bodyDescription > h4 {
+    margin-bottom: 10px;
+}
+
+.post__bodyRight {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    margin-right: 25px;
 }
 
 .post__bodyAssignedUsers {
@@ -96,21 +114,4 @@
     color: var(--header-icon-color);
     cursor: pointer;
     padding: 15px;
-}
-
-.post__option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    flex: 1;
-}
-
-.post__option > p {
-    margin-left: 10px;
-}
-
-.post__option:hover {
-    background-color: var(--header-input-color);
-    border-radius: 10px;
 }

@@ -6,7 +6,13 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import DoneAllOutlinedIcon from '@material-ui/icons/DoneAllOutlined';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
+import PostOption from './PostOption';
+import MemberWindow from './MemberWindow';
 
 class Post extends React.Component {
 
@@ -44,14 +50,33 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="post__body" onClick={this.toggleExpanded}>
-                    <div className="post__bodyDescription">
+                <div className={`row ${this.state.expanded ? 'post__body-expanded' : 'post__body'}`}>
+                    <div className="post__bodyDescription" onClick={this.toggleExpanded}>
+                        <h4>Description</h4>
                         <p>{message}</p>
                     </div>
-                    <div className="post__bodyAssignedUsers">
-                        <ul>Jo Johnson</ul>
-                        <ul>Sam Eslick</ul>
-                        <ul>Philip</ul>
+                    <div className="post__bodyRight">
+                        <div className="post__bodyRightMembers">
+                            <PostOption Icon={AccountCircleOutlinedIcon} title="Members" color="grey"/>
+                        </div>
+                        {/*
+                        <div className="post__bodyRightEdit">
+                            <PostOption Icon={EditOutlinedIcon} title="Edit" color="grey"/>
+                        </div>
+                        */}
+                        <div className="post__bodyRightDone">
+                            <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey"/>
+                        </div>
+                        <div className="post__bodyRightDone">
+                            <PostOption Icon={DeleteOutlineOutlinedIcon} title="Delete" color="grey"/>
+                        </div>
+                        {/*
+                        <div className="post__bodyAssignedUsers">
+                            <ul>Jo Johnson</ul>
+                            <ul>Sam Eslick</ul>
+                            <ul>Philip</ul>
+                        </div>
+                        */}
                     </div>
                 </div>
 
@@ -59,24 +84,7 @@ class Post extends React.Component {
                     <img src={image} alt="" />
                 </div>
 
-                <div className="post__options">
-                    <div className="post__option">
-                        <ThumbUpIcon />
-                        <p>Like</p>
-                    </div>
-                    <div className="post__option">
-                        <ChatBubbleOutlineOutlinedIcon />
-                        <p>Comment</p>
-                    </div>
-                    <div className="post__option">
-                        <NearMeIcon />
-                        <p>Share</p>
-                    </div>
-                    <div className="post__option">
-                        <AccountCircleIcon />
-                        <ExpandMoreOutlinedIcon />
-                    </div>
-                </div>
+                {/*<MemberWindow />*/}
             </div>
         )
     }

@@ -14,6 +14,7 @@ import LandingPage from './pages/LandingPage';
 import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
+import GroupView from './js/GroupView';
 
 function App() {
   return (
@@ -23,8 +24,11 @@ function App() {
           <Route path="/" exact>
             <LandingPage />
           </Route>
-          <Route path="/cards" exact>
+          <Route path="/chores" exact>
             <Main />
+          </Route>
+          <Route path="/groups" exact>
+            <GroupView />
           </Route>
           <Route path="/signin" exact>
             <LoginPage />

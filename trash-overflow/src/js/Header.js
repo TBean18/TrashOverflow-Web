@@ -37,7 +37,7 @@ function Header() {
             </div>
             <div className="header__option">
                 <Link to="/groupview">
-                    <FlagIcon fontSize="large" />
+                    <SupervisedUserCircleOutlinedIcon fontSize="large" />                    
                 </Link>
             </div>
             <div className="header__option">
@@ -47,7 +47,7 @@ function Header() {
                 <StorefrontOutlinedIcon fontSize="large" />
             </div>
             <div className="header__option">
-                <SupervisedUserCircleOutlinedIcon fontSize="large" />
+                <FlagIcon fontSize="large" />
             </div>
         </div>
         <div className="header__right">

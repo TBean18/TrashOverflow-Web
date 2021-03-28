@@ -6,6 +6,7 @@
     --header-color-dark: #161616;
 
     --header-input-color: #eff2f5;
+    --header-input-color-hover: #DFE3E8;
     --header-input-color-dark: #252526;
 
     --header-input-text: black;
@@ -26,10 +27,17 @@
 
 .app {
     background-color: var(--main-color);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+
+    overflow: scroll;
 }
 
 .app__body {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

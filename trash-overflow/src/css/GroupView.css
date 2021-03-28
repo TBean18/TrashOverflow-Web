@@ -8,4 +8,5 @@
 .groupView__body {
     display: flex;
     height: 60%;
+    width: 100%;
 }

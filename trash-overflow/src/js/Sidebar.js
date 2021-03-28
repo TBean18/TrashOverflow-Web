@@ -24,7 +24,7 @@ function Sidebar() {
             <SidebarRow Icon={StorefrontIcon} title="Marketplace"
             />
             <SidebarRow Icon={VideoLibraryIcon} title="Videos" />
-            <SidebarRow Icon={ExpandMoreOutlined} title="Marketpalce" />
+            <SidebarRow Icon={ExpandMoreOutlined} title="Marketplace" />
         </div>
     )
 }

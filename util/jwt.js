@@ -106,7 +106,7 @@ exports.createEmailVerficationToken = function (user_ID) {
 
 exports.verifyEmailToken = function (token) {
   try {
-    const vaild = jwt.verify(token, process.env.EMAIL_SECRET);
+    const valid = jwt.verify(token, process.env.EMAIL_SECRET);
     return valid.user_ID;
   } catch (err) {
     throw err;

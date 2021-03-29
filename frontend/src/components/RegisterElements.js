@@ -64,7 +64,7 @@ export const Form = styled.form`
   z-index: 1;
   display: grid;
   margin: 0 auto;
-  padding: 80px 32px;
+  padding: 60px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
@@ -119,7 +119,7 @@ export const FormButton = styled.button`
     color: #fff;
 `;
 
-export const Text = styled.span`
+export const Text = styled(Link)`
   text-align: center;
   margin-top: 24px;
   color: #000;

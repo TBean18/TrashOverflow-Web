@@ -103,7 +103,7 @@ function Register() {
               <FormButton type="submit" onClick={doRegister}>
                 Register
               </FormButton>
-              <Text>Already have an account?</Text>
+              <Text to="/signin">Already have an account?</Text>
             </Form>
           </FormContent>
         </FormWrap>

@@ -1,6 +1,7 @@
 import {
   FormButton,
   Text,
+  TextL,
   Container,
   Form,
   FormContent,
@@ -63,7 +64,7 @@ function Login() {
           <Icon to="/">Trash Overflow</Icon>
           <FormContent>
             <Form action="#">
-              <FormH1>Sign in to your account</FormH1>
+              <FormH1>Sign In</FormH1>
               <FormLabel id="email">Email</FormLabel>
               <FormInput
                 type="email"
@@ -82,6 +83,7 @@ function Login() {
                 Sign In
               </FormButton>
               <Text>Forgot password?</Text>
+              <TextL to="/register">Need a new account?</TextL>
             </Form>
           </FormContent>
         </FormWrap>

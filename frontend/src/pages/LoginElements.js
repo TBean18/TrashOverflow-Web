@@ -19,7 +19,7 @@ export const Container = styled.div`
 `;
 
 export const FormWrap = styled.div`
-  height: 80%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +85,7 @@ export const FormH1 = styled.h1`
 
 export const FormLabel = styled.label`
   margin-bottom: 8px;
-  margin-left: 6px;
+  margin-left: 12px;
   font-size: 14px;
   // change email and password color above input boxes
   color: #000;
@@ -120,6 +120,13 @@ export const FormButton = styled.button`
 `;
 
 export const Text = styled.span`
+  text-align: center;
+  margin-top: 24px;
+  color: #000;
+  font-size: 14px;
+`;
+
+export const TextL = styled(Link)`
   text-align: center;
   margin-top: 24px;
   color: #000;

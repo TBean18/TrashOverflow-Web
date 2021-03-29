@@ -16,10 +16,11 @@ const mailer = require("../../util/mailer");
 // ACCESS   Public
 
 // Currently Disabled as there is no need for retreivng all users
-// router.get('/', (req, res) => {
-//     user.find()
-//         .then(items => res.json(items))
-//         .catch(err => console.log(err));
+// router.get("/", (req, res) => {
+//   user
+//     .find()
+//     .then((items) => res.json(items))
+//     .catch((err) => console.log(err));
 // });
 
 // ROUTE    POST api/users/register
@@ -134,10 +135,16 @@ router.get("/verify/:token", (req, res) => {
     const user_ID = jwt.verifyEmailToken(req.params.token);
     user.findById(user_ID).then((item) => {
       item.email_verified = true;
-      item.save().then(req.redirect("http://localhost:3000/signin"));
+      item.save().then((item) => {
+        console.log(
+          `${item.name} has verfied their Email Address (User_ID:${item._id})`
+        );
+        return res.redirect("http://localhost:3000/signin");
+      });
     });
   } catch (err) {
     console.log(err);
+    res.status(404).send(err);
   }
 });
 

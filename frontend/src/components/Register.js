@@ -55,7 +55,7 @@ function Register() {
         console.log(res);
         //Set the user for the globalState
         logIn(res.data.user, res.data.token);
-        history.push('/cards');
+        history.push('/chores');
       })
       //Display error if error is caught
       .catch((error) => {

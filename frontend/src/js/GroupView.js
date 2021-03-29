@@ -7,7 +7,7 @@ import Sidebar from './Sidebar'
 function GroupView() {
     return (
         <div className="groupView">
-            <Header />
+            <Header selection={2}/>
         
             <div className="groupView__body">
                 <Sidebar />

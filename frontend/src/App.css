@@ -3,6 +3,14 @@
 }
 
 :root {
+  --dark-purple: #1d0625;
+  --light-purple: #301476;
+  --grey-purple: #56466d;
+  --grey-pink: #946b89;
+  --skin-orange: #ea8b6c;
+  --skin-orange-hover: #d17c60;
+  --yellow-orange: #feb054;
+  
   --main-color: #f1f2f5;
   --main-color-dark: #1e1e1e;
 

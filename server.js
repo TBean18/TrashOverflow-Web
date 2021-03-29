@@ -43,11 +43,3 @@ app.use("/api/user", user);
 app.use("/api/groups", group);
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));
-
-// //Testing out the Mailing System
-// const mailer = require("./util/mailer");
-// const nodemailer = require("nodemailer");
-// mailer.sendVerficationEmail("utb68205@zwoho.com", "", (err, info) => {
-//   if (err) console.log(err);
-//   console.log(nodemailer.getTestMessageUrl(info));
-// });

@@ -5,13 +5,24 @@ exports.sendVerficationEmail = async function (emailAddress, token, cb) {
   let testAccount = await nodemailer.createTestAccount();
 
   //Transporter is the object that sends emails
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+  // Example Transporter
+  // let transporter = nodemailer.createTransport({
+  //   host: "smtp.ethereal.email",
+  //   port: 587,
+  //   secure: false, // true for 465, false for other ports
+  //   auth: {
+  //     user: testAccount.user, // generated ethereal user
+  //     pass: testAccount.pass, // generated ethereal password
+  //   },
+  // });
+
+  // SendGrid Transport
+
+  const transporter = nodemailer.createTransport({
+    service: "SendGrid",
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
+      user: process.env.SENDGRID_USER,
+      pass: process.env.SENDGRID_PASS,
     },
   });
   const url = `http://localhost:5000/api/user/verify/${token}`;

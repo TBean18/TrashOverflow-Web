@@ -30,11 +30,6 @@ function Register() {
   const [message, setMessage] = useState('');
   const history = useHistory();
 
-  let name;
-  let password_hash;
-  let phone_number;
-  let email;
-
   // Register function called when register button is pressed
   const doRegister = async (event) => {
     // I do not know what this line does, Phil?!?

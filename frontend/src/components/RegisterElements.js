@@ -13,13 +13,13 @@ export const Container = styled.div`
   // gradient background
   background: linear-gradient(
     108deg,
-    rgba(86, 70, 109, 1) 0%,
-    rgba(254, 176, 84, 1) 100%
+    rgba(254, 176, 84, 1) 0,
+    rgba(86, 70, 109, 1) 100%
   );
 `;
 
 export const FormWrap = styled.div`
-  height: 90%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,7 +64,7 @@ export const Form = styled.form`
   z-index: 1;
   display: grid;
   margin: 0 auto;
-  padding: 80px 32px;
+  padding: 60px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
@@ -120,14 +120,7 @@ export const FormButton = styled.button`
   }
 `;
 
-export const Text = styled.span`
-  text-align: center;
-  margin-top: 24px;
-  color: #000;
-  font-size: 14px;
-`;
-
-export const TextL = styled(Link)`
+export const Text = styled(Link)`
   text-align: center;
   margin-top: 24px;
   color: #000;

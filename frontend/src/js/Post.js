@@ -11,8 +11,10 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DoneAllOutlinedIcon from '@material-ui/icons/DoneAllOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
+import TodayOutlinedIcon from '@material-ui/icons/TodayOutlined';
 import PostOption from './PostOption';
 import MemberWindow from './MemberWindow';
+import MyCalendar from './MyCalendar';
 
 class Post extends React.Component {
 
@@ -20,19 +22,21 @@ class Post extends React.Component {
         super(props)
         this.state = {
           expanded: false,
+          showMembers: false,
+          showCalendar: false,
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
-
-        this.state = {
-            showMembers: false,
-        }
-        this.toggleMembers = this.toggleMembers.bind(this)
+        this.toggleMembers = this.toggleMembers.bind(this);
+        this.toggleCalendar = this.toggleCalendar.bind(this);
       }
       toggleExpanded() {
-        this.setState({ expanded: !this.state.expanded, });
+        this.setState({ expanded: !this.state.expanded});
       }
       toggleMembers() {
         this.setState({ showMembers: !this.state.showMembers});
+      }
+      toggleCalendar() {
+        this.setState({ showCalendar: !this.state.showCalendar});
       }
 
     render() {
@@ -67,12 +71,13 @@ class Post extends React.Component {
                         <div className="post__bodyRightMembers" onClick={this.toggleMembers}>
                             <PostOption Icon={AccountCircleOutlinedIcon} title="Members" color="grey"/>
                         </div>
-                        <MemberWindow shown={this.state.showMembers ? true : false}/>
-                        {/*
-                        <div className="post__bodyRightEdit">
-                            <PostOption Icon={EditOutlinedIcon} title="Edit" color="grey"/>
-                        </div>
-                        */}
+                        <MemberWindow shown={this.state.showMembers ? true : false}/>                        
+
+                        <div className="post__bodyRightDate" onClick={this.toggleCalendar}>
+                            <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey"/>
+                        </div>                        
+                        {this.state.showCalendar && <MyCalendar />}
+
                         <div className="post__bodyRightDone">
                             <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey"/>
                         </div>

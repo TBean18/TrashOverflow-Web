@@ -18,5 +18,5 @@
 
 .sidebarRow > .MuiSvgIcon-root {
     font-size: xx-large;
-    color: #4900CB;
+    color: var(--light-purple);
 }

@@ -16,12 +16,13 @@
 .memberWindowMember > h4 {
     margin-left: 20px;
     font-weight: normal;
-    font-size: 15px;
+    font-size: 13px;
+    color: var(--post-text-color);
 }
 
 .memberWindowMember > .MuiAvatar-root {
     height: 30px;
-    width: auto;
+    width: 30px;
 }
 
 .memberWindowMember > .MuiSvgIcon-root {

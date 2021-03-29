@@ -39,7 +39,7 @@ export const HeroBackground = styled.div`
   overflow: hidden;
 `;
 
-export const VideoBackground = styled.video`
+export const VideoBackground = styled.img`
   width: 100%;
   height: 100%;
   -o-object-fit: cover;

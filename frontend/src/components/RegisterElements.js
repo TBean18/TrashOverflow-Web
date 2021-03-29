@@ -100,6 +100,7 @@ export const FormInput = styled.input`
   margin-bottom: 32px;
   border: none;
   border-radius: 15px;
+  outline: none;
 `;
 
 export const FormButton = styled.button`

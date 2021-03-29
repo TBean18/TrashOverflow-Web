@@ -14,7 +14,7 @@ exports.sendVerficationEmail = async function (emailAddress, token, cb) {
       pass: testAccount.pass, // generated ethereal password
     },
   });
-  const url = `http://localhost:3000/api/user/verify/${token}`;
+  const url = `http://localhost:5000/api/user/verify/${token}`;
   transporter.sendMail(
     {
       from: '"TrashOverflow" <noreply@trashoverflow.tech>',

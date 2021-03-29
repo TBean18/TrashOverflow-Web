@@ -67,36 +67,40 @@ function Register() {
   return (
     <>
       <Container>
-        <FormWrap>
+        <FormWrap onSubmit={doRegister}>
           <Icon to="/">Trash Overflow</Icon>
           <FormContent>
-            <Form action="#">
+            <Form onSubmit={doRegister}>
               <FormH1>Register for Your Account</FormH1>
-              <FormLabel id="name">Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormInput
-                type="name"
                 required
+                type="text"
+                name="name"
                 placeholder="Name"
                 onChange={(e) => setValues(e)}
               />
-              <FormLabel id="phone_number">Phone Number</FormLabel>
+              <FormLabel>Phone Number</FormLabel>
               <FormInput
+                required
                 type="text"
-                required
-                placeholder="123-456-7890"
+                name="phone_number"
+                placeholder="Phone Number"
                 onChange={(e) => setValues(e)}
               />
-              <FormLabel id="email">Email</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormInput
+                required
                 type="email"
-                required
-                placeholder="email@example.com"
+                name="email"
+                placeholder="Email"
                 onChange={(e) => setValues(e)}
               />
-              <FormLabel id="password_hash">Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormInput
-                type="password"
                 required
+                type="password"
+                name="password_hash"
                 placeholder="Password"
                 onChange={(e) => setValues(e)}
               />

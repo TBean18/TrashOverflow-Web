@@ -111,12 +111,13 @@ export const FormButton = styled.button`
   font-size: 20px;
   cursor: pointer;
 
-    &:hover {
+  &:hover {
     transition: all 0.2s ease-in-out;
     // background color of icon when you hover over it
     background: #d17c60;
     // text color of sign in button when you hover over it.
     color: #fff;
+  }
 `;
 
 export const Text = styled.span`

@@ -46,7 +46,7 @@ function Register() {
       })
       //Display Message
       .then((res) => {
-        if (res.data.error != '') throw res.data.error;
+        if (res.data.error !== '') throw res.data.error;
         console.log(res);
         //Set the user for the globalState
         logIn(res.data.user, res.data.token);

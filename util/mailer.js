@@ -14,14 +14,20 @@ exports.sendVerficationEmail = async function (emailAddress, token, cb) {
       pass: testAccount.pass, // generated ethereal password
     },
   });
+  const url = `http://localhost:3000/api/user/verify/${token}`;
   transporter.sendMail(
     {
       from: '"TrashOverflow" <noreply@trashoverflow.tech>',
       to: emailAddress,
       subject: "TrashOverflow | Email Verification",
       text: "Please click on the link below to verfiy your email",
-      html: '<a href="https://www.twitter.com">LINK</a>',
+      html: `'<p>Please click on the link below to verfiy your email</p>
+      <a href="${url}">LINK</a>`,
     },
-    cb
+    (err, info) => {
+      if (err) throw err;
+      console.log(nodemailer.getTestMessageUrl(info));
+      cb(err, info);
+    }
   );
 };

@@ -1,0 +1,109 @@
+.addCard__initial {
+    padding: 0 0 0 0;
+    width: 256px;
+    height: 250px;
+    margin: 15px 15px 15px 15px;
+
+    border-radius: 35px;
+    background-color: var(--post-color);
+    box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+
+    color: var(--post-text-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    transform: scale(0.5);
+    transition: transform 100ms ease-in;
+    cursor: pointer;
+}
+
+.addCard__initial:hover {
+    transform: scale(0.6);
+}
+
+.addCard__initial > .addCard__front {
+    display: none;
+}
+
+.addCard__initial > .addCard__options {
+    display: none;
+} 
+
+.addCard__initial > .MuiIconButton-root {
+    transform: scale(3);
+}
+
+.addCard__initial > .MuiIconButton-root:hover {
+    background-color: var(--post-color);
+}
+
+.addCard {
+    padding: 0 0 0 0;
+    width: 256px;
+    height: 250px;
+    margin: 15px 15px 15px 15px;
+
+    border-radius: 15px;
+    background-color: var(--post-color);
+    box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+
+    color: var(--post-text-color);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+
+    transition: transform 100ms ease-in;
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+.addCard > .MuiIconButton-root {
+    display: none;
+}
+
+.addCard > .addCard__options {
+    margin-top: 10px;
+    display: flex;
+    width: 200px;
+    padding: 5px 5px 5px 5px;
+    justify-content: space-between;
+}
+
+.groupCardBack__top {
+    height: 20%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.groupCardBack__topInfo > h3 {
+    font-size: medium;
+}
+
+.groupCardBack__body {
+    align-content: space-around;
+    position: relative;
+    left: -18px;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 40%;
+    width: 256px;
+    font-size: 11px;
+}
+
+.groupCardBack__bottom {
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -21,6 +21,7 @@ app.use(express.json());
 // cors
 app.use(cors());
 
+
 //Connecting to DataBase
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -34,6 +35,7 @@ mongoose
 // USE API ROUTES
 app.use("/api/user", user);
 app.use("/api/groups", group);
+
 
 // Serve Static Assets if in production
 if (process.env.NODE_ENV === "production") {

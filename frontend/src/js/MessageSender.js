@@ -31,35 +31,10 @@ function MessageSender() {
                         className="messageSender__input"
                         placeholder={`Task Name`}
                     />
-
-                    <input
-                        value={imgUrl} 
-                        onChange={e => setImageUrl(e.target.value)}
-                        placeholder="Image URL (Optional)" 
-                        className="messageSender__input"
-                    />
-
                     <button onClick={handleSubmit} type="submit">
                         Hidden submit
                     </button>
                 </form>
-            </div>
-
-            <div className="messageSender__bottom">
-                <div className="messageSender__option">
-                    <VideocamIcon style={{ color: "red" }} />
-                    <h3>Live Video</h3>
-                </div>           
-
-                <div className="messageSender__option">
-                    <PhotoLibraryIcon style={{ color: "green" }} />
-                    <h3>Photo/Video</h3>
-                </div>  
-
-                <div className="messageSender__option">
-                    <InsertEmoticonIcon style={{ color: "orange" }} />
-                    <h3>Feeling/Activity</h3>
-                </div>       
             </div>
         </div>
     )

@@ -42,11 +42,6 @@
     font-size: 11px;
 }
 
-.groupCardBack__member {
-    height: 15px;
-    padding: 0 0 4px 0;
-}
-
 .groupCardBack__bottom {
     height: 30%;
     display: flex;

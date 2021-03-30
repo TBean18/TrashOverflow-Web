@@ -12,7 +12,7 @@ export const useGroupCreation = (groupName, groupDescription) => {
     .then(res => {
         if(res.data.error !== '') throw res.data.error;
         console.log(res);
-        
+
         //If the responce contains a refreshed token then save it
         if(res.data.hasOwnProperty('token'))
             storeJWT(res.data.token);

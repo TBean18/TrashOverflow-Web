@@ -1,6 +1,7 @@
 import {
   FormButton,
   Text,
+  TextL,
   Container,
   Form,
   FormContent,
@@ -13,14 +14,18 @@ import {
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 import { useHistory } from 'react-router-dom';
+import { useForm } from '../hooks/useForm';
 const axios = require('axios').default;
 
 function Login() {
   //Bring in the userState form the global context
   const { logIn, user, storeJWT } = useContext(GlobalContext);
+  const [values, setValues] = useForm({
+    email: '',
+    password_hash: ''
+  });
+
   const history = useHistory();
-  let email;
-  let password_hash;
 
   const [message, setMessage] = useState('');
 
@@ -38,8 +43,8 @@ function Login() {
     //Make the login API call
     axios
       .post('/api/user/login', {
-        email: email.value,
-        password_hash: password_hash.value
+        email: values.email,
+        password_hash: values.password_hash
       })
       //Display Message
       .then((res) => {
@@ -59,29 +64,32 @@ function Login() {
   return (
     <>
       <Container>
-        <FormWrap>
+        <FormWrap onSubmit={doLogin}>
           <Icon to="/">Trash Overflow</Icon>
           <FormContent>
-            <Form action="#">
-              <FormH1>Sign in to your account</FormH1>
-              <FormLabel id="email">Email</FormLabel>
+            <Form onSubmit={doLogin}>
+              <FormH1>Sign In</FormH1>
+              <FormLabel>Email</FormLabel>
               <FormInput
+                required
                 type="email"
-                required
-                placeholder="example@email.com"
-                ref={(c) => (email = c)}
+                name="email"
+                placeholder="Email"
+                onChange={(e) => setValues(e)}
               />
-              <FormLabel id="password_hash">Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormInput
-                type="password"
                 required
+                type="password"
+                name="password_hash"
                 placeholder="Password"
-                ref={(c) => (password_hash = c)}
+                onChange={(e) => setValues(e)}
               />
               <FormButton type="submit" onClick={doLogin}>
                 Sign In
               </FormButton>
               <Text>Forgot password?</Text>
+              <TextL to="/register">Need a new account?</TextL>
             </Form>
           </FormContent>
         </FormWrap>

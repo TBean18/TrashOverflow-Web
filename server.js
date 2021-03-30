@@ -21,12 +21,6 @@ app.use(express.json());
 // cors
 app.use(cors());
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("frontend/public"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "public", "index.html"));
-  });
-}
 
 //Connecting to DataBase
 mongoose
@@ -41,5 +35,15 @@ mongoose
 // USE API ROUTES
 app.use("/api/user", user);
 app.use("/api/groups", group);
+
+
+// Serve Static Assets if in production
+if (process.env.NODE_ENV === "production") {
+  // Set styatic Folder
+  app.use(express.static("frontend/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
+}
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

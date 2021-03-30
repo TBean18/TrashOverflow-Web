@@ -46,8 +46,7 @@ function Feed() {
                 profilePic={JoIcon}
                 message="Deals contact damage. Targets a random direction and moves quickly along a straight path from one side of the screen to the other, rapidly firing bullets behind it, bouncing off the walls."
                 taskTitle="Take Out Trash"
-            />
-            
+            />            
         </div>
     )
 }

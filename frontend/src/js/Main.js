@@ -11,7 +11,7 @@ function Main() {
     // BEM naming convention
 
     <div className="main">
-      <Header />
+      <Header selection={1}/>
       <Sidebar />
       
       <div className="main__body">

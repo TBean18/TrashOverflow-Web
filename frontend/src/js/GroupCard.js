@@ -21,28 +21,22 @@ class GroupCard extends React.Component {
 
     render() {
         const {
-            profilePic, image, groupname, timestamp, message
+            curGroup, image
         } = this.props;
 
         return (
             <ReactCardFlip isFlipped={this.state.isFlipped}>
                 <div onClick={this.handleClick}>
                     <GroupCardFront 
-                        profilePic={profilePic}
-                        message={message}
-                        timestamp={timestamp}
-                        groupname={groupname}
+                        curGroup={curGroup}
                         image={image}
                     />
                 </div>
 
                 <div onClick={this.handleClick}>
                     <GroupCardBack 
-                        profilePic={profilePic}
-                        message={message}
-                        timestamp={timestamp}
-                        groupname={groupname}
-                        image={image}
+                        curGroup={curGroup}
+                        
                     />
                 </div>
             </ReactCardFlip>

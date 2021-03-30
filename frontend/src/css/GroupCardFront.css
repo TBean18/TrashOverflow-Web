@@ -68,9 +68,6 @@
 }
 
 .groupCardFront__admins {
-    margin-top: 30px;
-    margin-left: 13px;
-    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: start;

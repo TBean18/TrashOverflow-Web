@@ -10,10 +10,8 @@ function Feed() {
         <div className="feed">
             {/*
             <StoryReel />
-            */}
-            {/*
-            <MessageSender />
-            */}
+            */}            
+            <MessageSender />            
             <Post 
                 profilePic={JoIcon}
                 message="Right now, when an item is pressed in a menu there is no feedback that it was pressed or scrolled over. It would be awesome to get it so that when highlighting an option in a menu like 'Play Again' or 'Settings' a sound effect would play. Minecraft has something similar to this where a 'click' sound is played when selecting a choice."

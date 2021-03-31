@@ -1,6 +1,36 @@
 const nodemailer = require("nodemailer");
+const nodemailerSendgrid = require("nodemailer-sendgrid");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-exports.sendVerficationEmail = async function (emailAddress, token, cb) {
+exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
+  const url = `http://localhost:5000/api/user/verify/${token}`;
+
+  const msg = {
+    to: recipientEmail, // Change to your recipient
+    from: "jacobbean18@gmail.com", // Change to your verified sender
+    subject: "TrashOverflow | Email Verification",
+    text: "Please click on the link below to verfiy your email LINK",
+    html: `'<p>Please click on the link below to verfiy your email</p>
+    <a href="${url}">LINK</a>`,
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+      cb(null);
+    })
+    .catch((error) => {
+      console.error(error);
+      cb(error);
+    });
+};
+
+exports.sendVerficationEmailNodeMail = async function (
+  emailAddress,
+  token,
+  cb
+) {
   //Create A Test Account on Ethereal
   let testAccount = await nodemailer.createTestAccount();
 

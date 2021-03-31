@@ -32,6 +32,7 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   text-align: center;
   margin-top: 200px;
+  margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
   color: #fff;
@@ -40,7 +41,7 @@ export const Icon = styled(Link)`
 
   @media screen and (max-width: 480px) {
     margin-left: 16px;
-    margin-top: 8px;
+    margin-top: 50px;
   }
 `;
 
@@ -57,6 +58,7 @@ export const FormContent = styled.div`
 
 export const Form = styled.form`
   // background color of login box. This color is black.
+  box-sizing: border-box;
   background: #fff;
   max-width: 400px;
   height: auto;
@@ -111,6 +113,7 @@ export const FormButton = styled.button`
   color: #fff;
   font-size: 20px;
   cursor: pointer;
+  outline: none;
 
   &:hover {
     transition: all 0.2s ease-in-out;

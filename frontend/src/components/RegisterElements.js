@@ -40,7 +40,7 @@ export const Icon = styled(Link)`
 
   @media screen and (max-width: 480px) {
     margin-left: 16px;
-    margin-top: 8px;
+    margin-top: 80px;
   }
 `;
 
@@ -57,6 +57,9 @@ export const FormContent = styled.div`
 
 export const Form = styled.form`
   // background color of login box. This color is black.
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   background: #fff;
   max-width: 400px;
   height: auto;
@@ -97,7 +100,7 @@ export const FormInput = styled.input`
   // This is the font color when typing an email or password
   color: #000;
   padding: 16px 16px;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   border: none;
   border-radius: 15px;
   outline: none;
@@ -111,6 +114,7 @@ export const FormButton = styled.button`
   color: #fff;
   font-size: 20px;
   cursor: pointer;
+  outline: none;
 
   &:hover {
     transition: all 0.2s ease-in-out;

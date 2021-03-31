@@ -31,14 +31,15 @@ export const NavbarContainer = styled.div`
 
 // Link R is short for router
 export const NavLogo = styled(LinkR)`
+  font-family: lemon-jelly;
   color: #fff;
   justify-self: flex-start;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   display: flex;
   align-items: center;
   margin-left: 24px;
-  font-weight: bold;
+  font-weight: 300;
   text-decoration: none;
 `;
 

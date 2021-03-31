@@ -63,7 +63,7 @@ function Register() {
     <>
       <Container>
         <FormWrap onSubmit={doRegister}>
-          <Icon to="/">Trash Overflow</Icon>
+          <Icon to="/">TrashOverflow</Icon>
           <FormContent>
             <Form onSubmit={doRegister}>
               <FormH1>Register for Your Account</FormH1>

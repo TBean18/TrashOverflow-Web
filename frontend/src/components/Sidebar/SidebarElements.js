@@ -39,6 +39,9 @@ export const SidebarWrapper = styled.div`
 `;
 
 export const SidebarMenu = styled.ul`
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   display: grid;
   // controls how far from the left the items are
   grid-template-columns: 1fr;

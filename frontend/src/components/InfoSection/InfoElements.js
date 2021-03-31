@@ -3,6 +3,8 @@ import styled from 'styled-components';
 export const InfoContainer = styled.div`
   color: #fff;
   background: ${({ lightBg }) => (lightBg ? '#f9f9f9' : '#010606')};
+  margin: 0;
+  padding: 0;
 
   @media screen and (max-width: 768px) {
     padding: 100px 0;
@@ -10,6 +12,7 @@ export const InfoContainer = styled.div`
 `;
 
 export const InfoWrapper = styled.div`
+  box-sizing: border-box;
   display: grid;
   z-index: 1;
   height: 860px;

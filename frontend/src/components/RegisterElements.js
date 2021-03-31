@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   min-height: 692px;
@@ -68,6 +68,7 @@ export const Form = styled.form`
   width: 100%;
   z-index: 1;
   display: grid;
+  justify-content: center;
   margin: 0 auto;
   padding: 60px 32px;
   border-radius: 15px;

@@ -47,12 +47,12 @@ router.post("/register", (req, res) => {
       res.json({ user: item, token: token.accessToken, error: "" });
 
       //Send Email Verification
-      mailer.sendVerficationEmail(
+      mailer.sendVerficationEmailSendGrid(
         newUser.email,
         jwt.createEmailVerficationToken(item._id),
         (err, info) => {
           if (err) console.log(err);
-          console.log(info);
+          return console.log(info);
         }
       );
     })
@@ -81,14 +81,14 @@ router.post("/login", (req, res) => {
     })
     .then((item) => {
       //Check if we have found a user
-      if(item == null) throw 'No User Found';
+      if (item == null) throw "No User Found";
 
       //Compare the input password with the stored hash
       item.comparePassword(req.body.password_hash, (err, isMatch) => {
-        if(err) throw err;
-        if(!isMatch) throw 'Incorrect Password';
-      })
-      
+        if (err) throw err;
+        if (!isMatch) throw "Incorrect Password";
+      });
+
       //Create the Web Token
       let token = jwt.createToken({ user_ID: item._id });
       if (token.error !== "") throw token.error;

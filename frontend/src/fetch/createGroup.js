@@ -2,8 +2,8 @@ import {useState, useContext} from 'react';
 import {GlobalContext} from '../context/GlobalState'
 const axios = require('axios').default;
 
-export const useGroupCreation = (groupName, groupDescription) => {
-    const {storeJWT} = useContext(GlobalContext);
+export const createGroup = (groupName, groupDescription, storeJWT, setErrorMsg) => {
+    // const {storeJWT} = useContext(GlobalContext);
     axios.post('/api/groups/new', {
         group_name: groupName,
         group_description: groupDescription

@@ -1,15 +1,14 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 
 import AddIcon from '@material-ui/icons/Add';
 import { IconButton } from '@material-ui/core';
-import './AddCard.css';
-import AddCardFrontButton from './AddCardFrontButton';
+import './AddCard.css'
+import AddCardFront from './AddCardFront'
+import AddCardFrontButton from './AddCardFrontButton'
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import {useGroupCreation} from '../../hooks/useGroupCreation';
 import {useForm} from '../../hooks/useForm';
-import {createGroup} from '../../fetch/createGroup';
-import {GlobalContext} from '../../context/GlobalState';
-
 
 function AddCard() {
     // Fragment from when this used to be a class based component
@@ -22,31 +21,22 @@ function AddCard() {
     //     this.toggleAdding = this.toggleAdding.bind(this);
     // }
 
-    //Define State
     const [adding, setAdding] = useState(false);
-    const [values, setValues] = useForm({
-        groupName: '',
-        groupDescription: ''
-    });
-    const [errorMessage, setErrorMessage] = useState('');
-    const {storeJWT} = useContext(GlobalContext);
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    const [input, setInput] = useState("");
+    const [values, setValues] =
+    
     function toggleAdding() {
         setAdding(!adding);
     }
     
-    const handleCancel = e => {
-        e.preventDefault();
-
-        setValues('');
-        setAdding(!adding);        
-    }
-
     const handleSubmit = e => {
         e.preventDefault();
-        createGroup(values.groupName, values.groupDescription, storeJWT, setErrorMessage);
 
-        //Close the input boxes
-        setAdding(!adding);
+        // DB stuff
+
+        setInput("");
     }
 
     console.log('test');
@@ -60,10 +50,10 @@ function AddCard() {
             <div className="addCard__front">
                 <form>
                     <div className="addCardFront__groupName">
-                        <input type="text" name="groupName" placeholder="Group Name" onChange={(e) => setValues(e)}/>  
+                        <input type="text" placeholder="Group Name"/>  
                     </div>
                     <div className="addCardFront__groupDescription">
-                        <textarea type="text" rows="5" name="groupDescription" placeholder="Description" onChange={(e) => setValues(e)}/>  
+                        <textarea type="text" rows="5" placeholder="Description"/>  
                     </div>
                     <button className="hiddenSubmit" onClick={handleSubmit} type="submit">
                         Hidden submit
@@ -72,10 +62,10 @@ function AddCard() {
             </div>
 
             <div className="addCard__options">
-                <div className="addCard__option" onClick={handleSubmit}>
+                <div className="addCard__option" onClick={toggleAdding}>
                     <AddCardFrontButton Icon={SaveOutlinedIcon} title="Save" color="grey"/>
                 </div>
-                <div className="addCard__option" onClick={handleCancel}>
+                <div className="addCard__option" onClick={toggleAdding}>
                     <AddCardFrontButton Icon={CancelOutlinedIcon} title="Cancel" color="grey"/>
                 </div>
             </div>

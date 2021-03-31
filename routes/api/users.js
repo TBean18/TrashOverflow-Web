@@ -69,7 +69,7 @@ router.post("/login", (req, res) => {
   user
     .findOne({
       email: req.body.email,
-      password_hash: req.body.password_hash,
+      // password_hash: req.body.password_hash,
     })
     // Populates the user's groupPlaceHolders with the group infomation
     .populate({
@@ -80,6 +80,16 @@ router.post("/login", (req, res) => {
       },
     })
     .then((item) => {
+      //Check if we have found a user
+      if(item == null) throw 'No User Found';
+
+      //Compare the input password with the stored hash
+      item.comparePassword(req.body.password_hash, (err, isMatch) => {
+        if(err) throw err;
+        if(!isMatch) throw 'Incorrect Password';
+      })
+      
+      //Create the Web Token
       let token = jwt.createToken({ user_ID: item._id });
       if (token.error !== "") throw token.error;
       let output = {

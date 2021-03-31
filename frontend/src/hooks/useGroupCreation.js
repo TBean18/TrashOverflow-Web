@@ -4,7 +4,6 @@ const axios = require('axios').default;
 
 export const useGroupCreation = (groupName, groupDescription) => {
     const {storeJWT} = useContext(GlobalContext);
-
     axios.post('/api/groups/new', {
         group_name: groupName,
         group_description: groupDescription

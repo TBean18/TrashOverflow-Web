@@ -96,6 +96,15 @@ const Footer = () => {
             </FooterLinkItems>
             <FooterLinkItems>
               <FooterLinkTitle>Sam Eslick</FooterLinkTitle>
+              <FooterLink
+                to="//www.linkedin.com/in/samuel-eslick-3b59141b7/"
+                target="_blank"
+              >
+                LinkedIn
+              </FooterLink>
+              <FooterLink to="//github.com/jukebox303" target="_blank">
+                GitHub
+              </FooterLink>
             </FooterLinkItems>
           </FooterLinksWrapper>
         </FooterLinksContainer>

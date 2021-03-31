@@ -8,8 +8,11 @@
 - [ ] Forgot Password Email
   - [ ] Testing
   - [ ] SendGrid
+  - [ ] Forgot Password Page
 - [ ] Mobile App
   - [x] ReactNative
+  - [ ] Backend Code
+  - [ ] ReactNative Components
 - [x] Security
   - [x] Java Web Token
 - [ ] Invitation to HouseHold System
@@ -17,6 +20,8 @@
   - [x] Creator is permanate Admin
 - [x] Register / Log in
 - [ ] Creation of Households
+  - [x] FrontEnd Button
+  - [x] Backend Code
 - [x] View of Housegold info
   - [x] Group Member
   - [x] Group Admins
@@ -103,3 +108,29 @@
 - [ ] About Page
 - [ ] Group Color Theme
 - [ ] Add More than 1 person to a given chore
+  - Very Small Use Case
+
+# Notes for 3-31 Check-up Meeting
+
+- Currently using custom written Middleware for User Authenication using JSON Web Tokens
+  - We also use JWT for the email verification and Forgot Password link
+- Currently using Axios for all Client-Side requests
+  - Heavily considering implementing, React-Query instead. (Auto-Cashe, Auto-Auth, Easy Loading Display)
+- Email Verification has been implemented
+  - We registed for SendGrid, a SMTP service
+  - We Use NodeMailer to send email requests to SendGrid which then send out pre-written emails (HTML)
+- All API Endpoints have been designed and written
+  - Currently Working on Unit Testing
+  - Currently finishing
+- All MongoDB Schemas have been designed
+  - We use Mongoose in our project allowing use to have Schema Models which can contain custom instance/static methods.
+  - Examples include Group.addGroupMember(user_ID, cb)
+    - and a custom written Pre-Save functions that are called before every DB save.
+      - We use these to check for changed passwords and hash them.
+      - And check for an empty group, and delete it.
+- Completed FrontEnd Pages
+  - Welcome
+    - We used the welcome page as a way for the FrontEnd team to start learning react
+  - Sign in
+  - Register
+  -

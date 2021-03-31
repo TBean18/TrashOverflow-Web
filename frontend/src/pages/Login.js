@@ -65,7 +65,7 @@ function Login() {
     <>
       <Container>
         <FormWrap onSubmit={doLogin}>
-          <Icon to="/">Trash Overflow</Icon>
+          <Icon to="/">TrashOverflow</Icon>
           <FormContent>
             <Form onSubmit={doLogin}>
               <FormH1>Sign In</FormH1>

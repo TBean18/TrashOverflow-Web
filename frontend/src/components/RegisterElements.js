@@ -30,15 +30,17 @@ export const FormWrap = styled.div`
 `;
 
 export const Icon = styled(Link)`
+  font-family: lemon-jelly;
   text-align: center;
   margin-top: 200px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
   color: #fff;
-  font-weight: 700;
-  font-size: 42px;
+  font-weight: 300;
+  font-size: 100px;
 
   @media screen and (max-width: 480px) {
+    font-size: 60px;
     margin-left: 16px;
     margin-top: 80px;
   }

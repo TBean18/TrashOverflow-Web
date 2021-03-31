@@ -88,7 +88,7 @@ function Login() {
               <FormButton type="submit" onClick={doLogin}>
                 Sign In
               </FormButton>
-              <Text>Forgot password?</Text>
+              <TextL to="/forgot">Forgot password?</TextL>
               <TextL to="/register">Need a new account?</TextL>
             </Form>
           </FormContent>

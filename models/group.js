@@ -44,7 +44,7 @@ GroupSchema.pre('save', function(next) {
 });
 
 //Add a user to the group_members []
-GroupSchema.methods.addGroupMember = function(newMember, cb){
+GroupSchema.methods.addGroupMember = function(newMember, doSave, cb){
   //Format input data
   const data = {
     user_ID: newMember._id,
@@ -75,7 +75,7 @@ GroupSchema.methods.addGroupMember = function(newMember, cb){
   //If unique add
   if(unique){
     this.group_members.push(newGroupMember)
-    this.save(cb);
+    if (doSave) this.save(cb);
     return
   }else{
     let err = `User: ${data.user_name} is already a member of Group: ${this.group_name}`
@@ -96,17 +96,18 @@ GroupSchema.methods.removeGroupMember = function(curMemberID, cb) {
   });
 }
 
-// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// ***ASSUMES curUser_ID IS THE ID OF AN EXISTING USER***
 // Promotes a group member to admin
-GroupSchema.methods.promoteGroupMember = function(curMemberID, cb) {
-  this.group_members[curMemberID].admin = true;
-  this.save(cb);
+GroupSchema.methods.promoteGroupMember = function(curUser_ID, doSave, cb) {
+  console.log(curUser_ID);
+  (this.group_members.filter(mem => curUser_ID == mem.user_ID))[0].admin = true;
+  if (doSave) this.save(cb);
 }
 
-// ***ASSUMES curMemberID IS THE ID OF AN EXISTING GROUP MEMBER***
+// ***ASSUMES curUser_ID IS THE ID OF AN EXISTING GROUP MEMBER***
 // Demotes a group member from admin
-GroupSchema.methods.demoteGroupMember = function(curMemberID, cb) {
-  this.group_members[curMemberID].admin = false;
+GroupSchema.methods.demoteGroupMember = function(curUser_ID, cb) {
+  (this.group_members.filter(mem => curUser_ID === mem.user_ID))[0].admin = false;
   this.save(cb);
 }
 

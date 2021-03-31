@@ -39,22 +39,31 @@ router.post('/', jwt.authenticateUser, (req, res) => {
 // Route        POST api/groups/new
 // Description  Create a new group
 // Access       Public
-router.post('/new', jwt.authenticateUser, (req, res) => {
+router.post('/new', jwt.authenticateUser, async (req, res) => {
+    //Find the user 
+    const creator = await user.findById(req.body.user_ID).exec();
+
     // Create new payload. Only add description and chore list
     // if the items were filled out.
     const payload = {
         group_name : req.body.group_name,
-        group_members : req.body.group_members,
-        group_admins : req.body.group_admins,
-        group_member_count : req.body.group_members.length,
+        group_members : [],
         group_description : req.body.group_description,
-        group_chore_list : req.body.group_chore_list
+        group_chore_list : [],
     }
 
     // Make the new group with the payload created and save to db.
     const newGroup = new group(payload);
     newGroup.save()
-        .then(item => res.json(item))
+        .then(item => {
+            //Once the group is saved we need to add it to the creator's group list
+            creator.addGroup(item);
+            //Add the Creator as a group Member (Admin)
+            item.addGroupMember(creator, false);
+            item.promoteGroupMember(req.body.user_ID, true);
+
+            res.json(item)
+        })
         .catch(err => {
             console.log(err);
             res.status(401).json(err);

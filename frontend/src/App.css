@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 * {
-  font-family: 'Encode Sans Expanded', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 :root {
@@ -10,7 +12,7 @@
   --skin-orange: #ea8b6c;
   --skin-orange-hover: #d17c60;
   --yellow-orange: #feb054;
-  
+
   --main-color: #f1f2f5;
   --main-color-dark: #1e1e1e;
 

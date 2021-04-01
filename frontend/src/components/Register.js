@@ -1,74 +1,161 @@
-import React, { useState, useContext } from 'react';
-import "./Register.css";
-import { GlobalContext } from '../context/GlobalState'
-const axios = require('axios').default;
+import React, { useState, useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
+import { useForm } from "../hooks/useForm";
+import { useHistory } from "react-router-dom";
+import {
+  FormButton,
+  Text,
+  Container,
+  Form,
+  FormContent,
+  FormH1,
+  FormInput,
+  FormLabel,
+  FormWrap,
+  Icon,
+} from "./RegisterElements";
 
-function Register()
-{
-    //Bring in the userState form the global context
-    const {logIn, user, storeJWT} = useContext(GlobalContext);
+const axios = require("axios").default;
 
-    let name;
-    let password_hash;
-    let phone_number;
-    let email;
+function Register() {
+  //Bring in the userState form the global context
+  const { logIn, user, storeJWT } = useContext(GlobalContext);
+  //Store all form input in a JSON where key == component name(prop)
+  const [values, setValues] = useForm({
+    name: "",
+    password_hash: "",
+    phone_number: "",
+    email: "",
+  });
+  const [message, setMessage] = useState("");
+  const history = useHistory();
 
-    const [message,setMessage] = useState('');
+  // Register function called when register button is pressed
+  const doRegister = async (event) => {
+    // I do not know what this line does, Phil?!?
+    // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
+    event.preventDefault();
 
-    //Check to see if we have a logged in user in our state
-    if(user !== '' && message !== user.name){
-      setMessage(user.name);
-    }
+    //Make the register API call
+    axios
+      .post("/api/user/register", {
+        name: values.name,
+        password_hash: values.password_hash,
+        phone_number: values.phone_number,
+        email: values.email,
+      })
+      //Display Message
+      .then((res) => {
+        if (res.data.error !== "") return handleRegisterError(res.data.error);
+        console.log(res);
 
-    // Register function called when register button is pressed
-    const doRegister = async event => 
-    {
-        // I do not know what this line does, Phil?!?
-        // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
-        event.preventDefault();
+        //Since the user just registered, they need to verifiy the email
+        setMessage("Please Check Your Email For Verification");
+      })
+      //Display error if error is caught
+      .catch((error) => {
+        console.log(error);
+        setMessage(JSON.stringify(error));
+      });
+  };
 
-        //Make the register API call
-        axios.post('/api/user/register', {
-            
-            name: name.value,
-            password_hash: password_hash.value,
-            phone_number: phone_number.value,
-            email: email.value
-        })
-        //Display Message
-        .then(res => {
-          console.log(res);
-          //Set the user for the globalState
-          logIn(res.data.user, res.data.token);
-          setMessage(res.data.user.name);
-        })
-        //Display error if error is caught
-        .catch(error => {
-          console.log(error);
-          setMessage(error);
-        })
-    };
+  const handleRegisterError = (err) => {
+    setMessage(err);
+  };
 
+  return (
+    <>
+      <Container>
+        <FormWrap onSubmit={doRegister}>
+          <Icon to="/">TrashOverflow</Icon>
+          <FormContent>
+            <Form onSubmit={doRegister}>
+              <FormH1>Register for Your Account</FormH1>
+              <FormLabel>Name</FormLabel>
+              <FormInput
+                required
+                type="text"
+                name="name"
+                placeholder="Name"
+                onChange={(e) => setValues(e)}
+              />
+              <FormLabel>Phone Number</FormLabel>
+              <FormInput
+                required
+                type="text"
+                name="phone_number"
+                placeholder="Phone Number"
+                onChange={(e) => setValues(e)}
+              />
+              <FormLabel>Email</FormLabel>
+              <FormInput
+                required
+                type="email"
+                name="email"
+                placeholder="Email"
+                onChange={(e) => setValues(e)}
+              />
+              <FormLabel>Password</FormLabel>
+              <FormInput
+                required
+                type="password"
+                name="password_hash"
+                placeholder="Password"
+                onChange={(e) => setValues(e)}
+              />
+              <FormButton type="submit" onClick={doRegister}>
+                Register
+              </FormButton>
+              <Text to="/signin">Already have an account?</Text>
+              <span id="registerResult">{message}</span>
+            </Form>
+          </FormContent>
+        </FormWrap>
+      </Container>
+    </>
+  );
 
-    return(
-      <div className="RegisterArea" id="registerDiv">
-        <form onSubmit={doRegister}>
-        <span id="inner-title">Please Sign Up</span><br />
-        <input type="text" id="name" placeholder="Name" 
-          ref={(c) => name = c} />
-        <input type="text" id="phone_number" placeholder="Phone Number" 
-          ref={(c) => phone_number = c} />
-        <input type="text" id="email" placeholder="Email" 
-          ref={(c) => email = c} />
-        <input type="password" id="password_hash" placeholder="Password" 
-          ref={(c) => password_hash = c} />
-          <br></br>
-        <input type="submit" id="loginButton" class="buttons" value = "Sign Up"
-          onClick={doRegister} />
-        </form>
+  return (
+    <div className="RegisterArea" id="registerDiv">
+      <form onSubmit={doRegister}>
+        <span id="inner-title">Please Sign Up</span>
+        <br />
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          onChange={(e) => setValues(e)}
+        />
+        <input
+          type="text"
+          name="phone_number"
+          placeholder="Phone Number"
+          onChange={(e) => setValues(e)}
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="Email"
+          onChange={(e) => setValues(e)}
+        />
+        <input
+          type="password"
+          name="password_hash"
+          placeholder="Password"
+          onChange={(e) => setValues(e)}
+        />
+        <br></br>
+        <input
+          type="submit"
+          id="loginButton"
+          class="buttons"
+          value="Sign Up"
+          onClick={doRegister}
+        />
         <span id="registerResult">{message}</span>
-     </div>
-    );
-};
+      </form>
+    </div>
+  );
+}
 
 export default Register;

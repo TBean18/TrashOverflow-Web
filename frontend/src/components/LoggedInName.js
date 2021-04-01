@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {GlobalContext} from '../context/GlobalState';
 
 function LoggedInName()
 {
 
-    var user={}
+    const {user} = useContext(GlobalContext);
+
 
     const doLogout = event => 
     {
@@ -14,7 +16,7 @@ function LoggedInName()
 
     return(
       <div id="loggedInDiv">
-        <span id="userName">Logged In As John Doe </span><br />
+        <span id="userName">Logged In As {user.name} </span><br />
         <button type="button" id="logoutButton" class="buttons" 
            onClick={doLogout}> Log Out </button>
       </div>

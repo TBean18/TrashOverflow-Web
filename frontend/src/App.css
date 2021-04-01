@@ -1,7 +1,55 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Encode Sans Expanded', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+:root {
+  --dark-purple: #1d0625;
+  --light-purple: #301476;
+  --grey-purple: #56466d;
+  --grey-pink: #946b89;
+  --skin-orange: #ea8b6c;
+  --skin-orange-hover: #d17c60;
+  --yellow-orange: #feb054;
+
+  --main-color: #f1f2f5;
+  --main-color-dark: #1e1e1e;
+
+  --header-color: white;
+  --header-color-dark: #161616;
+
+  --header-input-color: #eff2f5;
+  --header-input-color-hover: #dfe3e8;
+  --header-input-color-dark: #252526;
+
+  --header-input-text: black;
+  --header-input-text-dark: #eff2f5;
+
+  --header-icon-color: gray;
+  --header-icon-color-dark: #eff2f5;
+
+  --sidebarrow-hover: lightgray;
+  --sidebarrow-hover-dark: #161616;
+
+  --post-color: white;
+  --post-color-dark: #161616;
+
+  --post-text-color: black;
+  --post-text-color-dark: white;
+}
+
+.main {
+  background-color: var(--main-color);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+
+  overflow: scroll;
+}
+
+.main__body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,0 +1,13 @@
+.feed {
+    position: absolute;
+    top: 80px;
+    flex: 1;
+    padding: 30px 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    margin-right: 15%;
+    margin-left: 15%;
+}

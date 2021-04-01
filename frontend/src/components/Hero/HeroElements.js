@@ -19,13 +19,12 @@ export const HeroContainer = styled.div`
     right: 0;
     bottom: 0;
     background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0.6) 100%
-    ),
+        180deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.6) 100%
+      ),
       linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
-      z-index: 2;
-    )
+    z-index: 2;
   }
 `;
 
@@ -40,7 +39,7 @@ export const HeroBackground = styled.div`
   overflow: hidden;
 `;
 
-export const VideoBackground = styled.video`
+export const VideoBackground = styled.img`
   width: 100%;
   height: 100%;
   -o-object-fit: cover;

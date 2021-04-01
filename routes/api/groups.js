@@ -7,37 +7,63 @@ const group = require('../../models/group');
 const user = require('../../models/user');
 
 // Route        GET api/groups/
-// Description  Get all Groups
+// Description  Get all Groups for the given user
 // Access       Public
-router.get('/', (req, res) => {
-    // Retrieve all group objects
-    group.find()
-        .then(items => res.json(items))
-        .catch(err => {
-            console.log(err);
-            res.status(401).json(err);
+// Parameters   user_ID
+router.post('/', jwt.authenticateUser, (req, res) => {
+
+    //Find the user and the groups for that user
+    user.findById(req.body.user_ID)
+    //Populate the users groups aswell
+    .populate({
+        path: 'groups',
+        populate:{
+            path: 'group_ID',
+            model: 'group'
+        }
+    })
+    .then(curUser => {
+        let groups = curUser.getGroup_IDArray();
+        res.json({
+            groups,
+            error: ''
         })
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(401).json({error: err});
+    });
+
 });
 
 // Route        POST api/groups/new
 // Description  Create a new group
 // Access       Public
-router.post('/new', (req, res) => {
+router.post('/new', jwt.authenticateUser, async (req, res) => {
+    //Find the user 
+    const creator = await user.findById(req.body.user_ID).exec();
+
     // Create new payload. Only add description and chore list
     // if the items were filled out.
     const payload = {
         group_name : req.body.group_name,
-        group_members : req.body.group_members,
-        group_admins : req.body.group_admins,
-        group_member_count : req.body.group_members.length,
+        group_members : [],
         group_description : req.body.group_description,
-        group_chore_list : req.body.group_chore_list
+        group_chore_list : [],
     }
 
     // Make the new group with the payload created and save to db.
     const newGroup = new group(payload);
     newGroup.save()
-        .then(item => res.json(item))
+        .then(item => {
+            //Once the group is saved we need to add it to the creator's group list
+            creator.addGroup(item);
+            //Add the Creator as a group Member (Admin)
+            item.addGroupMember(creator, false);
+            item.promoteGroupMember(req.body.user_ID, true);
+
+            res.json(item)
+        })
         .catch(err => {
             console.log(err);
             res.status(401).json(err);
@@ -47,7 +73,7 @@ router.post('/new', (req, res) => {
 // Route        POST api/groups
 // Description  Edit a group
 // Access       Public
-router.post('/editGroup', (req, res) => {
+router.post('/editGroup', jwt.authenticateUser, (req, res) => {
     group.findByIdAndUpdate(req.body._id, {
             group_name : req.body.group_name,
             group_description : req.body.group_description
@@ -61,7 +87,7 @@ router.post('/editGroup', (req, res) => {
 // Route        POST api/groups
 // Description  delete a group
 // Access       Public
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwt.authenticateUser, (req, res) => {
     group.findById(req.params.id)
         .then(g => {
             let name = {
@@ -81,16 +107,7 @@ router.delete('/:id', (req, res) => {
 // Parameters
 //      user_ID:    String - ID of current user
 //      group_ID:   String - ID of group to join
-router.post('/join', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
-
+router.post('/join', jwt.authenticateUser, async (req, res) => {
     //Since the group needs to be added to the User aswell we need to find the user first
     //Find User
     var foundUser, foundGroup;
@@ -141,105 +158,48 @@ router.post('/join', async (req, res) => {
 // Description  Endpoint hit when a admin wants to remove a user from the group
 // Access       Public
 // Parameters
-//      user_ID:    String - ID of current user
-//      admin_ID:   String - ID of admin (current user) who will remove the other member
-//      group_ID:   String - ID of group where removal will take place
-//      member_ID:  String - ID of member to be removed
-router.post('/removeUser', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
+//      admin_user_ID:    String - ID of current user
+//      member_user_ID:   String - ID of user to be demoted
+//      group_ID:         String - ID of group where demotion will take place
+router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
-    //Find Group
+    // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
-        return
-    }
-
-    //Find the relevant groupmembers
-    var foundAdmin, foundMember;
-    try{
-        //Set up an error variable to be passed through verification functions
-        var error = '';
-
-        foundAdmin = foundGroup.verifyAdmin(req.body.admin_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        //Verify User Info
-        if(foundAdmin === '') {
-            err = foundGroup.ERROR_ADMIN(req.body.admin_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-
-        // report error and exit function if any error was given
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return
-    }
-
-    //Try to update data
-    try{
-        //Set up an error variable to be passed thorugh both update functions
-        var error = '';
-        //Update Group data
-        foundGroup.removeGroupMember(req.body.group_member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        //update the User's Group and send responce
-        foundMember.leaveGroup(req.body.group_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                user_groups: foundMember.groups,
-                group: {
-                    name: foundGroup.group_name,
-                    members: foundGroup.group_members
-                },
-                error: err
-            })
-        })
-
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
         return;
     }
 
-    //Compose Response
+    // find the relevant groupmembers
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
+    if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
+    // check if current user is an admin
+    if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
+
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
+
+    // remove group member and check if successful
+    // TODO: afaik this doesn't return anything but would be nice if we start doing this for all our methods
+    // instead of try/catch blocks
+    let removedMemberStatus = foundGroup.removeGroupMember(foundGroupMember._id);
+    // TODO: turn error string into dedicated error method
+    if (!removedMemberStatus) return res.status(404).json({error: 'Could not remove member from group'});
+
+    let leaveGroupStatus = await user.leaveGroup(member_user_ID, group_ID);
+    // TODO: same as above
+    if(!leaveGroupStatus) return res.status(404).json({error: 'Could not remove/leave group from user'});
+
+    // compose response
+    let groupArray = updatedUser.getGroup_IDArray();
+    res.json({
+        groups: groupArray,
+        error: ''
+    });
 });
 
 // Route        POST api/groups/leave
@@ -247,266 +207,142 @@ router.post('/removeUser', async (req, res) => {
 // Access       Public
 // Parameters
 //      user_ID:    String - ID of current user
-//      member_ID:  String - ID of member that will leave group (current user)
 //      group_ID:   String - ID of group to leave
-router.post('/leave', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return
-    }
+router.post('/leave', jwt.authenticateUser, async (req, res) => {
+    const {group_ID, user_ID} = req.body;
 
-    //Locate data objects
+    // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     }catch(err){
         console.log(err);
-        res.status(404).json(err);
+        res.status(404).json({error: err});
         return
     }
 
-    //Try to update data
-    var foundMember;
-    try{
-        //Set up an error variable to be passed through both update functions
-        var error = '';
+    // find group Member
+    let foundGroupMember = foundGroup.findMemberByUser_ID(user_ID)
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(user_ID)})
 
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
+    // check if group is empty after removal
+    let prevMemCount = foundGroup.group_members.length;
 
+    // remove group member and check if successful
+    let removedMemberError = foundGroup.removeGroupMember(foundGroupMember._id);
+    if (removedMemberError) return res.status(404).json({error: removedMemberError});
+
+    // if group not empty after removal and removed user not an admin...
+    if(prevMemCount !== 1 && foundGroupMember.admin){
+        // find admins in the group
         let admins = foundGroup.group_members.filter(mem => (mem.admin === true));
-
-        //Update Group data
-        foundGroup.removeGroupMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-
-        // We need to randomly promote a user to admin after removing this one as they were the last admin
-        // If this user is the last in the group, group will be automatically deleted by pre method anyway
-        if (foundMember.admin === true && admins.length === 1 && foundGroup.group_members.length > 1) {
-            let members = foundGroup.group_members.filter(mem => (mem.user_ID !== foundMember.user_ID));
-            foundGroup.promoteGroupMember(members[0].user_ID, (err) => {
-                if(err) {
-                    console.log(err);
-                    error.concat((err + '; '));
-                }
-            });
+        // ...check to see if group is left w/ 0 admins
+        if(admins.length < 1){
+            //promote the next group member
+            foundGroup.promoteGroupMember(foundGroup.group_members[0]._id);
         }
-
-        //update the User's Group and send response
-        foundMember.leaveGroup(req.body.group_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                user_groups: foundMember.groups,
-                group: {
-                    name: foundGroup.group_name,
-                    members: foundGroup.group_members
-                },
-                error: err
-            })
-        })
-
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
     }
+
+    // remove the group from the user's list and check if successful
+    let updatedUser = await user.leaveGroup(user_ID, group_ID);
+    if(!updatedUser) return res.status(404).json({error: 'Could not remove/leave group from user'});
+
+    // compose response
+    let groupArray = updatedUser.getGroup_IDArray();
+    res.json({
+        groups: groupArray,
+        error: ''
+    });
+        // .then(foundUser => {
+        // console.log(foundUser)
+        // res.json({
+        //     groups: foundUser.groups,
+        //     error: 'test'
+        // })
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     res.status(404).json({error: err})
+        // });
+
+    // the group preSave function will take care of the empty group case
 });
 
+// TODO: Consolidate /promote and /demote into one?
 // Route        POST api/groups/promote
 // Description  Endpoint hit when a admin wants to promote another user to admin
 // Access       Public
 // Parameters
-//      user_ID:    String - ID of current user
-//      admin_ID:   String - ID of admin (current user) who will demote the other member
-//      group_ID:   String - ID of group where demotion will take place
-//      member_ID:  String - ID of member to be demoted
-router.post('/promote', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return;
-    }
+//      admin_user_ID:    String - ID of current user
+//      member_user_ID:   String - ID of user to be demoted
+//      group_ID:         String - ID of group where demotion will take place
+router.post('/promote', jwt.authenticateUser, async (req, res) => {
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
-    //Find Group
+    // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
         return;
     }
 
-    //Find the relevant groupmembers
-    var foundAdmin, foundMember;
-    try{
-        //Set up an error variable to be passed through verification functions
-        var error = '';
+    // find the relevant groupmembers
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
+    if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
+    // check if current user is an admin
+    if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
 
-        foundAdmin = foundGroup.verifyAdmin(req.body.admin_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
 
-        //Verify User Info
-        if(foundAdmin === '') {
-            err = foundGroup.ERROR_ADMIN(req.body.admin_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-
-        // report error and exit function if any error was given
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return
-    }
-
-    //Try to update data
-    try{
-        //Set up an error variable to be passed thorugh both update functions
-        var error = '';
-        //Update Group data
-        foundGroup.promoteGroupMember(foundMember.user_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                error: err
-            })
-        });
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
-    }
+    // update group data and compose response
+    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    if(!promoteMemberStatus) return res.status(404).json({error: 'Could not promote user'});
+    res.json({
+        // TODO: what else should go here?
+        error: ''
+    });
 });
 
 // Route        POST api/groups/demote
 // Description  Endpoint hit when a admin wants to demote another admin or themself
 // Access       Public
 // Parameters
-//      user_ID:    String - ID of current user
-//      admin_ID:   String - ID of admin (current user) who will demote the other member
-//      group_ID:   String - ID of group where demotion will take place
-//      member_ID:  String - ID of member to be demoted
-router.post('/demote', async (req, res) => {
-    //Verify that the supplied user_id is the same as the user_id on the token
-    try{
-        jwt.verifyID(req.body.token, req.body.user_ID)
-    }catch(err){
-        console.log({err});
-        res.status(401).json({error: err});
-        return;
-    }
+//      admin_user_ID:    String - ID of current user
+//      member_user_ID:   String - ID of user to be demoted
+//      group_ID:         String - ID of group where demotion will take place
+router.post('/demote', jwt.authenticateUser, async (req, res) => {
+    const {admin_user_ID, member_user_ID, group_ID} = req.body;
 
-    //Find Group
+    // find group
     var foundGroup;
     try{
-        foundGroup = group.findById(req.body.group_ID).exec();
+        foundGroup = group.findById(group_ID).exec();
     }catch(err){
         console.log({err});
         res.status(401).json({error: err});
         return;
     }
 
-    //Find the relevant groupmembers
-    var foundAdmin, foundMember;
-    try{
-        //Set up an error variable to be passed through verification functions
-        var error = '';
+    // find the relevant groupmembers
+    let foundGroupAdmin = foundGroup.findMemberByUser_ID(admin_user_ID);
+    if(!foundGroupAdmin) return res.status(404).json({error: foundGroup.ERROR_MEMBER(admin_user_ID)});
+    // check if current user is an admin
+    if(!foundGroupAdmin.admin) return res.status(404).json({error: foundGroup.ERROR_ADMIN(admin_user_ID)});
 
-        foundAdmin = foundGroup.verifyAdmin(req.body.admin_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
-        foundMember = foundGroup.verifyMember(req.body.member_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-        });
+    let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
+    if(!foundGroupMember) return res.status(404).json({error: foundGroup.ERROR_MEMBER(member_user_ID)});
 
-        //Verify User Info
-        if(foundAdmin === '') {
-            err = foundGroup.ERROR_ADMIN(req.body.admin_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-        if(foundMember === '') {
-            err = foundGroup.ERROR_MEMBER(req.body.member_ID);
-            console.log(err);
-            error.concat((err + '; '));
-        }
-
-        // report error and exit function if any error was given
-        if (error !== '') throw error;
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
-    }
-
-    //Try to update data
-    try{
-        //Set up an error variable to be passed thorugh both update functions
-        var error = '';
-        //Update Group data
-        foundGroup.demoteGroupMember(foundMember.user_ID, (err) => {
-            if(err) {
-                console.log(err);
-                error.concat((err + '; '));
-            }
-            res.json({
-                error: err
-            })
-        });
-    }catch(err){
-        console.log(err);
-        res.status(404).json(err);
-        return;
-    }
+    // update group data and compose response
+    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    if(!promoteMemberStatus) return res.status(404).json({error: 'Could not promote user'});
+    res.json({
+        // TODO: what else should go here?
+        error: ''
+    });
 });
 
 module.exports = router;

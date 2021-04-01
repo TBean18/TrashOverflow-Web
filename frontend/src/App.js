@@ -7,12 +7,15 @@ import {
 } from 'react-router-dom';
 import './App.css';
 
-import LoginPage from './pages/LoginPage';
-import CardPage from './pages/CardPage';
+import LoginPage from './pages/Login';
+// import CardPage from './pages/CardPage';
 import RegisterPage from './pages/RegisterPage';
-import LandingPage from './pages';
+import LandingPage from './pages/LandingPage';
+import ForgotPassPage from './pages/ForgotPassPage';
+import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
+import GroupView from './js/GroupView';
 
 function App() {
   return (
@@ -22,14 +25,20 @@ function App() {
           <Route path="/" exact>
             <LandingPage />
           </Route>
-          <Route path="/cards" exact>
-            <CardPage />
+          <Route path="/chores" exact>
+            <Main />
+          </Route>
+          <Route path="/groups" exact>
+            <GroupView />
           </Route>
           <Route path="/signin" exact>
             <LoginPage />
           </Route>
           <Route path="/register" exact>
             <RegisterPage />
+          </Route>
+          <Route path="/forgot" exact>
+            <ForgotPassPage />
           </Route>
           <Redirect to="/" />
         </Switch>

@@ -1,0 +1,21 @@
+.postOption {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px 2.5px 5px 10px;
+    margin-bottom: 8px;
+    width: 100px;
+    border-radius: 5px;
+    background-color: var(--header-input-color);
+}
+
+.postOption > p {
+    margin-left: 10px;
+    font-size: 13px;
+    color:black;
+}
+
+.postOption:hover {
+    cursor: pointer;
+    background-color: var(--header-input-color-hover);
+} 

@@ -66,6 +66,7 @@ UserSchema.methods.comparePassword = function(inputPassword, cb){
 };
 
 //Add a group to the users.groups []
+// Checks for duplicates before doing so
 UserSchema.methods.addGroup = function(newGroup, cb){
   //Format the data from the input model 
   const data = {
@@ -73,29 +74,27 @@ UserSchema.methods.addGroup = function(newGroup, cb){
     group_name: newGroup.group_name
   }
 
-  const added = this.groups.addToSet(data)
-  if(added.length == 0){
-    let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
-    return cb(err)
-  }
-  this.save()
+  // So aparantly addToSet will not with with documents unless the enplicit _id is the same too
+  // Thus, we should copy the groups add Group member function
 
-  // //Check for duplicate group
-  // var unique = true;
-  // this.groups.forEach(g => {
-  //   if(g.group_ID.equals(newGroupHolder.group_ID)){
-  //     unique = false;
-  //     // console.log('Same');
-  //   }
-  // })
-  // //If unique add the new group
-  // if(unique){
-  //   this.groups.push(newGroupHolder)
-  //   this.save(cb)
-  // }else{
-  //   let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
-  //   return cb(err)
-  // }
+  //Check for duplicates
+  let unique = true;
+  this.groups.every(group => {
+    if(group.group_ID.equals(data.group_ID)){
+      unique = false
+      return false;
+    }
+    return true;
+  })
+  //Add groupPlaceHolder if unique
+  if(unique){
+    this.groups.push(data);
+    this.save(cb);
+    return
+  }else{
+    let err = `User: ${this.name} is already a member of Group: ${data.group_name}`
+    return cb(err);
+  }
 }
 
 //Removes a group from the User's groups [] 
@@ -104,12 +103,31 @@ UserSchema.methods.leaveGroup = function(curGroupID, cb){
   //Manuallly find the index of the group we want to remove
   //remove that index form the groupPlaceHolders arrray
   //Save the result
-  this.groups.pull(curGroupID);
-  this.save(cb)
+  this.groups.pull(curGroupID).then(this.save(cb));
+  // this.save(cb)
 }
 
+// This function removed a group place holder from the user object corsponding to the user_ID param
+// RETURNS a the updated user with populated group data promise that should we awaited due to the included .exec()
 UserSchema.statics.leaveGroup = function(user_ID, group_ID){
-  this.update({_id: user_ID}, {$pull: { groups: { $elemMatch: {group_ID: group_ID}}}})
+  return this.findOneAndUpdate({_id: user_ID}, {$pull: { groups: { group_ID: group_ID}}}, {new: true}).populate({
+    path: 'groups',
+    populate:{
+        path: 'group_ID',
+        model: 'group'
+    }
+}).exec()
+}
+
+
+// Returns an array of the Users group.group_ID objects
+// Mainly for use when we use the .populate() command
+UserSchema.methods.getGroup_IDArray = function(cb){
+  let groups = []
+  this.groups.map(g =>{
+    groups.push(g.group_ID);
+  });
+  return groups
 }
 
 const User = mongoose.model('user', UserSchema); 

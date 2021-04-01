@@ -19,7 +19,7 @@ export const Container = styled.div`
 `;
 
 export const FormWrap = styled.div`
-  height: 90%;
+  height: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,7 +32,7 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 200px;
   margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.

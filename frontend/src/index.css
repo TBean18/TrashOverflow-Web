@@ -2,7 +2,8 @@
 @font-face {
   font-family: 'lemon-jelly';
   src: local('lemon-jelly'),
-    url(./fonts/lemon_jelly/Lemon\ Jelly\ Personal\ Use.ttf) format('truetype');
+    url(../src/public/fonts/lemon_jelly/Lemon\ Jelly\ Personal\ Use.ttf)
+      format('truetype');
 }
 
 * {

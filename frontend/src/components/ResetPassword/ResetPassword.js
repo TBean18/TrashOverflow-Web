@@ -10,24 +10,27 @@ import {
   FormLabel,
   FormWrap,
   Icon
-} from './LoginElements';
+} from './ResetPasswordElements';
 import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import { GlobalContext } from '../../context/GlobalState';
 import { useHistory } from 'react-router-dom';
-import { useForm } from '../hooks/useForm';
+import { useForm } from '../../hooks/useForm';
+import { Label } from '@material-ui/icons';
 const axios = require('axios').default;
 
-function Login() {
+function Reset() {
   //Bring in the userState form the global context
   const { logIn, user, storeJWT } = useContext(GlobalContext);
   const [values, setValues] = useForm({
-    email: '',
-    password_hash: ''
+    password_hash: '',
+    password_hash2: ''
   });
 
+  const [message, setMessage] = useState('');
   const history = useHistory();
 
-  const [message, setMessage] = useState('');
+  let password_hash;
+  let password_hash2;
 
   //Check to see if we have a logged in user in our state
   if (user !== '' && message !== user.name) {
@@ -35,10 +38,15 @@ function Login() {
   }
 
   //Login function called when login button is pressed
-  const doLogin = async (event) => {
+  const doReset = async (event) => {
     // I do not know what this line does, Phil?!?
     // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
     event.preventDefault();
+
+    if (password_hash !== password_hash2) {
+      setMessage('Passwords do not match.');
+      return;
+    }
 
     //Make the login API call
     axios
@@ -49,10 +57,9 @@ function Login() {
       //Display Message
       .then((res) => {
         console.log(res);
-        //Set the user for the globalState
-        logIn(res.data.user, res.data.token);
+
         setMessage(res.data.user.name);
-        history.push('/chores');
+        history.push('/signin');
       })
       //Display error if error is caught
       .catch((error) => {
@@ -64,32 +71,32 @@ function Login() {
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doLogin}>
+        <FormWrap onSubmit={doReset}>
           <Icon to="/">TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doLogin}>
-              <FormH1>Sign In</FormH1>
-              <FormLabel>Email</FormLabel>
-              <FormInput
-                required
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={(e) => setValues(e)}
-              />
-              <FormLabel>Password</FormLabel>
+            <Form onSubmit={doReset}>
+              <FormH1>Reset Password</FormH1>
+              <FormLabel>New Password</FormLabel>
               <FormInput
                 required
                 type="password"
-                name="password_hash"
-                placeholder="Password"
+                name="password_hash1"
+                placeholder="password"
                 onChange={(e) => setValues(e)}
               />
-              <FormButton type="submit" onClick={doLogin}>
-                Sign In
+              <FormLabel>Confirm Password</FormLabel>
+              <FormInput
+                required
+                type="password"
+                name="password_hash2"
+                placeholder="password"
+                onChange={(e) => setValues(e)}
+              />
+              <FormButton type="submit" onClick={doReset}>
+                Reset Password
               </FormButton>
-              <TextL to="/forgot">Forgot password?</TextL>
               <TextL to="/register">Need a new account?</TextL>
+              <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>
         </FormWrap>
@@ -98,4 +105,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Reset;

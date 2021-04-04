@@ -1,23 +1,24 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Switch,
-} from "react-router-dom";
-import "./App.css";
+  Switch
+} from 'react-router-dom';
+import './App.css';
 
 // import CardPage from './pages/CardPage';
-import RegisterPage from "./pages/RegisterPage";
-import LandingPage from "./pages/LandingPage";
-import ForgotPassPage from "./pages/ForgotPassPage";
-import Main from "./js/Main";
+import RegisterPage from './pages/RegisterPage';
+import LandingPage from './pages/LandingPage';
+import Login from './components/Login/Login';
+import ForgotPassPage from './pages/ForgotPassPage';
+import GroupView from './js/GroupView';
+import ResetPassword from './components/ResetPassword/ResetPassword';
+import Main from './js/Main';
 
-import { GlobalProvider } from "./context/GlobalState";
-import GroupView from "./js/GroupView";
-import Login from "./components/Login";
-import { QueryClientProvider } from "react-query";
-import useQueryClientCreator from "./hooks/useQueryClientCreator";
+import useQueryClientCreator from './hooks/useQueryClientCreator';
+import { GlobalProvider } from './context/GlobalState';
+import { QueryClientProvider } from 'react-query';
 
 function App() {
   const queryClient = useQueryClientCreator();
@@ -44,6 +45,9 @@ function App() {
             </Route>
             <Route path="/forgot" exact>
               <ForgotPassPage />
+            </Route>
+            <Route path="/reset" exact>
+              <ResetPassword />
             </Route>
             <Redirect to="/" />
           </Switch>

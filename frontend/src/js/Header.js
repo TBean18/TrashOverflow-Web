@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../images/logo.png';
+import logo from '../public/images/logo.png';
 import '../css/Header.css';
 import { NavLink } from 'react-router-dom';
 
@@ -28,23 +28,43 @@ function Header({ selection }) {
       </div>
 
       <div className="header__center">
-        <NavLink to="/chores" className="header__option header__option" activeClassName="header__option header__option--active">
-          < HomeIcon fontSize="large" />
+        <NavLink
+          to="/chores"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
+          <HomeIcon fontSize="large" />
         </NavLink>
 
-        <NavLink to="/groups" className="header__option header__option" activeClassName="header__option header__option--active">
-          <SupervisedUserCircleOutlinedIcon fontSize="large" />                
+        <NavLink
+          to="/groups"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
+          <SupervisedUserCircleOutlinedIcon fontSize="large" />
         </NavLink>
 
-        <NavLink to="/temp1" className="header__option header__option" activeClassName="header__option header__option--active">
+        <NavLink
+          to="/temp1"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
           <SubscriptionsOutlinedIcon fontSize="large" />
         </NavLink>
 
-        <NavLink to="/temp2" className="header__option header__option" activeClassName="header__option header__option--active">
+        <NavLink
+          to="/temp2"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
           <StorefrontOutlinedIcon fontSize="large" />
         </NavLink>
 
-        <NavLink to="/tempj3" className="header__option header__option" activeClassName="header__option header__option--active">
+        <NavLink
+          to="/tempj3"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
           <FlagIcon fontSize="large" />
         </NavLink>
       </div>

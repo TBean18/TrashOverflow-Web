@@ -12,9 +12,9 @@ import {
   Icon
 } from './LoginElements';
 import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import { GlobalContext } from '../../context/GlobalState';
 import { useHistory } from 'react-router-dom';
-import { useForm } from '../hooks/useForm';
+import { useForm } from '../../hooks/useForm';
 const axios = require('axios').default;
 
 function Login() {

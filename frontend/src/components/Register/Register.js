@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
-import { useForm } from '../hooks/useForm';
+import { GlobalContext } from '../../context/GlobalState';
+import { useForm } from '../../hooks/useForm';
 import { useHistory } from 'react-router-dom';
 import {
   FormButton,

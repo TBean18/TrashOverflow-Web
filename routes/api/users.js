@@ -5,13 +5,13 @@ const router = express.Router();
 // Item Model
 const user = require("../../models/user");
 
-//JSON Web Token
+// JSON Web Token
 const jwt = require("../../util/jwt");
 
-//Node Mailer Util folder
+// Node Mailer Util folder
 const mailer = require("../../util/mailer");
 
-// ROUTE    GET api/users
+// ROUTE    GET api/user
 // DESC     GET All Users
 // ACCESS   Public
 // This is just here to help with testing.
@@ -35,12 +35,25 @@ router.post('/tempverify', (req, res) => {
   }
 })
 
-// ROUTE    POST api/users/register
-// DESC     Register a user
-// ACCESS   Public
-// PARAMS   name, password_hash, phone_number, email
-// RETURNS  user, token, error
+// Route          POST api/user/register
+// Description    Register a user
+// Access         Public
+// Parameters     
+//    name:               String - Name of new user
+//    password_hash:      String - Password for new user
+//    phone_number:       String - Phone number of new user
+//    email:              String - Email of new user
+// Returns
+//    user:               JSON - Contains above info as well as the given _id
+//    token:              String - Token user will need to verify to log in
+//    error:              JSON { error: "" } if there is no error, or the error thrown
 router.post("/register", (req, res) => {
+
+  if (req.body.name === "" || req.body.password_hash === "" || req.body.phone_number === "" ||
+    req.body.email === "") {
+      res.json({error: "Please Fill Out All Fields"});
+      return;
+  }
   //Create new user Payload
   const newUser = new user({
     name: req.body.name,
@@ -77,14 +90,17 @@ router.post("/register", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: err
+        error: "Unable to Register New User"
       });
     });
 });
 
-// ROUTE    GET api/users/login
-// DESC     GET Login User Info
-// ACCESS   Public
+// Route          GET api/user/login
+// Description    GET Login User Info
+// Access         Public
+// Parameters
+//      email:          String - the email the user registered with
+//      password_hash:  String - the password the user entered at registration
 router.post("/login", (req, res) => {
   user
     .findOne({
@@ -124,14 +140,20 @@ router.post("/login", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: err
+        error: "Unable to Login"
       });
     });
 });
 
-// ROUTE    POST api/users/edit
-// DESC     Change Login User Info
-// ACCESS   Public
+// Route          POST api/user/edit
+// Description    Change Login User Info
+// Access         Public
+// Parameters
+//      _id:            String - the id of the user editing their account info
+//      name:           String - the "updated" name of the user
+//      password_hash:  String - the "updated" password for the user
+//      phone_number:   String - the "updated" phone number for the user
+//      email:          String - the "updated" email the user will now use to log in.
 router.post("/edit", (req, res) => {
   user
     .findByIdAndUpdate(
@@ -145,12 +167,17 @@ router.post("/edit", (req, res) => {
       }
     )
     .then((items) => res.json(items))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({error: "Could Not Edit Your Account Information"});
+    });
 });
 
-// ROUTE    DELETE api/users/
-// DESC     Deletes the users account
-// ACCESS   Public
+// Route          DELETE api/user/
+// Description    Deletes the users account
+// Access         Public
+// Parameters
+//      id:       String - ID of user to be deleted
 router.delete("/:id/:token", (req, res) => {
   var email;
   user
@@ -167,6 +194,11 @@ router.delete("/:id/:token", (req, res) => {
     }));
 });
 
+// Route          GET api/user/verify
+// Description    
+// Access         Public
+// Parameters
+//    token:    String - the token of the user to be verified
 router.get("/verify/:token", (req, res) => {
   try {
     const user_ID = jwt.verifyEmailToken(req.params.token);
@@ -185,4 +217,4 @@ router.get("/verify/:token", (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;D

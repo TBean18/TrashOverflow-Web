@@ -10,8 +10,8 @@ const chore = require('../../models/chore');
 // Route        GET api/chores/:group_ID
 // Description  Get the Chore list for a given group
 // Access       Public
-// Required Params
-// ...............      group_id
+// Parameters
+//      group_id:   String - ID of group for which to return chore list
 router.get('/:group_ID', (req, res) => {
     //Do we need to verify the user on a chorelist lookup?
 
@@ -26,7 +26,7 @@ router.get('/:group_ID', (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(404).json({
-                error: err
+                error: "Unable to Retrieve Chore List for Group"
             })
         })
 });
@@ -34,19 +34,14 @@ router.get('/:group_ID', (req, res) => {
 // Route                POST api/chores/
 // Description          Adds a chore to the group. 
 // Access               Public I think
-// Required Params      
-// ...............      chore_assigned_user
-// ...............          type: GroupMember.GroupMemberSchema
-// ...............      chore_user_pool
-// ...............          type: [GroupMember.GroupMemberSchema]
-// ...............      chore_name
-// ...............          type: String
-// Optional Params      chore_description
-// ...............          type: String
-// ...............      chore_point_value
-// ...............          type: Number
-// ...............      chore_schedule
-// ...............          type: Schedule.ScheduleSchema
+// Required Parameters      
+//      chore_assigned_user:    GroupMember - Group member currently assigned to the chore.
+//      chore_user_pool:        [GroupMember] - Group members that will rotate on this chore.
+//      chore_name:             String - Name of the chore.
+// Optional Parameters      
+//      chore_description:      String - Description of new chore
+//      chore_point_value:      Number - Value of points this chore is worth completing
+//      chore_schedule:         Schedule - Frequency of chore occurance
 router.post('/add', (req, res) => {
     // TODO: make sure user is admin.
 
@@ -87,7 +82,7 @@ router.post('/add', (req, res) => {
         .catch(err => {
             console.log(err);
             res.json({
-                error: err
+                error: "Could Not Add Your New Chore"
             })
         })
 });
@@ -95,9 +90,9 @@ router.post('/add', (req, res) => {
 // Route                DELETE api/chores/
 // Desc                 Deletes the chore.
 // Access               Public
-// Required Params      
-// ...............      id (of the chore)
-// ...............      token (jwt)
+// Parameters      
+//      id:     String - ID of the chore to be deleted
+//      token:  String - Token to verify the user
 router.delete('/:id/:token', (req, res) => {
     // TODO: make sure user is admin.
 
@@ -112,21 +107,18 @@ router.delete('/:id/:token', (req, res) => {
                 .then(() => res.json(deleted_chore))
         })
         .catch(err => res.status(404).json({
-            error: err
+            error: "Unable to Delete Chore"
         }))
 });
 
 // Route        POST api/chores
 // Description  Edit chore (name, description, point value)
 // Access       Public
-// Required Params      _id
-// ...............          type: Given by MongoDB
-// ...............      chore_name
-// ...............          type: String
-// ...............      chore_description
-// ...............          type: String
-// ...............      chore_point_value
-// ...............          type: Number
+// Parameters      
+//      _id:            String - ID of chore to be modified
+//      chore_name:     String - Name of chore to be modified
+//  chore_description:  String - Description of chore to be modified
+//  chore_point_value:  Number - Point value of chore to be modified
 router.post('/edit', (req, res) => {
     chore.findByIdAndUpdate(req.body._id, {
             chore_name: req.body.chore_name,
@@ -137,15 +129,20 @@ router.post('/edit', (req, res) => {
             new: true
         })
         .then(c => res.json(c))
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.json({
+                error: "Could Not Edit Your Chore"
+            })
+        });
 })
 
 // Route                POST api/chores
 // Desc                 Assigns a user to the chore queue.
 // Access               Public
-// Required Params
-// ...............      _id (of the chore)
-// ...............      user_ID -> user to be assigned to the chore.
+// Parameters
+//      _id:        String - ID of the chore
+//      user_ID:    String - ID of the user to be assigned to the chore
 router.post('/assignUser', (req, res) => {
     // TODO: only allow admin priviledges.
 
@@ -182,17 +179,19 @@ router.post('/assignUser', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.json(err);
+            res.json({
+                error: "Unable to Assign User to Chore"
+            });
         });
 })
 
 // Route                POST api/chores
 // Desc                 Removes the user from the chore queue
 // Access               Public
-// Required Params      
-// ...............      _id (of the chore)
-// ...............      user_ID -> id of user to be removed from the chore.
-// ...............      user_name -> name of user to be removed from the chore.
+// Parameters      
+//      _id:        String - ID of the chore.
+//      user_ID:    String - ID of user to be removed from the chore.
+//      user_name:  String - Name of user to be removed from the chore.
 router.post('/removeUser', (req, res) => {
     // TODO: only allow admin priviledges.
 
@@ -237,15 +236,17 @@ router.post('/removeUser', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.json(err);
+            res.json({
+                error: "Could Not Remove User From the Chore"
+            });
         });
 })
 
 // Route                POST api/chores
 // Description          Update user chore queue
 // Access               Public
-// Required Params      
-// ...............      _id (of the chore)
+// Parameters      
+//      _id:     String - ID of chore
 router.post('/updatePool', (req, res) => {
     chore.findById(req.body._id)
         .then(c => {
@@ -258,15 +259,17 @@ router.post('/updatePool', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.json(err);
+            res.json({
+                error: "Unable to Update User Chore Pool"
+            });
         })
 })
 
 // Route                POST api/chores
 // Description          Updates the chore status and rotates the user if chore is finished.
 // Access               Public
-// Required Params      
-// ...............      _id (of the chore)
+// Parameters      
+//      _id:    String - ID of the chore that will have to status updated
 router.post('/updateStatus', (req, res) => {
     chore.findById(req.body._id)
         .then(c => {
@@ -276,24 +279,10 @@ router.post('/updateStatus', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.json(err);
+            res.json({
+                error: "Could Not Update the Chore Status"
+            });
         });
 })
 
 module.exports = router;
-
-// add chore
-
-// delete chore (and schedule)
-
-// edit chore (name)
-
-// assign user to chore queue
-
-// remove user from chore queue
-
-// update chore status
-
-// 
-
-

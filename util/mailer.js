@@ -8,7 +8,7 @@ exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
 
   const msg = {
     to: recipientEmail, // Change to your recipient
-    from: "jacobbean18@gmail.com", // Change to your verified sender
+    from: "noReply@TrashOverflow.tech", // Change to your verified sender
     subject: "TrashOverflow | Email Verification",
     text: "Please click on the link below to verfiy your email LINK",
     html: `'<p>Please click on the link below to verfiy your email</p>
@@ -17,7 +17,30 @@ exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
   sgMail
     .send(msg)
     .then(() => {
-      console.log("Email sent");
+      console.log(`Email sent to ${recipientEmail}`);
+      cb(null);
+    })
+    .catch((error) => {
+      console.error(error);
+      cb(error);
+    });
+};
+
+exports.sendPasswordRecovery = (recipientEmail, token, cb) => {
+  const url = `http://localhost:5000/api/user/forgot_password/${token}`;
+
+  const msg = {
+    to: recipientEmail, // Change to your recipient
+    from: "noReply@TrashOverflow.tech", // Change to your verified sender
+    subject: "TrashOverflow | Password Recovery",
+    text: "Please click on the link below to recover your password LINK",
+    html: `'<p>Please click on the link below to verfiy your email</p>
+    <a href="${url}">LINK</a>`,
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log(`Email sent to ${recipientEmail}`);
       cb(null);
     })
     .catch((error) => {

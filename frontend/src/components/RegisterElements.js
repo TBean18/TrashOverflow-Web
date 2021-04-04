@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   min-height: 692px;
@@ -24,7 +24,7 @@ export const FormWrap = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     height: 80%;
   }
 `;
@@ -33,6 +33,7 @@ export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
   margin-top: 200px;
+  margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
   color: #fff;
@@ -43,6 +44,12 @@ export const Icon = styled(Link)`
     font-size: 60px;
     margin-left: 16px;
     margin-top: 80px;
+    margin-bottom: 0px;
+  }
+  @media screen and (max-width: 400px) {
+    font-size: 60px;
+    margin-left: 16px;
+    margin-top: 60px;
   }
 `;
 
@@ -60,23 +67,25 @@ export const FormContent = styled.div`
 export const Form = styled.form`
   // background color of login box. This color is black.
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   background: #fff;
   max-width: 400px;
   height: auto;
   width: 100%;
   z-index: 1;
   display: grid;
-  justify-content: center;
   margin: 0 auto;
   padding: 60px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
   overflow-wrap: break-word;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     padding: 32px 32px;
+  }
+
+  @media screen and (max-width: 350px) {
+    padding: 16px 32px;
+    margin-bottom: 50px;
   }
 `;
 
@@ -88,6 +97,11 @@ export const FormH1 = styled.h1`
   text-align: center;
   // change color of sign into your account
   color: #000;
+  max-width: 330px;
+
+  @media screen and (max-width: 350px) {
+    margin-bottom: 20px;
+  }
 `;
 
 export const FormLabel = styled.label`
@@ -108,6 +122,11 @@ export const FormInput = styled.input`
   border: none;
   border-radius: 15px;
   outline: none;
+  max-width: 300px;
+
+  @media screen and (max-width: 350px) {
+    padding: 12px 16px;
+  }
 `;
 
 export const FormButton = styled.button`
@@ -119,6 +138,7 @@ export const FormButton = styled.button`
   font-size: 20px;
   cursor: pointer;
   outline: none;
+  max-width: 332px;
 
   &:hover {
     transition: all 0.2s ease-in-out;
@@ -129,7 +149,19 @@ export const FormButton = styled.button`
   }
 `;
 
-export const Text = styled(Link)`
+export const Text = styled.text`
+  max-width: 330px;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--skin-orange-hover);
+`;
+
+export const TextL = styled(Link)`
+  max-width: 330px;
   text-align: center;
   margin-top: 24px;
   color: #000;

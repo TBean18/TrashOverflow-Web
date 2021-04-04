@@ -217,4 +217,47 @@ router.get("/verify/:token", (req, res) => {
   }
 });
 
-module.exports = router;D
+
+router.post("/forgot_password", (req, res) => {
+  const email = req.body.email;
+  user
+    .findOne({ email: email })
+    .then((user) => {
+      // No User Found Case
+      if (!user)
+        return res.json({ error: "No Account Found with given Email" });
+
+      //Send Email
+      mailer.sendVerficationEmailSendGrid(
+        user.email,
+        jwt.createEmailVerficationToken(user._id),
+        (err, info) => {
+          if (err) console.log(err);
+          return console.log(info);
+        }
+      );
+    })
+    .catch((err) => {
+      res.status(404).json({ error: err });
+    });
+});
+
+router.get("/forgot_password/:token", (req, res) => {
+  try {
+    const user_ID = jwt.verifyEmailToken(req.params.token);
+    user.findById(user_ID).then((item) => {
+      item.password_hash = req.body.password;
+      item.save().then((item) => {
+        console.log(
+          `${item.name} has changed their password (User_ID:${item._id})`
+        );
+        return res.redirect("http://localhost:3000/signin");
+      });
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).send(err);
+  }
+});
+
+module.exports = router;

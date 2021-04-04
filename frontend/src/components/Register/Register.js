@@ -115,48 +115,6 @@ function Register() {
       </Container>
     </>
   );
-
-  return (
-    <div className="RegisterArea" id="registerDiv">
-      <form onSubmit={doRegister}>
-        <span id="inner-title">Please Sign Up</span>
-        <br />
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          onChange={(e) => setValues(e)}
-        />
-        <input
-          type="text"
-          name="phone_number"
-          placeholder="Phone Number"
-          onChange={(e) => setValues(e)}
-        />
-        <input
-          type="text"
-          name="email"
-          placeholder="Email"
-          onChange={(e) => setValues(e)}
-        />
-        <input
-          type="password"
-          name="password_hash"
-          placeholder="Password"
-          onChange={(e) => setValues(e)}
-        />
-        <br></br>
-        <input
-          type="submit"
-          id="loginButton"
-          class="buttons"
-          value="Sign Up"
-          onClick={doRegister}
-        />
-        <span id="registerResult">{message}</span>
-      </form>
-    </div>
-  );
 }
 
 export default Register;

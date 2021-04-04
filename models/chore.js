@@ -87,6 +87,10 @@ ChoreSchema.statics.getUserChoreList = function (user_ID, cb) {
 
   // })
 
+  //https://stackoverflow.com/questions/16845191/mongoose-finding-subdocuments-by-criteria/28395234
+
+  // https://stackoverflow.com/questions/30740932/mongoose-how-to-query-subdocument-by-property-value
+
   Group.find({ "group_chores.chore_asssigned_member.user_ID": user_ID })
     .then((g) => console.log(g))
     .catch((err) => console.log(err));

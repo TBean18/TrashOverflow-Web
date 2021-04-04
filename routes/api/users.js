@@ -158,4 +158,30 @@ router.get("/verify/:token", (req, res) => {
   }
 });
 
+router.post("/forgot_password", (req, res) => {
+  const email = req.body.email;
+  user
+    .findOne({ email: email })
+    .then((user) => {
+      // No User Found Case
+      if (!user)
+        return res.json({ error: "No Account Found with given Email" });
+
+      //Send Email
+      mailer.sendVerficationEmailSendGrid(
+        user.email,
+        jwt.createEmailVerficationToken(user._id),
+        (err, info) => {
+          if (err) console.log(err);
+          return console.log(info);
+        }
+      );
+    })
+    .catch((err) => {
+      res.status(404).json({ error: err });
+    });
+});
+
+router.get("/forgot_password/:token", (req, res) => {});
+
 module.exports = router;

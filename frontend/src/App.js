@@ -15,6 +15,7 @@ import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
 import GroupView from './js/GroupView';
+import GroupChores from './components/GroupChores/GroupChores';
 import Login from './components/Login';
 
 function App() {
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path="/groups" exact>
             <GroupView />
+          </Route>
+          <Route path="/groupchores" exact>
+            <GroupChores />
           </Route>
           <Route path="/signin" exact>
             <Login />

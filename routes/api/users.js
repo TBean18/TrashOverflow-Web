@@ -23,22 +23,27 @@ router.get("/", (req, res) => {
 });
 
 // Also for testing, will simulate a user verifying their email
-router.post('/tempverify', (req, res) => {
+router.post("/tempverify", (req, res) => {
   if (jwt.verifyID(req.body.token, req.body.id)) {
-    user.findByIdAndUpdate(req.body.id, {
-        email_verified: true
-      }, {
-        new: true
-      })
-      .then(item => res.json(item))
-      .catch(err => res.json(err));
+    user
+      .findByIdAndUpdate(
+        req.body.id,
+        {
+          email_verified: true,
+        },
+        {
+          new: true,
+        }
+      )
+      .then((item) => res.json(item))
+      .catch((err) => res.json(err));
   }
-})
+});
 
 // Route          POST api/user/register
 // Description    Register a user
 // Access         Public
-// Parameters     
+// Parameters
 //    name:               String - Name of new user
 //    password_hash:      String - Password for new user
 //    phone_number:       String - Phone number of new user
@@ -48,11 +53,14 @@ router.post('/tempverify', (req, res) => {
 //    token:              String - Token user will need to verify to log in
 //    error:              JSON { error: "" } if there is no error, or the error thrown
 router.post("/register", (req, res) => {
-
-  if (req.body.name === "" || req.body.password_hash === "" || req.body.phone_number === "" ||
-    req.body.email === "") {
-      res.json({error: "Please Fill Out All Fields"});
-      return;
+  if (
+    req.body.name === "" ||
+    req.body.password_hash === "" ||
+    req.body.phone_number === "" ||
+    req.body.email === ""
+  ) {
+    res.json({ error: "Please Fill Out All Fields" });
+    return;
   }
   //Create new user Payload
   const newUser = new user({
@@ -67,14 +75,14 @@ router.post("/register", (req, res) => {
     .then((item) => {
       //Make a new JSON Web Token
       let token = jwt.createToken({
-        user_ID: item._id
+        user_ID: item._id,
       });
       if (token.error !== "") throw token.error;
       //Send Responce
       res.json({
         user: item,
         token: token.accessToken,
-        error: ""
+        error: "",
       });
 
       //Send Email Verification
@@ -90,7 +98,7 @@ router.post("/register", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: "Unable to Register New User"
+        error: "Unable to Register New User",
       });
     });
 });
@@ -121,26 +129,27 @@ router.post("/login", (req, res) => {
 
       //Compare the input password with the stored hash
       item.comparePassword(req.body.password_hash, (err, isMatch) => {
-        if (err) throw err;
-        if (!isMatch) throw "Incorrect Password";
+        if (err || !isMatch)
+          return res.status(404).json({ error: `Incorrect Password` });
+        if (isMatch) {
+          //Create the Web Token
+          let token = jwt.createToken({
+            user_ID: item._id,
+          });
+          if (token.error !== "") throw token.error;
+          let output = {
+            user: item,
+            token: token.accessToken,
+            error: "",
+          };
+          res.json(output);
+        }
       });
-
-      //Create the Web Token
-      let token = jwt.createToken({
-        user_ID: item._id
-      });
-      if (token.error !== "") throw token.error;
-      let output = {
-        user: item,
-        token: token.accessToken,
-        error: "",
-      };
-      res.json(output);
     })
     .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: "Unable to Login"
+        error: "Unable to Login",
       });
     });
 });
@@ -157,19 +166,23 @@ router.post("/login", (req, res) => {
 router.post("/edit", (req, res) => {
   user
     .findByIdAndUpdate(
-      req.body._id, {
+      req.body._id,
+      {
         name: req.body.name,
         password_hash: req.body.password_hash,
         phone_number: req.body.phone_number,
         email: req.body.email.toLowerCase(),
-      }, {
+      },
+      {
         new: true,
       }
     )
     .then((items) => res.json(items))
     .catch((err) => {
       console.log(err);
-      res.status(404).json({error: "Could Not Edit Your Account Information"});
+      res
+        .status(404)
+        .json({ error: "Could Not Edit Your Account Information" });
     });
 });
 
@@ -185,17 +198,19 @@ router.delete("/:id/:token", (req, res) => {
     .then((item) => {
       email = {
         email: item.email,
-        delete_success: true
+        delete_success: true,
       };
       item.remove().then(() => res.json(email));
     })
-    .catch((err) => res.status(404).json({
-      error: "ID Not Found"
-    }));
+    .catch((err) =>
+      res.status(404).json({
+        error: "ID Not Found",
+      })
+    );
 });
 
 // Route          GET api/user/verify
-// Description    
+// Description
 // Access         Public
 // Parameters
 //    token:    String - the token of the user to be verified
@@ -217,7 +232,6 @@ router.get("/verify/:token", (req, res) => {
   }
 });
 
-
 router.post("/forgot_password", (req, res) => {
   const email = req.body.email;
   user
@@ -225,7 +239,9 @@ router.post("/forgot_password", (req, res) => {
     .then((user) => {
       // No User Found Case
       if (!user)
-        return res.json({ error: "No Account Found with given Email" });
+        return res
+          .status(404)
+          .json({ error: "No Account Found with given Email" });
 
       //Send Email
       mailer.sendVerficationEmailSendGrid(
@@ -242,7 +258,7 @@ router.post("/forgot_password", (req, res) => {
     });
 });
 
-router.get("/forgot_password/:token", (req, res) => {
+router.post("/forgot_password/:token", (req, res) => {
   try {
     const user_ID = jwt.verifyEmailToken(req.params.token);
     user.findById(user_ID).then((item) => {

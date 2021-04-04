@@ -1,10 +1,11 @@
 import React from 'react'
 import './GroupChores.css'
+import List from './components/List/List'
 
 function GroupChores() {
     return (
         <div>
-            <p>Hello World!</p>
+            <List />
         </div>
     )
 }

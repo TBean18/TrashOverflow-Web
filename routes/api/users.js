@@ -182,6 +182,22 @@ router.post("/forgot_password", (req, res) => {
     });
 });
 
-router.get("/forgot_password/:token", (req, res) => {});
+router.get("/forgot_password/:token", (req, res) => {
+  try {
+    const user_ID = jwt.verifyEmailToken(req.params.token);
+    user.findById(user_ID).then((item) => {
+      item.password_hash = req.body.password;
+      item.save().then((item) => {
+        console.log(
+          `${item.name} has changed their password (User_ID:${item._id})`
+        );
+        return res.redirect("http://localhost:3000/signin");
+      });
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).send(err);
+  }
+});
 
 module.exports = router;

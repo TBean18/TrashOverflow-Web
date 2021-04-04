@@ -9,33 +9,27 @@ import {
   FormInput,
   FormLabel,
   FormWrap,
-  Icon
-} from './ResetPasswordElements';
-import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../../context/GlobalState';
-import { useHistory } from 'react-router-dom';
-import { useForm } from '../../hooks/useForm';
-import { Label } from '@material-ui/icons';
-const axios = require('axios').default;
+  Icon,
+} from "./ResetPasswordElements";
+import React, { useState, useContext } from "react";
+import { GlobalContext } from "../../context/GlobalState";
+import { useHistory, useParams } from "react-router-dom";
+import { useForm } from "../../hooks/useForm";
+import { Label } from "@material-ui/icons";
+const axios = require("axios").default;
 
 function Reset() {
-  //Bring in the userState form the global context
-  const { logIn, user, storeJWT } = useContext(GlobalContext);
   const [values, setValues] = useForm({
-    password_hash: '',
-    password_hash2: ''
+    password_hash: "",
+    password_hash2: "",
   });
 
-  const [message, setMessage] = useState('');
+  //Get the JSON Web token from the URL params
+  const { token } = useParams();
+  console.log(`token = ${token}`);
+
+  const [message, setMessage] = useState("");
   const history = useHistory();
-
-  let password_hash;
-  let password_hash2;
-
-  //Check to see if we have a logged in user in our state
-  if (user !== '' && message !== user.name) {
-    setMessage(user.name);
-  }
 
   //Login function called when login button is pressed
   const doReset = async (event) => {
@@ -43,23 +37,23 @@ function Reset() {
     // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
     event.preventDefault();
 
-    if (password_hash !== password_hash2) {
-      setMessage('Passwords do not match.');
+    // Passwords dont match case
+    if (values.password_hash !== values.password_hash2) {
+      setMessage("Passwords do not match.");
       return;
     }
 
-    //Make the login API call
+    //Make the reset API call
     axios
-      .post('/api/user/login', {
-        email: values.email,
-        password_hash: values.password_hash
+      .post(`/api/user/forgot_password/${token}`, {
+        password: values.password_hash,
       })
       //Display Message
       .then((res) => {
         console.log(res);
 
         setMessage(res.data.user.name);
-        history.push('/signin');
+        history.push("/signin");
       })
       //Display error if error is caught
       .catch((error) => {
@@ -80,7 +74,7 @@ function Reset() {
               <FormInput
                 required
                 type="password"
-                name="password_hash1"
+                name="password_hash"
                 placeholder="password"
                 onChange={(e) => setValues(e)}
               />

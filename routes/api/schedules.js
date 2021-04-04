@@ -46,7 +46,7 @@ router.post('/create', (req, res) => {
         .catch(err => {
             console.log(err);
             res.json({
-                error: err
+                error: "Unable to Create New Schedule for Chore"
             });
         })
 });
@@ -83,12 +83,9 @@ router.post('/edit', (req, res) => {
         .catch(err => {
             console.log(err);
             res.json({
-                error: err
+                error: "Could Not Update the Schedule For Your Chore"
             });
         });
 });
 
-// create schedule
-
-// update schedule
 module.export = router;

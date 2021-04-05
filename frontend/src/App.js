@@ -13,7 +13,6 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import ForgotPassPage from './pages/ForgotPassPage';
 import ResetPassPage from './pages/ResetPassPage';
-import GroupView from './js/GroupView';
 import Main from './js/Main';
 
 import useQueryClientCreator from './hooks/useQueryClientCreator';

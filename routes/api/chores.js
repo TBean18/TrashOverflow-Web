@@ -5,14 +5,14 @@ const jwt = require("../../util/jwt");
 
 const group = require("../../models/group");
 const user = require("../../models/user");
-const chore = require("../../models/chore");
-
+const { model } = require("../../models/chore");
+const chore = model;
 // Route        GET api/chores/
 // Description  Get the Chore list for the given user
 // Access       Private
 // Description  Endpoint used ot return the chore list for a given user
 //              Meaning, return an array of all chores for which the current user is the assigned group member
-router.get("/:user_ID", (req, res) => {
+router.get("/user_chores/:user_ID", (req, res) => {
   //TODO | Write this
   const user_ID = req.params.user_ID;
   chore.getUserChoreList(user_ID);
@@ -29,9 +29,11 @@ router.get("/:group_ID", (req, res) => {
   // Retrieve all chore objects from the given group_ID
   group
     .findById(req.params.group_ID)
+    // And populate the chore object with the groupmember data
+    // .populate("group_chores.chore_assigned_user")
     .then((foundGroup) => {
       res.json({
-        chores: foundGroup.chores,
+        chores: foundGroup.group_chores,
         error: "",
       });
     })
@@ -47,22 +49,33 @@ router.get("/:group_ID", (req, res) => {
 // Description          Adds a chore to the group.
 // Access               Public I think
 // Required Parameters
-//      chore_assigned_user:    GroupMember - Group member currently assigned to the chore.
-//      chore_user_pool:        [GroupMember] - Group members that will rotate on this chore.
+//      group_ID                The _id for the group adding the chore
+//      chore_assigned_user:    GroupMember - The _id Group member currently assigned to the chore.
+//      chore_user_pool:        [GroupMember] - Group members _ids that will rotate on this chore.
 //      chore_name:             String - Name of the chore.
 // Optional Parameters
 //      chore_description:      String - Description of new chore
 //      chore_point_value:      Number - Value of points this chore is worth completing
 //      chore_schedule:         Schedule - Frequency of chore occurance
-router.post("/add", (req, res) => {
+router.post("/add", jwt.authenticateUser, (req, res) => {
   // TODO: make sure user is admin.
+  const user_ID = req.body.user_ID;
 
   group
-    .findById(req.bodyParser._id)
+    .findById(req.body.group_ID)
     .then((g) => {
+      //Veryfiy Admin status of the user making the request
+      if (!g.verifyAdmin(user_ID)) {
+        //The user is not an admin ERROR
+        return res.status(404).json({
+          error: `User ${user_ID}: is not a Admin of group ${g.group_name}`,
+        });
+      }
+
       // Person to be assigned to the chore first and their index in the array.
       const assigned_person = req.body.chore_assigned_user;
-      const assigned_index = req.body.chore_user_pool.indexOf(assignedPerson);
+      // TODO check for not found case (-1)
+      const assigned_index = req.body.chore_user_pool.indexOf(assigned_person);
 
       // Create payload with required fields.
       const payload = {
@@ -82,13 +95,10 @@ router.post("/add", (req, res) => {
 
       // Update the group by adding the new chore to the chore list.
       const newChore = new chore(payload);
-      g.update({
-        $push: {
-          group_chore_list: newChore,
-        },
-      }).then(
+      g.group_chores.push(newChore);
+      g.save().then(
         res.json({
-          update_chore_list: g.group_chore_list,
+          chores: g.group_chores,
         })
       );
     })
@@ -130,14 +140,14 @@ router.delete("/:id/:token", (req, res) => {
 // Description  Edit chore (name, description, point value)
 // Access       Public
 // Parameters
-//      _id:            String - ID of chore to be modified
+//      chore_ID:            String - ID of chore to be modified
 //      chore_name:     String - Name of chore to be modified
 //  chore_description:  String - Description of chore to be modified
 //  chore_point_value:  Number - Point value of chore to be modified
 router.post("/edit", (req, res) => {
   chore
     .findByIdAndUpdate(
-      req.body._id,
+      req.body.chore_ID,
       {
         chore_name: req.body.chore_name,
         chore_description: req.body.chore_description,
@@ -221,9 +231,9 @@ router.post("/removeUser", (req, res) => {
     .findById(req.body._id)
     .then((c) => {
       // Find the index of the person to remove.
-      const personIndex = c.chore_user_pool.findIndex((person) => {
-        person.user_ID === req.body.user_ID;
-      });
+      const personIndex = c.chore_user_pool.findIndex(
+        (person) => person.user_ID === req.body.user_ID
+      );
 
       // If the person is not found, we cannot remove them.
       if (personIndex === -1)

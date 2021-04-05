@@ -6,7 +6,8 @@ const Group = require("./group");
 
 const ChoreSchema = new Schema({
   chore_assigned_user: {
-    type: GroupMember.GroupMemberSchema,
+    type: Schema.Types.ObjectID,
+    ref: "groupMember",
     required: true,
   },
   chore_assigned_user_index: {
@@ -14,7 +15,8 @@ const ChoreSchema = new Schema({
     default: 0,
   },
   chore_user_pool: {
-    type: [GroupMember.GroupMemberSchema],
+    type: [Schema.Types.ObjectID],
+    ref: "groupMember",
     required: true,
   },
   chore_name: {
@@ -94,6 +96,15 @@ ChoreSchema.statics.getUserChoreList = function (user_ID, cb) {
   Group.find({ "group_chores.chore_asssigned_member.user_ID": user_ID })
     .then((g) => console.log(g))
     .catch((err) => console.log(err));
+};
+
+//Chore static function used to find a chore with a populated groupMember
+// Callback Structure cb(Error, Chore)
+ChoreSchema.statics.findChore = function (chore_ID, cb) {
+  this.findById(chore_ID)
+    .populate("groupMember")
+    .then((chore) => cb(null, chore))
+    .catch((err) => cb(err, null));
 };
 
 const model = mongoose.model("chore", ChoreSchema);

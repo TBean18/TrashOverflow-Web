@@ -6,7 +6,8 @@ const Group = require("./group");
 
 const ChoreSchema = new Schema({
   chore_assigned_user: {
-    type: GroupMember.GroupMemberSchema,
+    type: Schema.Types.ObjectID,
+    ref: "groupMember",
     required: true,
   },
   chore_assigned_user_index: {
@@ -14,7 +15,8 @@ const ChoreSchema = new Schema({
     default: 0,
   },
   chore_user_pool: {
-    type: [GroupMember.GroupMemberSchema],
+    type: [Schema.Types.ObjectID],
+    ref: "groupMember",
     required: true,
   },
   chore_name: {

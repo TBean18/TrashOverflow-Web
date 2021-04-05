@@ -29,9 +29,11 @@ router.get("/:group_ID", (req, res) => {
   // Retrieve all chore objects from the given group_ID
   group
     .findById(req.params.group_ID)
+    // And populate the chore object with the groupmember data
+    // .populate("group_chores.chore_assigned_user")
     .then((foundGroup) => {
       res.json({
-        chores: foundGroup.chores,
+        chores: foundGroup.group_chores,
         error: "",
       });
     })

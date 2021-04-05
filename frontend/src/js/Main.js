@@ -12,11 +12,9 @@ function Main() {
 
     <div className="main">
       <Header selection={1}/>
-      <Sidebar />
       
       <div className="main__body">
         <Feed />
-        <Widgets />
       </div>
     </div>
   );

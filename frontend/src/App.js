@@ -16,6 +16,7 @@ import Main from './js/Main';
 
 import { GlobalProvider } from './context/GlobalState';
 import GroupView from './js/GroupView';
+import GroupChoresView from './components/GroupChoresView/GroupChoresView';
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path="/groups" exact>
             <GroupView />
+          </Route>
+          <Route path="/groupchores" exact>
+            <GroupChoresView />
           </Route>
           <Route path="/signin" exact>
             <LoginPage />

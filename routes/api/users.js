@@ -160,7 +160,6 @@ router.post("/login", (req, res) => {
 // Parameters
 //      _id:            String - the id of the user editing their account info
 //      name:           String - the "updated" name of the user
-//      password_hash:  String - the "updated" password for the user
 //      phone_number:   String - the "updated" phone number for the user
 //      email:          String - the "updated" email the user will now use to log in.
 router.post("/edit", (req, res) => {
@@ -169,7 +168,6 @@ router.post("/edit", (req, res) => {
       req.body._id,
       {
         name: req.body.name,
-        password_hash: req.body.password_hash,
         phone_number: req.body.phone_number,
         email: req.body.email.toLowerCase(),
       },

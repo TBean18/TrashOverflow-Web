@@ -1,7 +1,7 @@
 import React from 'react';
-import '../css/MemberWindow.css';
+import '../../css/MemberWindow.css';
 import MemberWindowMember from './MemberWindowMember';
-import JoIcon from '../public/images/JoIcon.png';
+import JoIcon from '../../public/images/JoIcon.png';
 
 function MemberWindow({ shown }) {
   MemberWindow.defaultProps = {

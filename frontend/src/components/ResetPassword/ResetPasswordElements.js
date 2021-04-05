@@ -32,7 +32,7 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 200px;
+  margin-top: 150px;
   margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
@@ -69,7 +69,7 @@ export const Form = styled.form`
   display: grid;
   margin: 0 auto;
   margin-bottom: 200px;
-  padding: 80px 32px;
+  padding: 32px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 

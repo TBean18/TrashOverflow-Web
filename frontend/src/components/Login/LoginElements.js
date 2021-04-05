@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   min-height: 692px;
@@ -32,7 +32,7 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 200px;
+  margin-top: 150px;
   margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
@@ -69,7 +69,7 @@ export const Form = styled.form`
   display: grid;
   margin: 0 auto;
   margin-bottom: 200px;
-  padding: 80px 32px;
+  padding: 32px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
@@ -79,6 +79,7 @@ export const Form = styled.form`
   }
   @media screen and (max-width: 350px) {
     padding: 16px 32px;
+    margin-top: -40px;
     margin-bottom: 50px;
   }
 `;
@@ -135,7 +136,7 @@ export const FormButton = styled.button`
 export const Text = styled.text`
   max-width: 330px;
   text-align: center;
-  margin-top: 24px;
+  margin-top: 14px;
   font-size: 14px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -145,7 +146,7 @@ export const Text = styled.text`
 
 export const TextL = styled(Link)`
   text-align: center;
-  margin-top: 24px;
+  margin-top: 14px;
   color: #000;
   font-size: 14px;
 `;

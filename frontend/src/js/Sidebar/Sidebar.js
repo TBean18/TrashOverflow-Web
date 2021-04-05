@@ -1,6 +1,6 @@
 import React from 'react';
-import JoIcon from '../public/images/JoIcon.png';
-import '../css/Sidebar.css';
+import JoIcon from '../../public/images/JoIcon.png';
+import '../../css/Sidebar.css';
 import SidebarRow from './SidebarRow';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import { ExpandMoreOutlined, Storefront } from '@material-ui/icons';

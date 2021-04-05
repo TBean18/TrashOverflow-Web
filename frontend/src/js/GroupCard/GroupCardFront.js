@@ -1,6 +1,6 @@
-import React from "react";
-import "../css/GroupCardFront.css";
-import GroupCardAdmin from "../components/GroupView/GroupCardAdmin";
+import React from 'react';
+import '../../css/GroupCardFront.css';
+import GroupCardAdmin from '../../../src/components/GroupView/GroupCardAdmin';
 
 function GroupCardFront({ image, curGroup }) {
   function displayAdmins() {

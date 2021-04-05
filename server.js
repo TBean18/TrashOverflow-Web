@@ -7,6 +7,8 @@ require("dotenv").config();
 //Import Self-Defined Files
 const user = require("./routes/api/users");
 const group = require("./routes/api/groups");
+const chores = require("./routes/api/chores");
+const schedules = require("./routes/api/schedules");
 
 // MERN B notes / heroku deployment
 const path = require("path");
@@ -21,7 +23,6 @@ app.use(express.json());
 // cors
 app.use(cors());
 
-
 //Connecting to DataBase
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -35,7 +36,8 @@ mongoose
 // USE API ROUTES
 app.use("/api/user", user);
 app.use("/api/groups", group);
-
+app.use("/api/chores", chores);
+app.use("/api/schedules", schedules);
 
 // Serve Static Assets if in production
 if (process.env.NODE_ENV === "production") {

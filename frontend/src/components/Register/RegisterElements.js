@@ -13,18 +13,18 @@ export const Container = styled.div`
   // gradient background
   background: linear-gradient(
     108deg,
-    rgba(86, 70, 109, 1) 0%,
-    rgba(254, 176, 84, 1) 100%
+    rgba(254, 176, 84, 1) 0,
+    rgba(86, 70, 109, 1) 100%
   );
 `;
 
 export const FormWrap = styled.div`
-  height: 90%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     height: 80%;
   }
 `;
@@ -32,8 +32,8 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 200px;
-  margin-bottom: 50px;
+  margin-top: 100px;
+  margin-bottom: 20px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
   color: #fff;
@@ -43,7 +43,13 @@ export const Icon = styled(Link)`
   @media screen and (max-width: 480px) {
     font-size: 60px;
     margin-left: 16px;
-    margin-top: 50px;
+    margin-top: 80px;
+    margin-bottom: 0px;
+  }
+  @media screen and (max-width: 400px) {
+    font-size: 60px;
+    margin-left: 16px;
+    margin-top: 60px;
   }
 `;
 
@@ -68,14 +74,18 @@ export const Form = styled.form`
   z-index: 1;
   display: grid;
   margin: 0 auto;
-  margin-bottom: 200px;
-  padding: 80px 32px;
+  padding: 32px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  overflow-wrap: break-word;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     padding: 32px 32px;
-    margin-bottom: 0px;
+  }
+
+  @media screen and (max-width: 350px) {
+    padding: 16px 32px;
+    margin-bottom: 50px;
   }
 `;
 
@@ -87,6 +97,11 @@ export const FormH1 = styled.h1`
   text-align: center;
   // change color of sign into your account
   color: #000;
+  max-width: 330px;
+
+  @media screen and (max-width: 350px) {
+    margin-bottom: 20px;
+  }
 `;
 
 export const FormLabel = styled.label`
@@ -103,10 +118,15 @@ export const FormInput = styled.input`
   // This is the font color when typing an email or password
   color: #000;
   padding: 16px 16px;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   border: none;
   border-radius: 15px;
   outline: none;
+  max-width: 300px;
+
+  @media screen and (max-width: 350px) {
+    padding: 12px 16px;
+  }
 `;
 
 export const FormButton = styled.button`
@@ -118,6 +138,7 @@ export const FormButton = styled.button`
   font-size: 20px;
   cursor: pointer;
   outline: none;
+  max-width: 332px;
 
   &:hover {
     transition: all 0.2s ease-in-out;
@@ -128,14 +149,19 @@ export const FormButton = styled.button`
   }
 `;
 
-export const Text = styled.span`
+export const Text = styled.text`
+  max-width: 330px;
   text-align: center;
   margin-top: 24px;
-  color: #000;
   font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--skin-orange-hover);
 `;
 
 export const TextL = styled(Link)`
+  max-width: 330px;
   text-align: center;
   margin-top: 24px;
   color: #000;

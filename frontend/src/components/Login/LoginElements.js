@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   min-height: 692px;
@@ -13,18 +13,18 @@ export const Container = styled.div`
   // gradient background
   background: linear-gradient(
     108deg,
-    rgba(254, 176, 84, 1) 0,
-    rgba(86, 70, 109, 1) 100%
+    rgba(86, 70, 109, 1) 0%,
+    rgba(254, 176, 84, 1) 100%
   );
 `;
 
 export const FormWrap = styled.div`
-  height: 80%;
+  height: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     height: 80%;
   }
 `;
@@ -32,7 +32,8 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 200px;
+  margin-top: 150px;
+  margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
   color: #fff;
@@ -42,7 +43,7 @@ export const Icon = styled(Link)`
   @media screen and (max-width: 480px) {
     font-size: 60px;
     margin-left: 16px;
-    margin-top: 80px;
+    margin-top: 50px;
   }
 `;
 
@@ -60,23 +61,26 @@ export const FormContent = styled.div`
 export const Form = styled.form`
   // background color of login box. This color is black.
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   background: #fff;
   max-width: 400px;
   height: auto;
   width: 100%;
   z-index: 1;
   display: grid;
-  justify-content: center;
   margin: 0 auto;
-  padding: 60px 32px;
+  margin-bottom: 200px;
+  padding: 32px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-  overflow-wrap: break-word;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     padding: 32px 32px;
+    margin-bottom: 0px;
+  }
+  @media screen and (max-width: 350px) {
+    padding: 16px 32px;
+    margin-top: -40px;
+    margin-bottom: 50px;
   }
 `;
 
@@ -104,7 +108,7 @@ export const FormInput = styled.input`
   // This is the font color when typing an email or password
   color: #000;
   padding: 16px 16px;
-  margin-bottom: 10px;
+  margin-bottom: 32px;
   border: none;
   border-radius: 15px;
   outline: none;
@@ -129,9 +133,20 @@ export const FormButton = styled.button`
   }
 `;
 
-export const Text = styled(Link)`
+export const Text = styled.text`
+  max-width: 330px;
   text-align: center;
-  margin-top: 24px;
+  margin-top: 14px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--skin-orange-hover);
+`;
+
+export const TextL = styled(Link)`
+  text-align: center;
+  margin-top: 14px;
   color: #000;
   font-size: 14px;
 `;

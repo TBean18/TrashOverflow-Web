@@ -13,18 +13,18 @@ export const Container = styled.div`
   // gradient background
   background: linear-gradient(
     108deg,
-    rgba(29, 6, 82, 1) 0%,
-    rgba(148, 107, 137, 1) 100%
+    rgba(148, 107, 137, 1) 0%,
+    rgba(29, 6, 82, 1) 100%
   );
 `;
 
 export const FormWrap = styled.div`
-  height: 90%;
+  height: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     height: 80%;
   }
 `;
@@ -32,7 +32,7 @@ export const FormWrap = styled.div`
 export const Icon = styled(Link)`
   font-family: lemon-jelly;
   text-align: center;
-  margin-top: 200px;
+  margin-top: 150px;
   margin-bottom: 50px;
   text-decoration: none;
   // Trash overflow text color at top of sign in page.
@@ -69,13 +69,17 @@ export const Form = styled.form`
   display: grid;
   margin: 0 auto;
   margin-bottom: 200px;
-  padding: 80px 32px;
+  padding: 32px 32px;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 480px) {
     padding: 32px 32px;
     margin-bottom: 0px;
+  }
+  @media screen and (max-width: 350px) {
+    padding: 16px 32px;
+    margin-bottom: 50px;
   }
 `;
 
@@ -128,11 +132,15 @@ export const FormButton = styled.button`
   }
 `;
 
-export const Text = styled.span`
+export const Text = styled.text`
+  max-width: 330px;
   text-align: center;
   margin-top: 24px;
-  color: #000;
   font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--skin-orange-hover);
 `;
 
 export const TextL = styled(Link)`

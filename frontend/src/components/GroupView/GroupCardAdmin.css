@@ -1,5 +1,6 @@
-.groupCardAdmin > ul {
-    padding: 0px 15px 0px 0px;
+.groupCardAdmin > p {
+    padding: 0px 0px 0px 0px;
+    margin-right: 10px;
     display: flex;
 
     font-size: 13px;

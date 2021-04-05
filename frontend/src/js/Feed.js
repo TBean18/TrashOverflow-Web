@@ -1,23 +1,21 @@
-import React from 'react';
-import '../css/Feed.css';
-import MessageSender from './MessageSender';
-import Post from './Post/Post';
-import StoryReel from './Story/StoryReel';
-import JoIcon from '../public/images/JoIcon.png';
+import React from 'react'
+import "../css/Feed.css"
+import Post from './Post'
+import JoIcon from '../images/JoIcon.png'
+
 
 function Feed() {
   return (
     <div className="feed">
       {/*
             <StoryReel />
-            */}
-      <MessageSender />
-      <Post
-        profilePic={JoIcon}
-        message="Right now, when an item is pressed in a menu there is no feedback that it was pressed or scrolled over. It would be awesome to get it so that when highlighting an option in a menu like 'Play Again' or 'Settings' a sound effect would play. Minecraft has something similar to this where a 'click' sound is played when selecting a choice."
-        taskTitle="Card-View"
-      />
-      {/*image="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.destination360.com%2Fnorth-america%2Fus%2Fwashington%2Fseattle%2Fimages%2Fseattle-shopping.jpg&f=1&nofb=1"
+            */}                   
+            <Post 
+                profilePic={JoIcon}
+                message="Right now, when an item is pressed in a menu there is no feedback that it was pressed or scrolled over. It would be awesome to get it so that when highlighting an option in a menu like 'Play Again' or 'Settings' a sound effect would play. Minecraft has something similar to this where a 'click' sound is played when selecting a choice."
+                taskTitle="Card-View"/>
+                {/*image="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.destination360.com%2Fnorth-america%2Fus%2Fwashington%2Fseattle%2Fimages%2Fseattle-shopping.jpg&f=1&nofb=1"
+
             />*/}
       <Post
         profilePic={JoIcon}

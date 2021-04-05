@@ -1,0 +1,14 @@
+.groupChoresView {
+    background-color: var(--main-color);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+
+    overflow: scroll;
+}
+
+.groupChoresView__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

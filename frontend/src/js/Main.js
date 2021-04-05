@@ -11,12 +11,11 @@ function Main() {
     // BEM naming convention
 
     <div className="main">
-      <Header selection={1} />
-      <Sidebar />
+      <Header selection={1}/>
+     
 
       <div className="main__body">
         <Feed />
-        <Widgets />
       </div>
     </div>
   );

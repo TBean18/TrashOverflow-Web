@@ -70,15 +70,16 @@
 .groupCardFront__admins {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     
     flex-wrap: wrap;
     margin-top: 10px;
     margin-left: 13px;
 }
 
-.groupCardFront__admins > ul {
-    padding: 0px 15px 0px 0px;
+.groupCardFront__admins > p {
+    padding: 0px 0px 0px 0px;
+    margin-right: 5px;
 }
 
 .groupCardFront__options {

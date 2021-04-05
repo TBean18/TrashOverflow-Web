@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import HomeIcon from '@material-ui/icons/Home';
 import FlagIcon from '@material-ui/icons/Flag';
-import SubscriptionsOutlinedIcon from '@material-ui/icons/SubscriptionsOutlined';
+import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
 import StorefrontOutlinedIcon from '@material-ui/icons/StorefrontOutlined';
 import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
 import { Avatar, IconButton } from '@material-ui/core';
@@ -37,35 +37,19 @@ function Header({ selection }) {
         </NavLink>
 
         <NavLink
+          to="/groupchores"
+          className="header__option header__option"
+          activeClassName="header__option header__option--active"
+        >
+          <GroupOutlinedIcon fontSize="large" />
+        </NavLink>
+
+        <NavLink
           to="/groups"
           className="header__option header__option"
           activeClassName="header__option header__option--active"
         >
           <SupervisedUserCircleOutlinedIcon fontSize="large" />
-        </NavLink>
-
-        <NavLink
-          to="/temp1"
-          className="header__option header__option"
-          activeClassName="header__option header__option--active"
-        >
-          <SubscriptionsOutlinedIcon fontSize="large" />
-        </NavLink>
-
-        <NavLink
-          to="/temp2"
-          className="header__option header__option"
-          activeClassName="header__option header__option--active"
-        >
-          <StorefrontOutlinedIcon fontSize="large" />
-        </NavLink>
-
-        <NavLink
-          to="/tempj3"
-          className="header__option header__option"
-          activeClassName="header__option header__option--active"
-        >
-          <FlagIcon fontSize="large" />
         </NavLink>
       </div>
       <div className="header__right">

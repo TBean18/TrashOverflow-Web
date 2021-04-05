@@ -41,8 +41,7 @@ GroupSchema.pre("save", function (next) {
 });
 
 //Add a user to the group_members []
-GroupSchema.methods.addGroupMember = function(newMember, doSave, cb){
-
+GroupSchema.methods.addGroupMember = function (newMember, doSave, cb) {
   //Format input data
   const data = {
     user_ID: newMember._id,
@@ -69,14 +68,13 @@ GroupSchema.methods.addGroupMember = function(newMember, doSave, cb){
     return true;
   });
   //If unique add
-  if(unique){
-    this.group_members.push(newGroupMember)
+  if (unique) {
+    this.group_members.push(newGroupMember);
     if (doSave) this.save(cb);
-    return
-  }else{
-    let err = `User: ${data.user_name} is already a member of Group: ${this.group_name}`
-    return cb(err)
-
+    return;
+  } else {
+    let err = `User: ${data.user_name} is already a member of Group: ${this.group_name}`;
+    return cb(err);
   }
 };
 
@@ -96,26 +94,28 @@ GroupSchema.methods.removeGroupMember = function (curMemberID, cb) {
 
 // ***ASSUMES curUser_ID IS THE ID OF AN EXISTING USER***
 // Promotes a group member to admin
-GroupSchema.methods.promoteGroupMember = function(curUser_ID, doSave, cb) {
+GroupSchema.methods.promoteGroupMember = function (curUser_ID, doSave, cb) {
   console.log(curUser_ID);
-  (this.group_members.filter(mem => curUser_ID == mem.user_ID))[0].admin = true;
+  this.group_members.filter((mem) => curUser_ID == mem.user_ID)[0].admin = true;
   if (doSave) this.save(cb);
   else cb;
-}
-
+};
 
 // ***ASSUMES curUser_ID IS THE ID OF AN EXISTING GROUP MEMBER***
 // Demotes a group member from admin
-GroupSchema.methods.demoteGroupMember = function(curUser_ID, cb) {
-  (this.group_members.filter(mem => curUser_ID === mem.user_ID))[0].admin = false;
+GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
+  this.group_members.filter(
+    (mem) => curUser_ID === mem.user_ID
+  )[0].admin = false;
 
   this.save(cb);
 };
 
 // Returns admin if admin is a member of this group, empty string otherwise
+// curMemberID = the User_ID of the group Member
 GroupSchema.methods.verifyAdmin = function (curMemberID, cb) {
   let res = this.group_members.filter(
-    (mem) => curMemberID === mem.user_ID && mem.admin === true
+    (mem) => curMemberID == mem.user_ID && mem.admin === true
   );
   // should just be length 1 if admin found, but just in case...
   return res.length >= 1 ? res[0] : "";

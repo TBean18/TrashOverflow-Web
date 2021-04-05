@@ -6,7 +6,7 @@ import {
   ThumbUp,
 } from "@material-ui/icons";
 import React from "react";
-import "../css/Post.css";
+import "../../css/Post.css";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import NearMeIcon from "@material-ui/icons/NearMe";
@@ -18,8 +18,8 @@ import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined"
 import ExpandMoreOutlinedIcon from "@material-ui/icons/ExpandMoreOutlined";
 import TodayOutlinedIcon from "@material-ui/icons/TodayOutlined";
 import PostOption from "./PostOption";
-import MemberWindow from "./MemberWindow";
-import MyCalendar from "./MyCalendar";
+import MemberWindow from "../MemberWindow/MemberWindow";
+import MyCalendar from "../MyCalendar";
 
 class Post extends React.Component {
   constructor(props) {

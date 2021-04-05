@@ -5,8 +5,8 @@ const jwt = require("../../util/jwt");
 
 const group = require("../../models/group");
 const user = require("../../models/user");
-const chore = require("../../models/chore");
-
+const { model } = require("../../models/chore");
+const chore = model;
 // Route        GET api/chores/
 // Description  Get the Chore list for the given user
 // Access       Private
@@ -60,7 +60,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
   const user_ID = req.body.user_ID;
 
   group
-    .findById(req.bodyParser.group_ID)
+    .findById(req.body.group_ID)
     .then((g) => {
       //Veryfiy Admin status of the user making the request
       if (!g.verifyAdmin(user_ID)) {
@@ -73,7 +73,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
       // Person to be assigned to the chore first and their index in the array.
       const assigned_person = req.body.chore_assigned_user;
       // TODO check for not found case (-1)
-      const assigned_index = req.body.chore_user_pool.indexOf(assignedPerson);
+      const assigned_index = req.body.chore_user_pool.indexOf(assigned_person);
 
       // Create payload with required fields.
       const payload = {
@@ -93,13 +93,10 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 
       // Update the group by adding the new chore to the chore list.
       const newChore = new chore(payload);
-      g.update({
-        $push: {
-          group_chore_list: newChore,
-        },
-      }).then(
+      g.group_chores.push(newChore);
+      g.save().then(
         res.json({
-          update_chore_list: g.group_chore_list,
+          chores: g.group_chores,
         })
       );
     })
@@ -141,14 +138,14 @@ router.delete("/:id/:token", (req, res) => {
 // Description  Edit chore (name, description, point value)
 // Access       Public
 // Parameters
-//      _id:            String - ID of chore to be modified
+//      chore_ID:            String - ID of chore to be modified
 //      chore_name:     String - Name of chore to be modified
 //  chore_description:  String - Description of chore to be modified
 //  chore_point_value:  Number - Point value of chore to be modified
 router.post("/edit", (req, res) => {
   chore
     .findByIdAndUpdate(
-      req.body._id,
+      req.body.chore_ID,
       {
         chore_name: req.body.chore_name,
         chore_description: req.body.chore_description,
@@ -232,9 +229,9 @@ router.post("/removeUser", (req, res) => {
     .findById(req.body._id)
     .then((c) => {
       // Find the index of the person to remove.
-      const personIndex = c.chore_user_pool.findIndex((person) => {
-        person.user_ID === req.body.user_ID;
-      });
+      const personIndex = c.chore_user_pool.findIndex(
+        (person) => person.user_ID === req.body.user_ID
+      );
 
       // If the person is not found, we cannot remove them.
       if (personIndex === -1)

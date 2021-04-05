@@ -1,8 +1,8 @@
 import React from 'react';
 import Story from './Story';
-import '../css/StoryReel.css';
-import JoIcon from '../public/images/JoIcon.png';
-import StockWoman from '../public/images/stockWoman.png';
+import '../../css/StoryReel.css';
+import JoIcon from '../../public/images/JoIcon.png';
+import StockWoman from '../../public/images/stockWoman.png';
 
 function StoryReel() {
   return (

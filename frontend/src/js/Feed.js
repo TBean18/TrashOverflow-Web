@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/Feed.css';
 import MessageSender from './MessageSender';
 import Post from './Post';
-import StoryReel from './StoryReel';
+import StoryReel from './Story/StoryReel';
 import JoIcon from '../public/images/JoIcon.png';
 
 function Feed() {

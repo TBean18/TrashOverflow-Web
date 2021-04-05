@@ -1,8 +1,6 @@
 import React from 'react'
 import "../css/Feed.css"
-import MessageSender from './MessageSender'
 import Post from './Post'
-import StoryReel from './StoryReel'
 import JoIcon from '../images/JoIcon.png'
 
 function Feed() {
@@ -10,8 +8,7 @@ function Feed() {
         <div className="feed">
             {/*
             <StoryReel />
-            */}            
-            <MessageSender />            
+            */}                   
             <Post 
                 profilePic={JoIcon}
                 message="Right now, when an item is pressed in a menu there is no feedback that it was pressed or scrolled over. It would be awesome to get it so that when highlighting an option in a menu like 'Play Again' or 'Settings' a sound effect would play. Minecraft has something similar to this where a 'click' sound is played when selecting a choice."

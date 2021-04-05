@@ -3,8 +3,8 @@ import './GroupCardAdmin.css'
 
 function GroupCardAdmin({ name }) {
     return (
-        <div className="GroupCardAdmin">
-            <ul>{name}</ul>
+        <div className="groupCardAdmin">
+            <p>{name}</p>
         </div>
     )
 }

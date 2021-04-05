@@ -98,5 +98,9 @@ ChoreSchema.statics.getUserChoreList = function (user_ID, cb) {
     .catch((err) => console.log(err));
 };
 
+ChoreSchema.statics.findChore() = function (chore_ID, cb) {
+  this.findById(chore_ID).then();
+};
+
 const model = mongoose.model("chore", ChoreSchema);
 module.exports = { model, ChoreSchema };

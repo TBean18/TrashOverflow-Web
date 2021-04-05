@@ -12,7 +12,7 @@ const chore = require("../../models/chore");
 // Access       Private
 // Description  Endpoint used ot return the chore list for a given user
 //              Meaning, return an array of all chores for which the current user is the assigned group member
-router.get("/:user_ID", (req, res) => {
+router.get("/user_chores/:user_ID", (req, res) => {
   //TODO | Write this
   const user_ID = req.params.user_ID;
   chore.getUserChoreList(user_ID);
@@ -47,21 +47,32 @@ router.get("/:group_ID", (req, res) => {
 // Description          Adds a chore to the group.
 // Access               Public I think
 // Required Parameters
-//      chore_assigned_user:    GroupMember - Group member currently assigned to the chore.
-//      chore_user_pool:        [GroupMember] - Group members that will rotate on this chore.
+//      group_ID                The _id for the group adding the chore
+//      chore_assigned_user:    GroupMember - The _id Group member currently assigned to the chore.
+//      chore_user_pool:        [GroupMember] - Group members _ids that will rotate on this chore.
 //      chore_name:             String - Name of the chore.
 // Optional Parameters
 //      chore_description:      String - Description of new chore
 //      chore_point_value:      Number - Value of points this chore is worth completing
 //      chore_schedule:         Schedule - Frequency of chore occurance
-router.post("/add", (req, res) => {
+router.post("/add", jwt.authenticateUser, (req, res) => {
   // TODO: make sure user is admin.
+  const user_ID = req.body.user_ID;
 
   group
-    .findById(req.bodyParser._id)
+    .findById(req.bodyParser.group_ID)
     .then((g) => {
+      //Veryfiy Admin status of the user making the request
+      if (!g.verifyAdmin(user_ID)) {
+        //The user is not an admin ERROR
+        return res.status(404).json({
+          error: `User ${user_ID}: is not a Admin of group ${g.group_name}`,
+        });
+      }
+
       // Person to be assigned to the chore first and their index in the array.
       const assigned_person = req.body.chore_assigned_user;
+      // TODO check for not found case (-1)
       const assigned_index = req.body.chore_user_pool.indexOf(assignedPerson);
 
       // Create payload with required fields.

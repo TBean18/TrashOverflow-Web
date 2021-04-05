@@ -59,7 +59,7 @@ describe("User API Tests", () => {
                 headers: {
                     "Content-Type": "application/json"
                 }
-            })
+            });
 
             res = await response.json();
             status = await response.status;
@@ -93,7 +93,6 @@ describe("User API Tests", () => {
             expect(res.user.password_hash).toBe(user.password_hash);
             expect(res.user.phone_number).toBe(user.phone_number);
             expect(res.user.email).toBe(user.email);
-            expect(res.token).toBe(user_token);
         });
 
         it("Should delete the user", async () => {
@@ -103,7 +102,7 @@ describe("User API Tests", () => {
                 headers: {
                     "Content-Type": "string"
                 }
-            })
+            });
 
             res = await response.json();
             status = await response.status;
@@ -113,7 +112,7 @@ describe("User API Tests", () => {
             expect(res.error).toBeUndefined();
             expect(res.delete_success).toBe(true);
             expect(res.email).toBe(payload.email);
-        })
+        });
     });
 
 
@@ -192,8 +191,6 @@ describe("User API Tests", () => {
             phone_number: "1564654564",
             email: "verifyagain@email.com"
         };
-        // Hashed Password.
-        const hashed_password = "$2b$10$9T6knQPlQ.drS5ruaV2b.e8UnPPAdMk1OjZkdKe0B2VVbYj38nila";
 
         it(`Should Allow The User to Login, 
             Change Their Information, Login With New Info, 
@@ -219,7 +216,6 @@ describe("User API Tests", () => {
             user.name = "A Different Name";
             user.email = "anewme@email.com";
             user.phone_number = "00000000000";
-            user.password_hash = "mynewpassword";
 
             // Send edit request.
             response = await fetch(`${base_url}/user/edit`, {
@@ -237,8 +233,6 @@ describe("User API Tests", () => {
             expect(res._id).toBe(user._id);
             expect(res.name).toBe(user.name);
             expect(res.name).not.toBe(payload.name);
-            expect(res.password_hash).not.toBe(user.password_hash);
-            expect(res.password_hash).not.toBe(hashed_password);
             expect(res.email).toBe(user.email);
             expect(res.email).not.toBe(payload.email);
             expect(res.phone_number).toBe(user.phone_number);
@@ -247,14 +241,17 @@ describe("User API Tests", () => {
             // Try logging in with new info.            
             response = await fetch(`${base_url}/user/login`, {
                 method: "post",
-                body: JSON.stringify(user),
+                body: JSON.stringify({
+                    email: user.email,
+                    password_hash: payload.password_hash
+                }),
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
 
             res = await response.json();
-            status = await response.status();
+            status = await response.status;
 
             expect(status).toBe(200);
             expect(res.user).toEqual(user);
@@ -276,16 +273,14 @@ describe("User API Tests", () => {
             expect(status).toBe(200);
             expect(res._id).toBe(user._id);
             expect(res.name).toBe(payload.name);
-            expect(res.password_hash).toBe(password_hash);
             expect(res.phone_number).toBe(payload.phone_number);
             expect(res.email).toBe(payload.email);
             expect(res.name).not.toBe(user.name);
-            expect(res.password_hash).not.toBe(user.password_hash);
             expect(res.phone_number).not.toBe(user.phone_number);
             expect(res.email).not.toBe(user.email);
 
             // Try logging in with original info.
-            let response = await fetch(`${base_url}/user/login`, {
+            response = await fetch(`${base_url}/user/login`, {
                 method: "post",
                 body: JSON.stringify(payload),
                 headers: {
@@ -298,15 +293,71 @@ describe("User API Tests", () => {
 
             expect(status).toBe(200);
             expect(res.user.name).toBe(payload.name);
-            expect(res.user.password_hash).toBe(payload.password_hash);
             expect(res.user.phone_number).toBe(payload.phone_number);
             expect(res.user.email).toBe(payload.email);
             expect(res.user.name).not.toBe(user.name);
-            expect(res.user.password_hash).not.toBe(user.password_hash);
             expect(res.user.phone_number).not.toBe(user.phone_number);
             expect(res.user.email).not.toBe(user.email);
         });
     });
 
+    // FIXME: not working
+    describe("Forgot Password", () => {
 
+        const payload = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        };
+
+        it("Should Allow a User to Reset Their Password And Login With The New Password", async () => {
+
+            const response = await fetch(`${base_url}/user/forgot_password`, {
+                method: "post",
+                body: {
+                    email: payload.email
+                },
+                header: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            console.log(res);
+            const status = await response.status;
+
+            expect(status).toBe(200);
+        });
+    });
+
+});
+
+
+describe("Group Related Endpoints", () => {
+
+    describe("New Group", () => {
+        it("Should Allow a User to Make a New Group", async () => {
+
+        });
+    
+        it("Should Allow a User to Edit Their Newly Made Group", async () => {
+            
+        });
+
+        it("Should Allow a User to Delete Their Newly Made Group", async () => {
+
+        });
+    });
+
+    
+    describe("Existing Group", () => {
+        it("Should Allow a User to Join a Group", async () => {
+
+        });
+
+        it("Should Allow a User to Leave a Group", async () => {
+
+        });
+    });
 });

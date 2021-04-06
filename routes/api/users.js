@@ -23,20 +23,21 @@ router.get("/", (req, res) => {
 });
 
 // Also for testing, will simulate a user verifying their email
-router.post("/tempverify", (req, res) => {
-  if (jwt.verifyID(req.body.token, req.body.id)) {
-    user
-      .findByIdAndUpdate(
-        req.body.id,
-        {
-          email_verified: true,
-        },
-        {
-          new: true,
-        }
-      )
-      .then((item) => res.json(item))
-      .catch((err) => res.json(err));
+router.post("/verify", (req, res) => {
+  try {
+    if (jwt.verifyID(req.body.token, req.body.id)) {
+      user.findByIdAndUpdate(req.body.id, {
+            email_verified: true,
+          }, {
+            new: true,
+          }
+        )
+        .then((item) => res.json(item))
+        .catch((err) => res.json(err));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(404).json(err);
   }
 });
 

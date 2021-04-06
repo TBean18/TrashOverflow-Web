@@ -20,6 +20,7 @@ import TodayOutlinedIcon from "@material-ui/icons/TodayOutlined";
 import PostOption from "./PostOption";
 import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
+import onClickOutside from 'react-onclickoutside';
 
 class Post extends React.Component {
   constructor(props) {
@@ -29,23 +30,36 @@ class Post extends React.Component {
       showMembers: false,
       showCalendar: false,
       showMessage: true,
+      hidMembersBlur: false,
     };
-    this.toggleExpanded = this.toggleExpanded.bind(this);
+    this.expand = this.expand.bind(this);
     this.toggleMembers = this.toggleMembers.bind(this);
+    this.hideMembers = this.hideMembers.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
-    this.toggleMessage = this.toggleMessage.bind(this);
+    this.hideMessage = this.hideMessage.bind(this);
+    this.showMessage = this.showMessage.bind(this);
   }
-  toggleExpanded() {
-    this.setState({ expanded: !this.state.expanded });
+  expand() {
+    this.setState({ expanded: true });
   }
+
   toggleMembers() {
     this.setState({ showMembers: !this.state.showMembers });
+  }
+  hideMembers() {
+    this.setState({ showMembers: false });
   }
   toggleCalendar() {
     this.setState({ showCalendar: !this.state.showCalendar });
   }
-  toggleMessage() {
-    this.setState({ showMessage: !this.state.showMessage });
+  hideMessage() {
+    this.setState({ showMessage: false });
+  }
+  showMessage() {
+    this.setState({ showMessage: true });
+  }
+  handleClickOutside = () => {
+    this.setState({ expanded: false, showMessage: true });
   }
 
   render() {
@@ -53,11 +67,8 @@ class Post extends React.Component {
     return (
       <div
         className={`row ${this.state.expanded ? "post-expanded" : "post"}`}
-        onBlur={() => this.toggleExpanded()}
-        onFocus={() => this.toggleExpanded()}
-        tabIndex="0"
       >
-        <div className="post__top">
+        <div className="post__top" onClick={this.expand}>
           <div className="post__topTitle">
             <h3>{taskTitle}</h3>
             <p>Points: 47</p>
@@ -74,13 +85,20 @@ class Post extends React.Component {
         <div
           className={`row ${
             this.state.expanded ? "post__body-expanded" : "post__body"
-          }`}
+          }`} onClick={this.expand}
         >
           <div className="post__bodyDescription">
             <h4>Description</h4>
-            <div className="post__bodyDescriptionMessage" onClick={this.toggleMessage} onFocus={this.toggleMessage} onBlur={this.toggleMessage}>
+            <div className="post__bodyDescriptionMessage">
               {
-                this.state.showMessage ? <p>{message}</p> : <textarea>{message}</textarea>
+                this.state.showMessage ? <p onClick={this.hideMessage}>{message}</p> : 
+                <textarea
+                  onBlur={() => this.showMessage()}
+                  onFocus={() => this.hideMessage()}        
+                  tabIndex="0"
+                >
+                  {message}
+                </textarea>
               }
             </div>
           </div>
@@ -95,7 +113,7 @@ class Post extends React.Component {
                 color="grey"
               />
             </div>
-            <MemberWindow shown={this.state.showMembers ? true : false} />
+            {this.state.showMembers && <MemberWindow hideMembers={this.hideMembers} eventTypes={['mouseup']}/>}
 
             <div className="post__bodyRightDate" onClick={this.toggleCalendar}>
               <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />
@@ -127,4 +145,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+export default onClickOutside(Post);

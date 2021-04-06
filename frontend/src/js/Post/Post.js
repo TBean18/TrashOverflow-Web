@@ -28,10 +28,12 @@ class Post extends React.Component {
       expanded: false,
       showMembers: false,
       showCalendar: false,
+      showMessage: true,
     };
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.toggleMembers = this.toggleMembers.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
+    this.toggleMessage = this.toggleMessage.bind(this);
   }
   toggleExpanded() {
     this.setState({ expanded: !this.state.expanded });
@@ -42,16 +44,17 @@ class Post extends React.Component {
   toggleCalendar() {
     this.setState({ showCalendar: !this.state.showCalendar });
   }
+  toggleMessage() {
+    this.setState({ showMessage: !this.state.showMessage });
+  }
 
   render() {
     const { profilePic, image, taskTitle, timestamp, message } = this.props;
-
     return (
       <div
         className={`row ${this.state.expanded ? "post-expanded" : "post"}`}
         onBlur={() => this.toggleExpanded()}
         onFocus={() => this.toggleExpanded()}
-        // style={{ border: "5px solid #CCC" }}
         tabIndex="0"
       >
         <div className="post__top">
@@ -75,7 +78,11 @@ class Post extends React.Component {
         >
           <div className="post__bodyDescription">
             <h4>Description</h4>
-            <p>{message}</p>
+            <div className="post__bodyDescriptionMessage" onClick={this.toggleMessage} onFocus={this.toggleMessage} onBlur={this.toggleMessage}>
+              {
+                this.state.showMessage ? <p>{message}</p> : <textarea>{message}</textarea>
+              }
+            </div>
           </div>
           <div className="post__bodyRight">
             <div
@@ -109,13 +116,6 @@ class Post extends React.Component {
                 color="grey"
               />
             </div>
-            {/*
-                        <div className="post__bodyAssignedUsers">
-                            <ul>Jo Johnson</ul>
-                            <ul>Sam Eslick</ul>
-                            <ul>Philip</ul>
-                        </div>
-                        */}
           </div>
         </div>
 

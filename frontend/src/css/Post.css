@@ -78,12 +78,25 @@
     width: 400px;
 }
 
-.post__bodyDescription > p {
+.post__bodyDescriptionMessage > p {
     word-wrap: break-word;
     font-size: 14px;
 }
 .post__bodyDescription > h4 {
     margin-bottom: 10px;
+}
+
+.post__bodyDescriptionMessage > textarea {
+    height: 150px;
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    width: 100%;
+
+    font-size: 14px;
+    word-wrap: break-word;
+    outline-width: 0;
+    background-color: var(--main-color);
 }
 
 .post__bodyRight {

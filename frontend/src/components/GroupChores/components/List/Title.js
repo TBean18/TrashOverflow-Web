@@ -23,7 +23,7 @@ const useStyle = makeStyles((theme) => ({
         }
     }
 }))
-export default function Title() {
+export default function Title({ title }) {
     const [open, setOpen] = useState(false)
     const classes = useStyle()
 
@@ -33,7 +33,7 @@ export default function Title() {
                 <div>
                     <InputBase
                         autoFocus
-                        value="Todo" 
+                        value={title} 
                         inputProps={{
                             className: classes.input,
                         }}
@@ -43,8 +43,11 @@ export default function Title() {
                 </div>
             ) : (
                 <div className={classes.editableTitleContainer}>
-                    <Typography onClick={() => setOpen(!open)} 
-                    className={classes.editableTitle}>Todo
+                    <Typography 
+                        onClick={() => setOpen(!open)} 
+                        className={classes.editableTitle}
+                    >
+                        {title}
                     </Typography>
                     <MoreHorizIcon />
                 </div>

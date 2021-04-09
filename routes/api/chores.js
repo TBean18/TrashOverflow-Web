@@ -15,7 +15,18 @@ const chore = model;
 router.get("/user_chores/:user_ID", (req, res) => {
   //TODO | Write this
   const user_ID = req.params.user_ID;
-  chore.getUserChoreList(user_ID);
+  //Each user has an array of groups
+  try {
+    user.getChoreList(user_ID, (err, ret) => {
+      if (err) return res.status(404).json({ error: err });
+      return res.json({ chores: ret });
+    });
+  } catch (err) {
+    res.status(404).json({ error: err });
+  }
+  //
+  // group.getGroupMemberArrayFromUser(user_ID);
+  // chore.getUserChoreList(user_ID);
 });
 
 // Route        GET api/chores/:group_ID

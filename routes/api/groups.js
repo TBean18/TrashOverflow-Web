@@ -158,6 +158,8 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
     //Find User
     var foundUser, foundGroup;
     try {
+        // foundUser = await user.findById(req.body.user_ID).exec();
+        // foundGroup = await group.findById(req.body.group_ID).exec();
         [foundUser, foundGroup] = await Promise.all([user.findById(req.body.user_ID).exec(), group.findById(req.body.group_ID).exec()]);
     } catch (err) {
         console.log(err);
@@ -167,6 +169,8 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
         return;
     }
     // We have found our user
+
+    console.log(foundGroup);
 
     //Try to update data
     try {
@@ -363,7 +367,7 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -390,12 +394,12 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
     });
 
     // update group data and compose response
-    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    let promoteMemberStatus = await foundGroup.promoteGroupMember(member_user_ID, true);
     if (!promoteMemberStatus) return res.status(404).json({
         error: 'Could Not Promote User'
     });
     res.json({
-        // TODO: what else should go here?
+        member: foundGroupMember,
         error: ''
     });
 });
@@ -417,7 +421,7 @@ router.post('/demote', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -444,13 +448,13 @@ router.post('/demote', jwt.authenticateUser, async (req, res) => {
     });
 
     // update group data and compose response
-    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    let promoteMemberStatus = await foundGroup.demoteGroupMember(member_user_ID);
     if (!promoteMemberStatus) return res.status(404).json({
         error: 'Could Not Promote User'
     });
     res.json({
-        // TODO: what else should go here?
-        error: 'If you can read this, you broke our code'
+        member: foundGroupMember,
+        error: ''
     });
 });
 

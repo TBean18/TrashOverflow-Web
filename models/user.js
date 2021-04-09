@@ -161,6 +161,7 @@ UserSchema.statics.getChoreList = function (user_ID, cb) {
         //Find all chores assigned to the found member
         // console.log(group.group_chores);
         let memberChores = group.getChoresForMember(member);
+        memberChores = group.populateChoreList(memberChores);
         memberChores.forEach((chore) => ret.push(chore));
       });
 

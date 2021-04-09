@@ -3,8 +3,10 @@ const express = require("express");
 const router = express.Router();
 const jwt = require('../../util/jwt')
 
+const groupPlaceHolder = require('../../models/groupPlaceHolder');
 const group = require('../../models/group');
 const user = require('../../models/user');
+const { json } = require("body-parser");
 
 // Route        GET api/groups/
 // Description  Get all Groups for the given user
@@ -102,25 +104,47 @@ router.post('/editGroup', jwt.authenticateUser, (req, res) => {
         });
 });
 
-// Route        POST api/groups
+// Route        POST api/groups/delete
 // Description  delete a group
 // Access       Public
 // Parameters
-//      id:     String - ID of group to be deleted
-router.delete('/:id', jwt.authenticateUser, (req, res) => {
-    group.findById(req.params.id)
-        .then(g => {
-            let name = {
-                "name": g.group_name,
-                "delete_success": true
+//      _id:     String - ID of group to be deleted
+//      user_ID: String - ID of the person deleting the group
+router.post('/delete', jwt.authenticateUser, (req, res) => {
+
+    group.findById(req.body._id)
+    .then(async g => {
+        
+        // Make sure user is admin in group.
+        for (let i = 0; i < g.group_members.length; i++) {
+            if (g.group_members[i].user_ID == req.body.user_ID) {
+                if (g.group_members[i].admin)
+                    break;
+                
+                res.status(401).json({
+                    error: "Permission Denied"
+                });
+                return;
             }
-            g.remove().then(() => res.json(name))
-        })
-        .catch(err => {
-            res.status(401).json({
-                error: "Permission Denied"
+        }
+
+        for (let member of g.group_members) {
+            await user.leaveGroup(member.user_ID, g._id);
+        }
+
+        g.remove().then(() => {
+            res.json({
+                name: g.group_name,
+                delete_success: true
             });
         });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(404).json({
+            error: "Could Not Find Group"
+        });
+    });
 });
 
 // Route        POST api/groups/join

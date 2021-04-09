@@ -134,7 +134,40 @@ UserSchema.methods.getGroup_IDArray = function (cb) {
   return groups;
 };
 
-UserSchema.methods.getChoreList = function (cb) {};
+//Returns a list of all chores assigned to the current user
+UserSchema.statics.getChoreList = function (user_ID, cb) {
+  // Initilize an empty list to store the chorelist
+  let ret = [];
+  this.findById(user_ID) // Populates the user's groupPlaceHolders with the group infomation
+    .populate({
+      path: "groups",
+      populate: {
+        path: "group_ID",
+        model: "group",
+      },
+    })
+    .then((user) => {
+      if (!user) throw "No User Found";
+      //We found a user
+      // console.log(user);
+
+      //Now for each group....
+      user.groups.forEach((g) => {
+        const group = g.group_ID;
+        // Find the user's coresponding groupMember object
+        const member = group.findMemberByUser_ID(user_ID);
+        // .filter((mem) => user_ID == mem.user_ID)[0];
+        // console.log(member);
+        //Find all chores assigned to the found member
+        // console.log(group.group_chores);
+        let memberChores = group.getChoresForMember(member);
+        memberChores.forEach((chore) => ret.push(chore));
+      });
+
+      return cb ? cb(null, ret) : ret;
+    })
+    .catch((err) => cb(err, null));
+};
 
 const User = mongoose.model("user", UserSchema);
 module.exports = User;

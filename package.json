@@ -33,6 +33,7 @@
     "mongoose": "^5.11.15",
     "nodemailer": "^6.5.0",
     "nodemailer-sendgrid": "^1.0.3",
+    "react-beautiful-dnd": "^13.1.0",
     "react-router-dom": "^5.2.0",
     "react-uuid": "^1.0.2",
     "styled-components": "^5.2.1"

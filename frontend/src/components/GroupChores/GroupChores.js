@@ -6,6 +6,7 @@ import store from './utils/store'
 import StoreApi from './utils/storeApi'
 import InputContainer from './components/Input/InputContainer'
 import {makeStyles} from '@material-ui/core/styles'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 const useStyle = makeStyles((theme)=> ({
     root: {
@@ -18,7 +19,7 @@ const useStyle = makeStyles((theme)=> ({
 }))
 
 function GroupChores() {
-    const [data,setData] = useState(store)
+    const [data, setData] = useState(store)
     const classes = useStyle()
     const addMoreCard = (title, listId) => {
         const newCardId = uuid()
@@ -70,15 +71,46 @@ function GroupChores() {
         setData(newState)
     }
 
+    const onDragEnd = (result) => {
+        const { destination, source, draggableId } = result
+        console.log("destination", destination, "source", source, draggableId)
+
+        if (!destination) {
+            return
+        }
+        const sourceList = data.lists[source.droppableId]
+        const destinationList = data.lists[destination.droppableId]
+        const draggingCard = sourceList.cards.filter(
+            (card) => card.id == draggableId
+        )[0]
+
+        if (source.droppableId == destination.droppableId) {
+            sourceList.cards.splice(source.index, 1)
+            destinationList.cards.splice(destination.index, 0, draggingCard)
+            const newState = {
+                ...data,
+                lists: {
+                    ...data.lists,
+                    [sourceList.id]: destinationList,
+                },
+            }
+            setData(newState)
+        }
+    }
+
     return (
         <StoreApi.Provider value={{ addMoreCard, addMoreList, updateListTitle }}>
-        <div className={classes.root}>
-            {data.listIds.map((listID) => {
-                const list = data.lists[listID]
-                return <List list={list} key={listID} />
-            })}
-            <InputContainer type='list'/>
-        </div>
+            <DragDropContext
+                onDragEnd={onDragEnd}
+            >
+                <div className={classes.root}>
+                    {data.listIds.map((listID) => {
+                        const list = data.lists[listID]
+                        return <List list={list} key={listID} />
+                    })}
+                    <InputContainer type='list' />
+                </div>
+            </DragDropContext>
         </StoreApi.Provider>
     )
 }

@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const { base } = require("../../models/group");
 
 const base_url = "http://localhost:5000/api";
 
@@ -337,19 +338,19 @@ describe("User API Tests", () => {
 
 describe("Group Related Endpoints", () => {
 
-    const payload = {
-        group_name: "A-Team",
-        group_description: "Our Awesome Group"
-    };
-
-    const user = {
-        name: "My Awesome Test",
-        password_hash: "password",
-        phone_number: "1564654564",
-        email: "verifyagain@email.com"
-    }
-
     describe("New Group", () => {
+
+        const payload = {
+            group_name: "A-Team",
+            group_description: "Our Awesome Group"
+        };
+    
+        const user = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        }
 
         it("Should Make a User Login Before Doing Group Stuff", async () => {
 
@@ -405,22 +406,211 @@ describe("Group Related Endpoints", () => {
         });
     
         it("Should Allow a User to Edit Their Newly Made Group", async () => {
+
+            const differentPayload = {
+                group_name: "B-Team",
+                group_description: "Not as good as the A-team",
+                _id: payload._id,
+                token: payload.token
+            }
             
+            // Changing the information of the group
+            const response = await fetch(`${base_url}/groups/editGroup`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(differentPayload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.group_name).toBe(differentPayload.group_name);
+            expect(res.group_description).toBe(differentPayload.group_description);
+            expect(res.group_name).not.toBe(payload.group_name);
+            expect(res.group_description).not.toBe(payload.group_description);
+
+            // Change payload info for delete testcase.
+            if (status == 200) {
+                payload.group_name = differentPayload.group_name;
+                payload.group_description = differentPayload.group_description;
+            }
         });
 
         it("Should Allow a User to Delete Their Newly Made Group", async () => {
 
+            const response = await fetch(`${base_url}/groups/delete`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.name).toBe(payload.group_name);
+            expect(res.delete_success).toBe(true);
         });
     });
 
     
     describe("Existing Group", () => {
-        it("Should Allow a User to Join a Group", async () => {
 
+        const payload = {
+            group_ID: "607093ef014cd60d7380fbfe",
+        };
+
+        const groupInfo = {
+            group_name: "Unit Test Group",
+            group_description: "An Awesome Unit Testing Group",
+            _id: payload._id
+        };
+
+        const admin = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        };
+
+        const user = {
+            name: "Forgetful User",
+            password_hash: "password",
+            email: "short-term-memory@email.com"
+        };
+
+        it("Should Make a User Login Before Doing Group Stuff", async () => {
+
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(user),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            payload.user_ID = res.user._id;
+            payload.token = res.token;
+
+            expect(status).toBe(200);
+            expect(payload.user_ID).toBeDefined();
+            expect(payload.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+        });
+
+        it("Should Allow a User to Join a Group", async () => {
+            
+            const response = await fetch(`${base_url}/groups/join`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.error).toBeFalsy(); // "" or null
+            expect(res.user_groups[ res.user_groups.length - 1 ].group_ID).toBe(payload.group_ID);
+            expect(res.user_groups[ res.user_groups.length - 1 ].group_name).toBe(groupInfo.group_name);
+            expect(res.group[ res.group.length - 1 ].user_ID).toBe(payload.user_ID);
+            expect(res.group[ res.group.length - 1 ].admin).toBe(false);
+            expect(res.group[ res.group.length - 1 ].user_name).toBe(user.name);
+        });
+
+        it("Should Make Admin Login Before Doing Group Stuff", async () => {
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(admin),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            payload.admin_user_ID = res.user._id;
+            payload.member_user_ID = payload.user_ID;
+
+            expect(status).toBe(200);
+            expect(payload.user_ID).toBeDefined();
+            expect(payload.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+        });
+
+        it("Should Allow the User to be Promoted", async () => {
+
+            // Promoting "Forgetful User" in "My Awesome Test"'s group
+            const response = await fetch(`${base_url}/groups/promote`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+        });
+
+        it("Should Allow the User to be Demoted", async () => {
+
+            // Demoting "Forgetful User" in "My Awesome Test"'s group
+            const response = await fetch(`${base_url}/groups/demote`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
         });
 
         it("Should Allow a User to Leave a Group", async () => {
 
+            const response = await fetch(`${base_url}/groups/leave`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.error).toBeFalsy();
+            // Check all of this members groups to make sure it no longer exist.
+            for (let g of res.groups)
+                expect(g._id).not.toBe(payload.group_ID);
         });
     });
 });

@@ -30,6 +30,8 @@ class Post extends React.Component {
       showMembers: false,
       showCalendar: false,
       showMessage: true,
+      showPoints: true,
+      showTitle: true,
       hidMembersBlur: false,
     };
     this.expand = this.expand.bind(this);
@@ -38,11 +40,14 @@ class Post extends React.Component {
     this.toggleCalendar = this.toggleCalendar.bind(this);
     this.hideMessage = this.hideMessage.bind(this);
     this.showMessage = this.showMessage.bind(this);
+    this.showPoints = this.showPoints.bind(this);
+    this.hidePoints = this.hidePoints.bind(this);
+    this.showTitle = this.showTitle.bind(this);
+    this.hideTitle = this.hideTitle.bind(this);
   }
   expand() {
     this.setState({ expanded: true });
   }
-
   toggleMembers() {
     this.setState({ showMembers: !this.state.showMembers });
   }
@@ -58,20 +63,64 @@ class Post extends React.Component {
   showMessage() {
     this.setState({ showMessage: true });
   }
-  handleClickOutside = () => {
-    this.setState({ expanded: false, showMessage: true });
+  hidePoints() {
+    this.setState({ showPoints: false });
   }
+  showPoints() {
+    this.setState({ showPoints: true });
+  }
+  hideTitle() {
+    this.setState({ showTitle: false });
+  }
+  showTitle() {
+    this.setState({ showTitle: true });
+  }
+  handleClickOutside = () => {
+    this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true });
+  }
+  handleSubmit = e => {
+    e.preventDefault();
 
+    this.setState({ showMessage: true, showPoints: true, showTitle: true })
+  }
+  
   render() {
-    const { profilePic, image, taskTitle, timestamp, message } = this.props;
+    const { profilePic, image, taskTitle, timestamp, message, points } = this.props;
     return (
       <div
         className={`row ${this.state.expanded ? "post-expanded" : "post"}`}
       >
         <div className="post__top" onClick={this.expand}>
           <div className="post__topTitle">
-            <h3>{taskTitle}</h3>
-            <p>Points: 47</p>
+            {
+              this.state.showTitle ? <h3 onClick={this.state.expanded ? this.hideTitle : null}>{taskTitle === undefined ? "No Title" : taskTitle}</h3> : 
+                <form>
+                  <input type="text" placeholder={taskTitle}
+                    onBlur={() => this.showTitle()}
+                    onFocus={() => this.hideTitle()}        
+                    tabIndex="0"
+                  />
+                  <button onClick={this.handleSubmit} type="submit">
+                    Hidden submit
+                  </button>
+                </form>
+            }
+            <div className="post__points">
+              <p>Points:</p>
+              {
+                this.state.showPoints ? <p onClick={this.state.expanded ? this.hidePoints : null}>{points === undefined ? "None" : points}</p> : 
+                <form>
+                  <input type="text" placeholder={points}
+                    onBlur={() => this.showPoints()}
+                    onFocus={() => this.hidePoints()}        
+                    tabIndex="0"
+                  />
+                  <button onClick={this.handleSubmit} type="submit">
+                    Hidden submit
+                  </button>
+                </form>
+              }
+            </div>
           </div>
           <div className="post__topRight">
             <div className="post__topRightDate">

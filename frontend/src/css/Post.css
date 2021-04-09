@@ -47,6 +47,59 @@
     font-size: medium;
 }
 
+.post__topTitle > form > input {
+    display: flex;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    font-size: medium;
+    font-weight: bold;
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    margin: 0 0 5px 0;
+    width: 100%;
+    outline-width: 0;
+}
+
+.post__topTitle > form > button {
+    display: none;
+}
+
+.post__points {
+    width: auto;
+    display: inline-block;
+}
+
+.post__points > p {
+    margin: 0 5px 0 0;
+    display: inline-block;
+}
+
+.post__points > form {
+    display: inline-block;
+}
+
+.post__points > form > input {
+    display: inline-block;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    width: 15%;
+    outline-width: 0;
+}
+
+.post__points > form > button {
+    display: none;
+}
+
 .post__topRight {
     display: flex;
     flex-direction: column;

@@ -12,9 +12,9 @@ const chore = model;
 // Access       Private
 // Description  Endpoint used ot return the chore list for a given user
 //              Meaning, return an array of all chores for which the current user is the assigned group member
-router.get("/user_chores/:user_ID", (req, res) => {
+router.get("/user_chores", jwt.authenticateUser, (req, res) => {
   //TODO | Write this
-  const user_ID = req.params.user_ID;
+  const user_ID = req.body.user_ID;
   //Each user has an array of groups
   try {
     user.getChoreList(user_ID, (err, ret) => {

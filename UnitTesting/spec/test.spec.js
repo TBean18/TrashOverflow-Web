@@ -337,9 +337,71 @@ describe("User API Tests", () => {
 
 describe("Group Related Endpoints", () => {
 
-    describe("New Group", () => {
-        it("Should Allow a User to Make a New Group", async () => {
+    const payload = {
+        group_name: "A-Team",
+        group_description: "Our Awesome Group"
+    };
 
+    const user = {
+        name: "My Awesome Test",
+        password_hash: "password",
+        phone_number: "1564654564",
+        email: "verifyagain@email.com"
+    }
+
+    describe("New Group", () => {
+
+        it("Should Make a User Login Before Doing Group Stuff", async () => {
+
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(user),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            payload.user_ID = res.user._id;
+            payload.token = res.token;
+
+            expect(status).toBe(200);
+            expect(payload.user_ID).toBeDefined();
+            expect(payload.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+
+        });
+
+        it("Should Allow a User to Make a New Group", async () => {
+            
+            const response = await fetch(`${base_url}/groups/new`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.group_member_count).toBe(1);
+            expect(res.group_description).toBe(payload.group_description);
+            expect(res._id).toBeDefined();
+
+            payload._id = res._id;
+
+            expect(res.group_name).toBe(payload.group_name);
+            expect(res.group_members).toBeDefined();
+            expect(res.group_members[0].admin).toBe(true);
         });
     
         it("Should Allow a User to Edit Their Newly Made Group", async () => {

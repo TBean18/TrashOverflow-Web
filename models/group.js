@@ -151,6 +151,8 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
       chore_user_pool: choreList[i].chore_user_pool.map((user) =>
         this.group_members.id(user)
       ),
+      chore_point_value: choreList[i].chore_point_value,
+      chore_completion_status: choreList[i].chore_completion_status,
     };
 
     ret.push(obj);

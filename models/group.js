@@ -135,6 +135,39 @@ GroupSchema.statics.findMember = async function (user_ID, group_ID) {
   return member;
 };
 
+// Group Method used to populate the Chore GroupMember data
+GroupSchema.methods.populateChoreList = function (choreList, cb) {
+  let ret = [];
+  //Loop through the chore list
+  for (let i = 0; i < choreList.length; i++) {
+    // For each element add the data to the return object
+    let obj = {
+      // ...choreList[i],
+      chore_name: choreList[i].chore_name,
+      chore_description: choreList[i].chore_description,
+      chore_assigned_user: this.group_members.id(
+        choreList[i].chore_assigned_user
+      ),
+      chore_user_pool: choreList[i].chore_user_pool.map((user) =>
+        this.group_members.id(user)
+      ),
+    };
+
+    ret.push(obj);
+  }
+  return ret;
+};
+
+GroupSchema.methods.getChoresForMember = function (member, cb) {
+  let ret = [];
+  this.group_chores.forEach((chore) => {
+    if (!chore.chore_assigned_user.equals(member._id)) return;
+    console.log(chore);
+    ret.push(chore);
+  });
+  return cb ? cb(null, ret) : ret;
+};
+
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 };

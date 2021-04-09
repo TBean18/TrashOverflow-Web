@@ -81,23 +81,6 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
   return;
 };
 
-//Function used to return the list a user's chores
-ChoreSchema.statics.getUserChoreList = function (user_ID, cb) {
-  // Group.aggregate().match({
-  //   "group_chores.chore_asssigned_member.user_ID": user_ID,
-  // }).project({
-
-  // })
-
-  //https://stackoverflow.com/questions/16845191/mongoose-finding-subdocuments-by-criteria/28395234
-
-  // https://stackoverflow.com/questions/30740932/mongoose-how-to-query-subdocument-by-property-value
-
-  Group.find({ "group_chores.chore_asssigned_member.user_ID": user_ID })
-    .then((g) => console.log(g))
-    .catch((err) => console.log(err));
-};
-
 //Chore static function used to find a chore with a populated groupMember
 // Callback Structure cb(Error, Chore)
 ChoreSchema.statics.findChore = function (chore_ID, cb) {

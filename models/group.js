@@ -158,6 +158,16 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
   return ret;
 };
 
+GroupSchema.methods.getChoresForMember = function (member, cb) {
+  let ret = [];
+  this.group_chores.forEach((chore) => {
+    if (!chore.chore_assigned_user.equals(member._id)) return;
+    console.log(chore);
+    ret.push(chore);
+  });
+  return cb ? cb(null, ret) : ret;
+};
+
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 };

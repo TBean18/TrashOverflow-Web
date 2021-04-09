@@ -72,12 +72,20 @@ function GroupChores() {
     }
 
     const onDragEnd = (result) => {
-        const { destination, source, draggableId } = result
+        const { destination, source, draggableId, type } = result
         console.log("destination", destination, "source", source, draggableId)
 
         if (!destination) {
             return
         }
+        if (type == 'list') {
+            const newListIds = data.listIds
+            newListIds.splice(source.index, 1)
+            newListIds.splice(destination.index, 0, draggableId)
+            return
+        }
+
+
         const sourceList = data.lists[source.droppableId]
         const destinationList = data.lists[destination.droppableId]
         const draggingCard = sourceList.cards.filter(
@@ -113,16 +121,23 @@ function GroupChores() {
 
     return (
         <StoreApi.Provider value={{ addMoreCard, addMoreList, updateListTitle }}>
-            <DragDropContext
-                onDragEnd={onDragEnd}
-            >
-                <div className={classes.root}>
-                    {data.listIds.map((listID) => {
-                        const list = data.lists[listID]
-                        return <List list={list} key={listID} />
-                    })}
-                    <InputContainer type='list' />
-                </div>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="page" type='list' direction='horizontal'>
+                    {(provided) => (
+                        <div 
+                            className={classes.root} 
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {data.listIds.map((listID, index) => {
+                                const list = data.lists[listID]
+                                return <List list={list} key={listID} index={index} />
+                            })}
+                            <InputContainer type='list' />
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
             </DragDropContext>
         </StoreApi.Provider>
     )

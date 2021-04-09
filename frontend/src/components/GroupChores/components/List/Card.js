@@ -22,7 +22,6 @@ export default function Card({ card, index }) {
                     <Paper className={classes.card}>{card.title}</Paper>
                 </div>
             )}
-
         </Draggable>
     )
 }

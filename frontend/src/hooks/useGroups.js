@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 
 export default function useGroups() {
   return useQuery(
-    "groups",
+    ["user", "groups"],
     () => axios.post("/api/groups/").then((res) => res.data),
     {
       // onSuccess: store the token

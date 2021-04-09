@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import '../../css/GroupCardBack.css';
 
 import { GlobalContext } from '../../context/GlobalState';
-import { AwesomeButton } from 'react-awesome-button';
 import 'react-awesome-button/dist/themes/theme-blue.css';
-import '../../css/GroupCardBackButton.css';
 import GroupCardMember from '../../components/GroupView/GroupCardMember';
 
 function GroupCardBack({ curGroup }) {
@@ -26,6 +24,14 @@ function GroupCardBack({ curGroup }) {
         </div>
       </div>
       <div className="groupCardBack__body">
+        <h4>Description</h4>
+        <p>There is no tracking information for the current branch.
+           Please specify which branch you want to merge with.
+           See git-pull(1) for details.
+        </p>
+      </div>
+      <div className="groupCardBack__bottom">
+        <h4>Members:</h4>
         <>{displayMembers(groups)}</>
         <GroupCardMember name="Jason Terry" points={31} />
         <GroupCardMember name="Jason Terry" points={31} />
@@ -34,13 +40,6 @@ function GroupCardBack({ curGroup }) {
         <GroupCardMember name="Jason Terry" points={31} />
         <GroupCardMember name="Jason Terry" points={31} />
         <GroupCardMember name="Jason Terry" points={31} />
-      </div>
-      <div className="groupCardBack__bottom">
-        <div className="groupCardBack__bottomButton">
-          <AwesomeButton size="medium" type="primary">
-            Select
-          </AwesomeButton>
-        </div>
       </div>
     </div>
   );

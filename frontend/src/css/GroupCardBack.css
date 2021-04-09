@@ -30,9 +30,20 @@
 }
 
 .groupCardBack__body {
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.groupCardBack__body > h4 {
+    font-size: 15px;
+}
+.groupCardBack__bottom {
     align-content: space-around;
     position: relative;
-    left: -18px;
+    
     padding-left: 0;
     display: flex;
     flex-wrap: wrap;
@@ -42,9 +53,7 @@
     font-size: 11px;
 }
 
-.groupCardBack__bottom {
-    height: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.groupCardBack__bottom > h4 {
+    width: 100%;
+    font-size: 15px;
 }

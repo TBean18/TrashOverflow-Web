@@ -1,21 +1,23 @@
-import React from 'react';
-import logo from '../public/images/logo.png';
-import '../css/Header.css';
-import { NavLink } from 'react-router-dom';
+import React, { useContext } from "react";
+import logo from "../public/images/logo.png";
+import "../css/Header.css";
+import { NavLink } from "react-router-dom";
 
-import SearchIcon from '@material-ui/icons/Search';
-import HomeIcon from '@material-ui/icons/Home';
-import FlagIcon from '@material-ui/icons/Flag';
-import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
-import StorefrontOutlinedIcon from '@material-ui/icons/StorefrontOutlined';
-import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
-import { Avatar, IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import ForumIcon from '@material-ui/icons/Forum';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import SearchIcon from "@material-ui/icons/Search";
+import HomeIcon from "@material-ui/icons/Home";
+import FlagIcon from "@material-ui/icons/Flag";
+import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
+import StorefrontOutlinedIcon from "@material-ui/icons/StorefrontOutlined";
+import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserCircleOutlined";
+import { Avatar, IconButton } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import ForumIcon from "@material-ui/icons/Forum";
+import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { GlobalContext } from "../context/GlobalState";
 function Header({ selection }) {
+  const { user } = useContext(GlobalContext);
+
   return (
     <div className="header">
       <div className="header__left">
@@ -37,7 +39,7 @@ function Header({ selection }) {
         </NavLink>
 
         <NavLink
-          to="/groupchores"
+          to="/groupchores/testID"
           className="header__option header__option"
           activeClassName="header__option header__option--active"
         >
@@ -55,7 +57,7 @@ function Header({ selection }) {
       <div className="header__right">
         <div className="header__info">
           <Avatar />
-          <h4>jojohnson.jsj</h4>
+          <h4>{user.name}</h4>
         </div>
 
         <IconButton>

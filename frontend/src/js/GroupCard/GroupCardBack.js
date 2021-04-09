@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import '../../css/GroupCardBack.css';
+import React, { useContext } from "react";
+import "../../css/GroupCardBack.css";
 
-import { GlobalContext } from '../../context/GlobalState';
-import { AwesomeButton } from 'react-awesome-button';
-import 'react-awesome-button/dist/themes/theme-blue.css';
-import '../../css/GroupCardBackButton.css';
-import GroupCardMember from '../../components/GroupView/GroupCardMember';
+import { GlobalContext } from "../../context/GlobalState";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/themes/theme-blue.css";
+import "../../css/GroupCardBackButton.css";
+import GroupCardMember from "../../components/GroupView/GroupCardMember";
 
 function GroupCardBack({ curGroup }) {
   const { groups } = useContext(GlobalContext);
@@ -27,13 +27,6 @@ function GroupCardBack({ curGroup }) {
       </div>
       <div className="groupCardBack__body">
         <>{displayMembers(groups)}</>
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
       </div>
       <div className="groupCardBack__bottom">
         <div className="groupCardBack__bottomButton">

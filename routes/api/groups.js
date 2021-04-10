@@ -223,7 +223,7 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -249,10 +249,9 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
         error: foundGroup.ERROR_MEMBER(member_user_ID)
     });
 
+    // Added not in front of retval because on success it returns "", on failure it returns the error
     // remove group member and check if successful
-    // TODO: afaik this doesn't return anything but would be nice if we start doing this for all our methods
-    // instead of try/catch blocks
-    let removedMemberStatus = foundGroup.removeGroupMember(foundGroupMember._id);
+    let removedMemberStatus = !foundGroup.removeGroupMember(member_user_ID);
     // TODO: turn error string into dedicated error method
     if (!removedMemberStatus) return res.status(404).json({
         error: 'Could Not Remove Member From Group'
@@ -265,9 +264,9 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     });
 
     // compose response
-    let groupArray = updatedUser.getGroup_IDArray();
+    // let groupArray = foundGroupMember.getGroup_IDArray();
     res.json({
-        groups: groupArray,
+        groups: leaveGroupStatus.groups,
         error: ''
     });
 });

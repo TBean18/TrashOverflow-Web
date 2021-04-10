@@ -3,6 +3,10 @@ const { base } = require("../../models/group");
 
 const base_url = "http://localhost:5000/api";
 
+
+// *************************************************************************************
+//                          USER RELATED ENDPOINT TESTING
+// *************************************************************************************
 describe("User API Tests", () => {
 /*
     describe("All Information Is Correct For New User", () => {
@@ -336,6 +340,10 @@ describe("User API Tests", () => {
 });
 
 
+
+// *************************************************************************************
+//                          GROUP RELATED ENDPOINT TESTING
+// *************************************************************************************
 describe("Group Related Endpoints", () => {
 
     describe("New Group", () => {
@@ -461,14 +469,10 @@ describe("Group Related Endpoints", () => {
     
     describe("Existing Group", () => {
 
-        const payload = {
-            group_ID: "607093ef014cd60d7380fbfe",
-        };
-
         const groupInfo = {
             group_name: "Unit Test Group",
             group_description: "An Awesome Unit Testing Group",
-            _id: payload._id
+            _id: "607093ef014cd60d7380fbfe"
         };
 
         const admin = {
@@ -497,12 +501,12 @@ describe("Group Related Endpoints", () => {
             const res = await response.json();
             const status = await response.status;
 
-            payload.user_ID = res.user._id;
-            payload.token = res.token;
+            user._id = res.user._id;
+            user.token = res.token;
 
             expect(status).toBe(200);
-            expect(payload.user_ID).toBeDefined();
-            expect(payload.token).toBeDefined();
+            expect(user._id).toBeDefined();
+            expect(user.token).toBeDefined();
             // expect(res.user.name).toBe(payload.name);
             // expect(res.user.phone_number).toBe(payload.phone_number);
             // expect(res.user.email).toBe(payload.email);
@@ -518,7 +522,11 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: user.token
+                })
             });
 
             const res = await response.json();
@@ -526,9 +534,9 @@ describe("Group Related Endpoints", () => {
 
             expect(status).toBe(200);
             expect(res.error).toBeFalsy(); // "" or null
-            expect(res.user_groups[ res.user_groups.length - 1 ].group_ID).toBe(payload.group_ID);
+            expect(res.user_groups[ res.user_groups.length - 1 ].group_ID).toBe(groupInfo._id);
             expect(res.user_groups[ res.user_groups.length - 1 ].group_name).toBe(groupInfo.group_name);
-            expect(res.group[ res.group.length - 1 ].user_ID).toBe(payload.user_ID);
+            expect(res.group[ res.group.length - 1 ].user_ID).toBe(user._id);
             expect(res.group[ res.group.length - 1 ].admin).toBe(false);
             expect(res.group[ res.group.length - 1 ].user_name).toBe(user.name);
         });
@@ -545,12 +553,12 @@ describe("Group Related Endpoints", () => {
             const res = await response.json();
             const status = await response.status;
 
-            payload.admin_user_ID = res.user._id;
-            payload.member_user_ID = payload.user_ID;
+            admin._id = res.user._id;
+            admin.token = res.token;
 
             expect(status).toBe(200);
-            expect(payload.user_ID).toBeDefined();
-            expect(payload.token).toBeDefined();
+            expect(admin._id).toBeDefined();
+            expect(admin.token).toBeDefined();
             // expect(res.user.name).toBe(payload.name);
             // expect(res.user.phone_number).toBe(payload.phone_number);
             // expect(res.user.email).toBe(payload.email);
@@ -567,7 +575,12 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    admin_user_ID: admin._id,
+                    member_user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: admin.token
+                })
             });
 
             const res = await response.json();
@@ -584,7 +597,12 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    admin_user_ID: admin._id,
+                    member_user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: admin.token
+                })
             });
 
             const res = await response.json();
@@ -600,7 +618,11 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: user.token
+                })
             });
 
             const res = await response.json();
@@ -610,7 +632,185 @@ describe("Group Related Endpoints", () => {
             expect(res.error).toBeFalsy();
             // Check all of this members groups to make sure it no longer exist.
             for (let g of res.groups)
-                expect(g._id).not.toBe(payload.group_ID);
+                expect(g._id).not.toBe(groupInfo._id);
+        });
+/*
+        it("Should Allow an Admin to Remove A User", async () => {
+
+            // Make user join group.
+            let response = await fetch(`${base_url}/groups/join`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: user.token
+                })
+            });
+
+            let res = await response.json();
+            let status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.error).toBeFalsy(); // "" or null
+            expect(res.user_groups[ res.user_groups.length - 1 ].group_ID).toBe(groupInfo._id);
+            expect(res.user_groups[ res.user_groups.length - 1 ].group_name).toBe(groupInfo.group_name);
+            expect(res.group[ res.group.length - 1 ].user_ID).toBe(user._id);
+            expect(res.group[ res.group.length - 1 ].admin).toBe(false);
+            expect(res.group[ res.group.length - 1 ].user_name).toBe(user.name);
+
+            // FIXME: will not allow user to join after they get removed from a group.            
+            // // Have admin remove user.
+            // response = await fetch(`${base_url}/groups/removeUser`, {
+            //     method: "post",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify({
+            //         admin_user_ID: admin._id,
+            //         member_user_ID: user._id,
+            //         group_ID: groupInfo._id,
+            //         token: admin.token
+            //     })
+            // });
+
+            // res = await response.json();
+            // status = await response.status;
+
+            // expect(status).toBe(200);
+            // expect(res.error).toBeFalsy();
+            // // Check all of this members groups to make sure it no longer exist.
+            // for (let g of res.groups)
+            //     expect(g._id).not.toBe(groupInfo._id);
+        });
+*/
+    });
+});
+
+// *************************************************************************************
+//                          CHORE RELATED ENDPOINT TESTING
+// *************************************************************************************
+describe("Chore Related Endpoints", () => {
+
+
+    describe("New Chores", () => {
+
+        const group = {
+            group_name: "Group A",
+            group_description: "A",
+            _id: "60709a48e325890fdf912bfe",
+            // user_name not needed for each member in these tests, but put in readability/context.
+            group_members: [
+                {
+                    _id: "60709a48e325890fdf912c00",
+                    user_name: "Forgetful User"
+                },
+                {
+                    _id: "60710483dbf6e524460f1df3",
+                    user_name: "My Awesome Test"
+                }
+            ]
+        };
+
+        const chore = {
+            chore_assigned_user: group.group_members[0]._id,
+            chore_user_pool: [group.group_members[0]._id, group.group_members[1]._id],
+            chore_name: "Yard Work"
+        }
+
+        const user = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        };
+
+        const admin = {
+            name: "Forgetful User",
+            password_hash: "password",
+            email: "short-term-memory@email.com"
+        };
+
+        it("Should Make a User Login Before Dealing With Chores", async () => {
+            
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(admin),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            admin._id = res.user._id;
+            admin.token = res.token;
+
+            expect(status).toBe(200);
+            expect(admin._id).toBeDefined();
+            expect(admin.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+        });
+
+        it("Should Allow an Admin to Make a New Chore", async () => {
+
+            // Make deep copy of chore rather than reference copy.
+            const payload = JSON.parse(JSON.stringify(chore));
+            // Add admin token.
+            payload.token = admin.token;
+            payload.group_ID = group._id;
+
+            const response = await fetch(`${base_url}/chores/add`, {
+                method: "post",
+                body: JSON.stringify(payload),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            chore._id = res.chores[ res.chores.length - 1 ]._id;
+
+            expect(status).toBe(200);
+            expect(res.chores[ res.chores.length - 1 ].chore_name).toBe(payload.chore_name);
+            expect(res.chores[ res.chores.length - 1 ].chore_completion_status).toBe("TODO");
+            // TODO: add more expects
+        });
+
+        it("Should Allow an Admin to Delete a Chore", async () => {
+
+            const response = await fetch(`${base_url}/chores/delete`, {
+                method: "post",
+                body: JSON.stringify({
+                    chore_ID: chore._id,
+                    group_ID: group._id,
+                    user_ID: admin._id,
+                    token: admin.token
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = response.json();
+            const status = response.status;
+
+            expect(status).toBe(200);
         });
     });
+
+    describe("Existing Chores", () => {
+        
+    });
+
 });

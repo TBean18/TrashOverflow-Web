@@ -4,10 +4,10 @@ import react from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 
-export default function useGroups() {
+export default function useUserChores() {
   return useQuery(
-    ["user", "groups"],
-    () => axios.post("/api/groups/").then((res) => res.data),
+    ["user", "chores"],
+    () => axios.get("/api/chores/user_chores").then((res) => res.data),
     {
       // onSuccess: store the token
     }

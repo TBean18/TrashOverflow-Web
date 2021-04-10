@@ -2,10 +2,11 @@ import axios from 'axios'
 import config from '../config/config'
 
 const getImages = async () => {
+    const searchTerm = 'Kitchen'
     const page = Math.floor(Math.random() * 20 + 1)
     const urlImages = 
     config.url +
-        `search/photos?page=${page}&query=Landscape&client_id=${config.clientKey}`
+        `search/photos?page=${page}&query=${searchTerm}&client_id=${config.clientKey}`
 
     const res = await axios.get(urlImages)
     const photos = res.data.results.map((image) => ({

@@ -99,16 +99,19 @@ GroupSchema.methods.promoteGroupMember = function (curUser_ID, doSave, cb) {
   this.group_members.filter((mem) => curUser_ID == mem.user_ID)[0].admin = true;
   if (doSave) this.save(cb);
   else cb;
+
+  return true;
 };
 
 // ***ASSUMES curUser_ID IS THE ID OF AN EXISTING GROUP MEMBER***
 // Demotes a group member from admin
 GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
   this.group_members.filter(
-    (mem) => curUser_ID === mem.user_ID
+    (mem) => curUser_ID == mem.user_ID
   )[0].admin = false;
 
   this.save(cb);
+  return true;
 };
 
 // Returns admin if admin is a member of this group, empty string otherwise
@@ -166,6 +169,15 @@ GroupSchema.methods.getChoresForMember = function (member, cb) {
     ret.push(chore);
   });
   return cb ? cb(null, ret) : ret;
+};
+
+// Removes a chore from the group array and returns the updated chore list.
+GroupSchema.statics.removeChore = function(group_ID, chore_ID) {
+  return this.findOneAndUpdate(
+    { _id: group_ID },
+    { $pull: { group_chores: { _id: chore_ID } } },
+    { new: true }
+  ).exec();
 };
 
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {

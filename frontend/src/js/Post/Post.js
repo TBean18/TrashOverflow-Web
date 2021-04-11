@@ -33,6 +33,7 @@ class Post extends React.Component {
       showMessage: true,
       showPoints: true,
       showTitle: true,
+      showDelete: false,
       hidMembersBlur: false,
     };
     this.expand = this.expand.bind(this);
@@ -45,6 +46,7 @@ class Post extends React.Component {
     this.hidePoints = this.hidePoints.bind(this);
     this.showTitle = this.showTitle.bind(this);
     this.hideTitle = this.hideTitle.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
   }
   expand() {
     this.setState({ expanded: true });
@@ -76,13 +78,19 @@ class Post extends React.Component {
   showTitle() {
     this.setState({ showTitle: true });
   }
+  toggleDelete() {
+    this.setState({ showDelete: !this.state.showDelete });
+  }
   handleClickOutside = () => {
-    this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true });
+    this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true, showDelete: false });
   }
   handleSubmit = e => {
     e.preventDefault();
 
     this.setState({ showMessage: true, showPoints: true, showTitle: true })
+  }
+  handleDelete = e => {
+
   }
   
   render() {
@@ -182,11 +190,25 @@ class Post extends React.Component {
               />
             </div>
             <div className="post__bodyRightDone">
-              <PostOption
-                Icon={DeleteOutlineOutlinedIcon}
-                title="Delete"
-                color="grey"
-              />
+              {
+                this.state.showDelete ? 
+                <div>
+                  <div className="post__bodyRightDeleteConfirm">
+                    <p>Delete?</p>
+                  </div>
+                  <div className="post__bodyRightDeleteCancel" onClick={this.toggleDelete}>
+                    <p>Cancel</p>
+                  </div>
+                </div>
+                :
+                <div className="post__bodyRightDelete" onClick={this.toggleDelete}>
+                  <PostOption
+                    Icon={DeleteOutlineOutlinedIcon}
+                    title="Delete"
+                    color="grey"
+                  />
+                </div>
+              }
             </div>
             <div className="post__bodyRightSave">
               { 

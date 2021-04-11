@@ -7,6 +7,7 @@
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
+    align-content: center;
 
     position: sticky;
     background-color: var(--header-color);
@@ -19,6 +20,7 @@
 .header__left {
     display: flex;
     justify-content: space-evenly;
+    width: 15%;
 }
 
 .header__input {
@@ -46,6 +48,8 @@
     display: flex;
     flex: 1;
     justify-content: center;
+    align-items: center;
+    width: 70%;
 }
 
 .header__option > .MuiSvgIcon-root {
@@ -61,10 +65,12 @@
 }
 
 .header__option {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 0 30px;
     cursor: pointer;
+    
 }
 
 .header__option--active {
@@ -97,10 +103,17 @@
 }
 
 .header__right {
+    width: 15%;
     display: flex;
     color: var(--header-input-text);
+    justify-content: center;
+    align-items: center;
 }
 
 .header__right > .MuiIconButton-root {
     color: var(--header-icon-color);
+}
+
+.header__right > .postOption {
+    margin-bottom: 0;
 }

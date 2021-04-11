@@ -10,20 +10,16 @@ import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
 import StorefrontOutlinedIcon from '@material-ui/icons/StorefrontOutlined';
 import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
 import { Avatar, IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import ForumIcon from '@material-ui/icons/Forum';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PostOption from './Post/PostOption';
 
 function Header({ selection }) {
   return (
     <div className="header">
       <div className="header__left">
-        <img src={logo} alt="tester" />
-
-        <div className="header__input">
-          <SearchIcon />
-          <input placeholder="Search TrashOverflow" type="text" />
+      <div className="header__info">
+          <Avatar />
+          <h4>jojohnson.jsj</h4>
         </div>
       </div>
 
@@ -37,14 +33,6 @@ function Header({ selection }) {
         </NavLink>
 
         <NavLink
-          to="/groupchores"
-          className="header__option header__option"
-          activeClassName="header__option header__option--active"
-        >
-          <GroupOutlinedIcon fontSize="large" />
-        </NavLink>
-
-        <NavLink
           to="/groups"
           className="header__option header__option"
           activeClassName="header__option header__option--active"
@@ -53,23 +41,12 @@ function Header({ selection }) {
         </NavLink>
       </div>
       <div className="header__right">
-        <div className="header__info">
-          <Avatar />
-          <h4>jojohnson.jsj</h4>
-        </div>
-
-        <IconButton>
-          <AddIcon />
-        </IconButton>
-        <IconButton>
-          <ForumIcon />
-        </IconButton>
-        <IconButton>
-          <NotificationsActiveIcon />
-        </IconButton>
-        <IconButton>
-          <ExpandMoreIcon />
-        </IconButton>
+        <PostOption 
+          className="header__logout"
+          Icon={ExitToAppIcon}
+          title="Logout"
+          color="grey"
+        />
       </div>
     </div>
   );

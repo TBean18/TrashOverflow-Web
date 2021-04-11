@@ -19,7 +19,7 @@
 
 .header__left {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     width: 15%;
 }
 
@@ -106,7 +106,7 @@
     width: 15%;
     display: flex;
     color: var(--header-input-text);
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 }
 

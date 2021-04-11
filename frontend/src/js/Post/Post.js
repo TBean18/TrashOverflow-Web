@@ -28,13 +28,14 @@ class Post extends React.Component {
     super(props);
     this.state = {
       expanded: false,
+      hidden: false,
       showMembers: false,
       showCalendar: false,
       showMessage: true,
       showPoints: true,
       showTitle: true,
       showDelete: false,
-      hidMembersBlur: false,
+      hidMembersBlur: false,  
     };
     this.expand = this.expand.bind(this);
     this.toggleMembers = this.toggleMembers.bind(this);
@@ -61,28 +62,31 @@ class Post extends React.Component {
     this.setState({ showCalendar: !this.state.showCalendar });
   }
   hideMessage() {
-    this.setState({ showMessage: false });
+    this.setState({ showDelete: false, showMessage: false });
   }
   showMessage() {
     this.setState({ showMessage: true });
   }
   hidePoints() {
-    this.setState({ showPoints: false });
+    this.setState({ showDelete: false, showPoints: false });
   }
   showPoints() {
     this.setState({ showPoints: true });
   }
   hideTitle() {
-    this.setState({ showTitle: false });
+    this.setState({ showDelete: false, showTitle: false });
   }
   showTitle() {
     this.setState({ showTitle: true });
   }
   toggleDelete() {
-    this.setState({ showDelete: !this.state.showDelete });
+    this.setState({ showDelete: !this.state.showDelete, showMessage: true, showPoints: true, showTitle: true });
   }
   handleClickOutside = () => {
     this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true, showDelete: false });
+  }
+  handleDone = e => {
+    this.setState({ hidden: true });
   }
   handleSubmit = e => {
     e.preventDefault();
@@ -90,14 +94,20 @@ class Post extends React.Component {
     this.setState({ showMessage: true, showPoints: true, showTitle: true })
   }
   handleDelete = e => {
-
+    this.setState({ hidden: true });
+  }
+  handleSave = e => {
+    this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true, showDelete: false });
+  }
+  handleCancel = e => {
+    this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true, showDelete: false });
   }
   
   render() {
     const { profilePic, image, taskTitle, timestamp, message, points } = this.props;
     return (
       <div
-        className={`row ${this.state.expanded ? "post-expanded" : "post"}`}
+        className={`row ${this.state.hidden ? "post-hidden" : this.state.expanded ? "post-expanded" : "post"}`}
       >
         <div className="post__top" onClick={this.expand}>
           <div className="post__topTitle">
@@ -182,7 +192,7 @@ class Post extends React.Component {
             </div>
             {this.state.showCalendar && <MyCalendar />}
 
-            <div className="post__bodyRightDone">
+            <div className="post__bodyRightDone" onClick={this.handleDone}>
               <PostOption
                 Icon={DoneAllOutlinedIcon}
                 title="Done"
@@ -193,7 +203,7 @@ class Post extends React.Component {
               {
                 this.state.showDelete ? 
                 <div>
-                  <div className="post__bodyRightDeleteConfirm">
+                  <div className="post__bodyRightDeleteConfirm" onClick={this.handleDelete}>
                     <p>Delete?</p>
                   </div>
                   <div className="post__bodyRightDeleteCancel" onClick={this.toggleDelete}>
@@ -213,12 +223,14 @@ class Post extends React.Component {
             <div className="post__bodyRightSave">
               { 
                 !this.state.showMessage || !this.state.showPoints || !this.state.showTitle ? 
-                <PostOption 
-                  onClick={this.handleSubmit}
-                  Icon={SaveAltIcon}
-                  title="Save"
-                  color="grey"                  
-                />
+                <div>
+                  <div className="post__bodyRightSaveButton" onClick={this.handleSave}>
+                    <p>Save</p>
+                  </div>
+                  <div className="post__bodyRightDeleteCancel" onClick={this.handleCancel}>
+                    <p>Cancel</p>
+                  </div>
+                </div>
                 : null
               }
             </div>

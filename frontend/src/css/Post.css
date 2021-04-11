@@ -13,6 +13,10 @@
     cursor: pointer;
 }
 
+.post-hidden {
+    display: none;
+}
+
 .post-expanded {
     width: 600px;
     height: auto;
@@ -230,6 +234,29 @@
 .post__bodyRightDeleteCancel:hover {
     cursor: pointer;
     background-color: #3b8ac6;
+}
+
+.post__bodyRightSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    margin-bottom: 8px;
+    width: 108px;
+    height: 22px;
+    border-radius: 5px;
+    background-color: #26ad41;
+}
+
+.post__bodyRightSaveButton > p {
+    font-size: 13px;
+    font-weight: bold;
+    color:white;
+}
+
+.post__bodyRightSaveButton:hover {
+    cursor: pointer;
+    background-color: #118428;
 }
 
 .post__bodyAssignedUsers {

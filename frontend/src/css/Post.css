@@ -79,6 +79,7 @@
 }
 
 .post__points > form {
+    height: 100%;
     display: inline-block;
 }
 
@@ -139,7 +140,13 @@
     margin-bottom: 10px;
 }
 
-.post__bodyDescriptionMessage > textarea {
+.post__bodyDescriptionMessageInput {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.post__bodyDescriptionMessageInput > form > textarea {
     height: 150px;
     border: none;
     border-radius: 5px;
@@ -150,6 +157,21 @@
     word-wrap: break-word;
     outline-width: 0;
     background-color: var(--main-color);
+}
+
+.post__bodyDescriptionMessageInput > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.post__bodyDescriptionMessageInput > form > button {
+    display: none;
+}
+
+.post__bodyDescriptionMessageInput > .postOption {
+    margin-bottom: 0;
+    margin-top: 10px;
+    width: 20%;
 }
 
 .post__bodyRight {

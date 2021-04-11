@@ -21,6 +21,7 @@ import PostOption from "./PostOption";
 import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
 import onClickOutside from 'react-onclickoutside';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
 class Post extends React.Component {
   constructor(props) {
@@ -141,13 +142,17 @@ class Post extends React.Component {
             <div className="post__bodyDescriptionMessage">
               {
                 this.state.showMessage ? <p onClick={this.hideMessage}>{message}</p> : 
-                <textarea
-                  onBlur={() => this.showMessage()}
-                  onFocus={() => this.hideMessage()}        
-                  tabIndex="0"
-                >
-                  {message}
-                </textarea>
+                <div className="post__bodyDescriptionMessageInput">
+                  <form>
+                    <textarea
+                      onBlur={() => this.showMessage()}
+                      onFocus={() => this.hideMessage()}        
+                      tabIndex="0"
+                    >
+                      {message}
+                    </textarea>
+                  </form>                  
+              </div>
               }
             </div>
           </div>
@@ -182,6 +187,18 @@ class Post extends React.Component {
                 title="Delete"
                 color="grey"
               />
+            </div>
+            <div className="post__bodyRightSave">
+              { 
+                !this.state.showMessage || !this.state.showPoints || !this.state.showTitle ? 
+                <PostOption 
+                  onClick={this.handleSubmit}
+                  Icon={SaveAltIcon}
+                  title="Save"
+                  color="grey"                  
+                />
+                : null
+              }
             </div>
           </div>
         </div>

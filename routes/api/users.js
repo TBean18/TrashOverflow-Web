@@ -26,9 +26,13 @@ router.get("/", (req, res) => {
 router.post("/verify", (req, res) => {
   try {
     if (jwt.verifyID(req.body.token, req.body.id)) {
-      user.findByIdAndUpdate(req.body.id, {
+      user
+        .findByIdAndUpdate(
+          req.body.id,
+          {
             email_verified: true,
-          }, {
+          },
+          {
             new: true,
           }
         )
@@ -209,7 +213,7 @@ router.delete("/:id/:token", (req, res) => {
 });
 
 // Route          GET api/user/verify
-// Description
+// Description    Email Verification endpoint
 // Access         Public
 // Parameters
 //    token:    String - the token of the user to be verified
@@ -272,6 +276,22 @@ router.post("/forgot_password/:token", (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(404).send(err);
+  }
+});
+
+router.post("/refresh_token", jwt.authenticateUser, (req, res) => {
+  try {
+    let token = jwt.createToken({
+      user_ID: req.body.user_ID,
+    });
+    if (token.error !== "") throw token.error;
+    let output = {
+      token: token.accessToken,
+      error: "",
+    };
+    res.json(output);
+  } catch (err) {
+    res.status(404).json({ error: err });
   }
 });
 

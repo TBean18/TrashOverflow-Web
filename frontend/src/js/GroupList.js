@@ -25,7 +25,7 @@ function GroupList() {
 
   return (
     <div className="groupList">
-      {isSuccess === "success" ? displayGroups(data.groups) : "Loading..."}
+      {status === "success" ? displayGroups(data.groups) : "Loading..."}
       <GroupCard
         curGroup="Trash Overflow"
         image="https://www.hdwallpapers.in/download/skyscrapers_panorama_city_lights_4k_hd-HD.jpg"

@@ -4,13 +4,14 @@ import useLogout from "./useLogout";
 export const useAPIErrorChecking = () => {
   const logout = useLogout();
   return (err) => {
+    //Response was received
     if (err.response) {
-      //Response was received
+      //Authentication Error
       if (err.response.status === 400) {
-        //Authentication Error
         //Log the User Out
-        logout();
+        return logout();
       }
+      return err.response.body.error;
     }
   };
 };

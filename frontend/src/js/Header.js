@@ -8,8 +8,10 @@ import { Avatar } from "@material-ui/core";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PostOption from "./Post/PostOption";
 import { GlobalContext } from "../context/GlobalState";
+import useLogout from "../hooks/useLogout";
 function Header() {
   const { user } = useContext(GlobalContext);
+  const logout = useLogout();
 
   return (
     <div className="header">
@@ -43,6 +45,7 @@ function Header() {
           Icon={ExitToAppIcon}
           title="Logout"
           color="grey"
+          onClick={logout}
         />
       </div>
     </div>

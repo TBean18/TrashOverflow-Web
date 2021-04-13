@@ -12,7 +12,7 @@ import Navbar from "../components/Navbar";
 import Services from "../components/Services";
 import Sidebar from "../components/Sidebar";
 import { GlobalContext } from "../context/GlobalState";
-import { useLoggedInRedirect } from "./useLoggedInRedirect";
+import { useLoggedInRedirect } from "../hooks/useLoggedInRedirect";
 
 const LandingPage = () => {
   // first value is the name of the state, the second is a function that will be updating it.

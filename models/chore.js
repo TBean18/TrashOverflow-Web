@@ -34,6 +34,7 @@ const ChoreSchema = new Schema({
   },
   chore_point_value: {
     type: Number,
+    default: 0,
   },
   chore_schedule: Schedule.ScheduleSchema,
 });

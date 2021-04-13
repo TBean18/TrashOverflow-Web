@@ -23,6 +23,7 @@ import MyCalendar from "../MyCalendar";
 import onClickOutside from 'react-onclickoutside';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
+
 class Post extends React.Component {
   constructor(props) {
     super(props);
@@ -103,42 +104,58 @@ class Post extends React.Component {
     this.setState({ expanded: false, showMessage: true, showPoints: true, showTitle: true, showDelete: false });
   }
   
+
   render() {
-    const { profilePic, image, taskTitle, timestamp, message, points } = this.props;
+    const {
+      profilePic,
+      image,
+      taskTitle,
+      timestamp,
+      message,
+      points,
+    } = this.props;
     return (
-      <div
-        className={`row ${this.state.hidden ? "post-hidden" : this.state.expanded ? "post-expanded" : "post"}`}
-      >
+      <div        className={`row ${this.state.hidden ? "post-hidden" : this.state.expanded ? "post-expanded" : "post"}`}      >
         <div className="post__top" onClick={this.expand}>
           <div className="post__topTitle">
-            {
-              this.state.showTitle ? <h3 onClick={this.state.expanded ? this.hideTitle : null}>{taskTitle === undefined ? "No Title" : taskTitle}</h3> : 
-                <form>
-                  <input type="text" placeholder={taskTitle}
-                    onBlur={() => this.showTitle()}
-                    onFocus={() => this.hideTitle()}        
-                    tabIndex="0"
-                  />
-                  <button onClick={this.handleSubmit} type="submit">
-                    Hidden submit
-                  </button>
-                </form>
-            }
+            {this.state.showTitle ? (
+              <h3 onClick={this.state.expanded ? this.hideTitle : null}>
+                {taskTitle === undefined ? "No Title" : taskTitle}
+              </h3>
+            ) : (
+              <form>
+                <input
+                  type="text"
+                  placeholder={taskTitle}
+                  onBlur={() => this.showTitle()}
+                  onFocus={() => this.hideTitle()}
+                  tabIndex="0"
+                />
+                <button onClick={this.handleSubmit} type="submit">
+                  Hidden submit
+                </button>
+              </form>
+            )}
             <div className="post__points">
               <p>Points:</p>
-              {
-                this.state.showPoints ? <p onClick={this.state.expanded ? this.hidePoints : null}>{points === undefined ? "None" : points}</p> : 
+              {this.state.showPoints ? (
+                <p onClick={this.state.expanded ? this.hidePoints : null}>
+                  {points === undefined ? "None" : points}
+                </p>
+              ) : (
                 <form>
-                  <input type="text" placeholder={points}
+                  <input
+                    type="text"
+                    placeholder={points}
                     onBlur={() => this.showPoints()}
-                    onFocus={() => this.hidePoints()}        
+                    onFocus={() => this.hidePoints()}
                     tabIndex="0"
                   />
                   <button onClick={this.handleSubmit} type="submit">
                     Hidden submit
                   </button>
                 </form>
-              }
+              )}
             </div>
           </div>
           <div className="post__topRight">
@@ -153,7 +170,8 @@ class Post extends React.Component {
         <div
           className={`row ${
             this.state.expanded ? "post__body-expanded" : "post__body"
-          }`} onClick={this.expand}
+          }`}
+          onClick={this.expand}
         >
           <div className="post__bodyDescription">
             <h4>Description</h4>
@@ -185,7 +203,13 @@ class Post extends React.Component {
                 color="grey"
               />
             </div>
-            {this.state.showMembers && <MemberWindow hideMembers={this.hideMembers} eventTypes={['mouseup']}/>}
+            {this.state.showMembers && (
+              <MemberWindow
+                hideMembers={this.hideMembers}
+                eventTypes={["mouseup"]}
+                members={this.props.members}
+              />
+            )}
 
             <div className="post__bodyRightDate" onClick={this.toggleCalendar}>
               <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />

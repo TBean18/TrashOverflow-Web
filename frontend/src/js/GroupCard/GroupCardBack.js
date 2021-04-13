@@ -8,6 +8,7 @@ import GroupCardMember from '../../components/GroupView/GroupCardMember';
 import PostOption from '../Post/PostOption';
 import { NavLink } from 'react-router-dom';
 
+
 function GroupCardBack({ curGroup }) {
   const { groups } = useContext(GlobalContext);
 
@@ -27,6 +28,7 @@ function GroupCardBack({ curGroup }) {
            Please specify which branch you want to merge with.
            See git-pull(1) for details.
         </p>
+
       </div>
       <div className="groupCardBack__bottom">
         <h4>Members</h4>

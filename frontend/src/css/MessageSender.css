@@ -29,7 +29,9 @@
     margin: 0 10px;
     border-radius: 999px;
     background-color: var(--header-input-color);
-    color: var(--header-input-text)
+    color: var(--header-input-text);
+
+    outline-width: 0;
 }
 
 .messageSender__top > form > button {
@@ -38,6 +40,7 @@
 
 .messageSender__input {
     flex: 1;
+    outline-width: 0;
 }
 
 .messageSender__bottom {

@@ -133,36 +133,3 @@
 .addCard__front > form > button {
     display: none;
 }
-
-.groupCardBack__top {
-    height: 20%;
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-}
-
-.groupCardBack__topInfo > h3 {
-    font-size: medium;
-}
-
-.groupCardBack__body {
-    align-content: space-around;
-    position: relative;
-    left: -18px;
-    padding-left: 0;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    height: 40%;
-    width: 256px;
-    font-size: 11px;
-}
-
-.groupCardBack__bottom {
-    height: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}

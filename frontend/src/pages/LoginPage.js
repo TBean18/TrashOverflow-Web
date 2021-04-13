@@ -1,7 +1,11 @@
-import React from 'react';
-import Login from '../components/Login/Login';
+import React from "react";
+import Login from "../components/Login/Login";
+import { GlobalContext } from "../context/GlobalState";
+import { useLoggedInRedirect } from "./useLoggedInRedirect";
 
 const LoginPage = () => {
+  useLoggedInRedirect(GlobalContext);
+
   return (
     <div>
       <Login />

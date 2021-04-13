@@ -52,7 +52,7 @@ export const GlobalProvider = function (props) {
   }
 
   //Logout function used to remove user data from global state
-  function logOut(id) {
+  function logOut() {
     localStorage.setItem("user", "");
     setUser("");
     storeJWT("");

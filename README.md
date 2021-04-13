@@ -57,6 +57,7 @@
         - [x] Group Members
   - [ ] Finish and Test Chores API
   - [ ] Create the Unit Testing Thing
+  - [ ] Alert on Chore Deletion
 
 ## API Endpoints (API Team Please Change)
 

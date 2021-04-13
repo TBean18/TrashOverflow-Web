@@ -4,9 +4,11 @@ import react from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
+import useLogout from "./useLogout";
 
 export default function useGroups() {
   const history = useHistory();
+  const logout = useLogout();
   return useQuery(
     ["user", "groups"],
     () =>
@@ -19,8 +21,7 @@ export default function useGroups() {
             if (err.response.status === 400) {
               //Authentication Error
               //Log the User Out
-              //Redirect to Landing Page
-              history.push("/signin");
+              logout();
             }
           }
         }),

@@ -10,7 +10,7 @@ export default function useRefreshToken() {
       .post("/api/user/refresh_token")
       //Display Message
       .then((res) => {
-        console.log(res);
+        console.log(`Token Refresh Successful: ${res.data.token}`);
         return cb(null, true);
       })
       //Display error if error is caught
@@ -19,7 +19,7 @@ export default function useRefreshToken() {
         if (error.response) {
           const err = error.response.data.error;
           console.log(err);
-          return cb(null, false);
+          return cb(err, false);
         }
       });
   };

@@ -3,8 +3,10 @@ const express = require("express");
 const router = express.Router();
 const jwt = require('../../util/jwt')
 
+const groupPlaceHolder = require('../../models/groupPlaceHolder');
 const group = require('../../models/group');
 const user = require('../../models/user');
+const { json } = require("body-parser");
 
 // Route        GET api/groups/
 // Description  Get all Groups for the given user
@@ -102,25 +104,47 @@ router.post('/editGroup', jwt.authenticateUser, (req, res) => {
         });
 });
 
-// Route        POST api/groups
+// Route        POST api/groups/delete
 // Description  delete a group
 // Access       Public
 // Parameters
-//      id:     String - ID of group to be deleted
-router.delete('/:id', jwt.authenticateUser, (req, res) => {
-    group.findById(req.params.id)
-        .then(g => {
-            let name = {
-                "name": g.group_name,
-                "delete_success": true
+//      _id:     String - ID of group to be deleted
+//      user_ID: String - ID of the person deleting the group
+router.post('/delete', jwt.authenticateUser, (req, res) => {
+
+    group.findById(req.body._id)
+    .then(async g => {
+        
+        // Make sure user is admin in group.
+        for (let i = 0; i < g.group_members.length; i++) {
+            if (g.group_members[i].user_ID == req.body.user_ID) {
+                if (g.group_members[i].admin)
+                    break;
+                
+                res.status(401).json({
+                    error: "Permission Denied"
+                });
+                return;
             }
-            g.remove().then(() => res.json(name))
-        })
-        .catch(err => {
-            res.status(401).json({
-                error: "Permission Denied"
+        }
+
+        for (let member of g.group_members) {
+            await user.leaveGroup(member.user_ID, g._id);
+        }
+
+        g.remove().then(() => {
+            res.json({
+                name: g.group_name,
+                delete_success: true
             });
         });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(404).json({
+            error: "Could Not Find Group"
+        });
+    });
 });
 
 // Route        POST api/groups/join
@@ -134,6 +158,8 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
     //Find User
     var foundUser, foundGroup;
     try {
+        // foundUser = await user.findById(req.body.user_ID).exec();
+        // foundGroup = await group.findById(req.body.group_ID).exec();
         [foundUser, foundGroup] = await Promise.all([user.findById(req.body.user_ID).exec(), group.findById(req.body.group_ID).exec()]);
     } catch (err) {
         console.log(err);
@@ -143,6 +169,8 @@ router.post('/join', jwt.authenticateUser, async (req, res) => {
         return;
     }
     // We have found our user
+
+    console.log(foundGroup);
 
     //Try to update data
     try {
@@ -195,7 +223,7 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -221,10 +249,9 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
         error: foundGroup.ERROR_MEMBER(member_user_ID)
     });
 
+    // Added not in front of retval because on success it returns "", on failure it returns the error
     // remove group member and check if successful
-    // TODO: afaik this doesn't return anything but would be nice if we start doing this for all our methods
-    // instead of try/catch blocks
-    let removedMemberStatus = foundGroup.removeGroupMember(foundGroupMember._id);
+    let removedMemberStatus = !foundGroup.removeGroupMember(member_user_ID);
     // TODO: turn error string into dedicated error method
     if (!removedMemberStatus) return res.status(404).json({
         error: 'Could Not Remove Member From Group'
@@ -237,9 +264,9 @@ router.post('/removeUser', jwt.authenticateUser, async (req, res) => {
     });
 
     // compose response
-    let groupArray = updatedUser.getGroup_IDArray();
+    // let groupArray = foundGroupMember.getGroup_IDArray();
     res.json({
-        groups: groupArray,
+        groups: leaveGroupStatus.groups,
         error: ''
     });
 });
@@ -339,7 +366,7 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -366,12 +393,12 @@ router.post('/promote', jwt.authenticateUser, async (req, res) => {
     });
 
     // update group data and compose response
-    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    let promoteMemberStatus = await foundGroup.promoteGroupMember(member_user_ID, true);
     if (!promoteMemberStatus) return res.status(404).json({
         error: 'Could Not Promote User'
     });
     res.json({
-        // TODO: what else should go here?
+        member: foundGroupMember,
         error: ''
     });
 });
@@ -393,7 +420,7 @@ router.post('/demote', jwt.authenticateUser, async (req, res) => {
     // find group
     var foundGroup;
     try {
-        foundGroup = group.findById(group_ID).exec();
+        foundGroup = await group.findById(group_ID).exec();
     } catch (err) {
         console.log({
             err
@@ -420,13 +447,13 @@ router.post('/demote', jwt.authenticateUser, async (req, res) => {
     });
 
     // update group data and compose response
-    let promoteMemberStatus = await foundGroup.promoteGroupMember(foundGroupMember._id);
+    let promoteMemberStatus = await foundGroup.demoteGroupMember(member_user_ID);
     if (!promoteMemberStatus) return res.status(404).json({
         error: 'Could Not Promote User'
     });
     res.json({
-        // TODO: what else should go here?
-        error: 'If you can read this, you broke our code'
+        member: foundGroupMember,
+        error: ''
     });
 });
 

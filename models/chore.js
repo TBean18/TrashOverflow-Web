@@ -82,6 +82,15 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
   return;
 };
 
+// Removes a member from a chore and returns the updated user pool.
+ChoreSchema.statics.removeMemberFromChore = function(member_ID, chore_ID) {
+  return this.findByIdAndUpdate(
+    { _id: chore_ID },
+    { $pull: { chore_user_pool: { _id: member_ID } } },
+    { new: true }
+  ).exec();
+};
+
 //Chore static function used to find a chore with a populated groupMember
 // Callback Structure cb(Error, Chore)
 ChoreSchema.statics.findChore = function (chore_ID, cb) {

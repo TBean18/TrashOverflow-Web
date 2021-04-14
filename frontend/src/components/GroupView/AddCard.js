@@ -7,8 +7,8 @@ import AddCardFrontButton from "./AddCardFrontButton";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { useForm } from "../../hooks/useForm";
-import { createGroup } from "../../fetch/createGroup";
 import { GlobalContext } from "../../context/GlobalState";
+import { useGroupCreation } from "../../hooks/useGroupCreation";
 
 function AddCard() {
   // Fragment from when this used to be a class based component
@@ -28,7 +28,7 @@ function AddCard() {
   const [adding, setAdding] = useState(false);
   const [values, setValues, resetValues] = useForm(initialState);
   const [errorMessage, setErrorMessage] = useState("");
-  const { storeJWT } = useContext(GlobalContext);
+  const newGroup = useGroupCreation(GlobalContext);
   function toggleAdding() {
     setAdding(!adding);
   }
@@ -44,12 +44,7 @@ function AddCard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createGroup(
-      values.groupName,
-      values.groupDescription,
-      storeJWT,
-      setErrorMessage
-    );
+    newGroup(values.groupName, values.groupDescription);
 
     //Close the input boxes
     setAdding(!adding);

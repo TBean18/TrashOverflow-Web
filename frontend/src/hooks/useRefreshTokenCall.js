@@ -1,10 +1,13 @@
 // Custom React Query hook used to fetch group data for the
 
-import react from "react";
+import react, { useContext } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 
-export default function useRefreshToken() {
+export default function useRefreshTokenCall() {
+  //If token was supplied than store it
+
+  //Else use the designated refresh_token endpoint to request a new token
   return (cb) => {
     axios
       .post("/api/user/refresh_token")

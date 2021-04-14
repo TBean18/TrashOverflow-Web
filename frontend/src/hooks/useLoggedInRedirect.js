@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import useRefreshToken from "./useRefreshToken";
+import useRefreshTokenCall from "./useRefreshTokenCall";
 import { useHistory } from "react-router-dom";
 import useLogout from "./useLogout";
 
 export const useLoggedInRedirect = (GlobalContext) => {
-  const refreshToken = useRefreshToken();
+  const refreshToken = useRefreshTokenCall();
   const { user } = useContext(GlobalContext);
   const history = useHistory();
   const logout = useLogout();

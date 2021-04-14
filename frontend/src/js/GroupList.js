@@ -6,6 +6,7 @@ import useGroupRefresh from "../hooks/useGroupRefresh";
 import AddCard from "../components/GroupView/AddCard";
 import useGroups from "../hooks/useGroups";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { CircularProgress } from "@material-ui/core";
 
 function GroupList() {
   const { groups } = useContext(GlobalContext);
@@ -25,7 +26,7 @@ function GroupList() {
 
   return (
     <div className="groupList">
-      {status === "success" ? displayGroups(data.groups) : "Loading..."}
+      {status === "success" ? displayGroups(data.groups) : <CircularProgress />}
       <GroupCard
         curGroup="Trash Overflow"
         image="https://www.hdwallpapers.in/download/skyscrapers_panorama_city_lights_4k_hd-HD.jpg"

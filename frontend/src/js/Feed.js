@@ -3,6 +3,7 @@ import "../css/Feed.css";
 import useUserChores from "../hooks/useUserChores";
 import Post from "./Post/Post";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { CircularProgress } from "@material-ui/core";
 
 function Feed() {
   const { data, status } = useUserChores();
@@ -21,7 +22,8 @@ function Feed() {
 
   return (
     <div className="feed">
-      {status === "success" && displayChores(data.chores)}
+      {status === "success" ? displayChores(data.chores) : <CircularProgress />}
+
       <Post
         message="Deals contact damage. Targets a random direction and moves quickly along a straight path from one side of the screen to the other, rapidly firing bullets behind it, bouncing off the walls."
         taskTitle="Take Out Trash"

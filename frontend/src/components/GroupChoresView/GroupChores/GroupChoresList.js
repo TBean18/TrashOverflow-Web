@@ -4,6 +4,7 @@ import MessageSender from "../../../js/MessageSender";
 import Post from "../../../js/Post/Post";
 import useGroupChores from "../../../hooks/useGroupChores";
 import { useParams } from "react-router";
+import { CircularProgress } from "@material-ui/core";
 
 function GroupChoresList() {
   const { group_ID } = useParams();
@@ -23,7 +24,7 @@ function GroupChoresList() {
   return (
     <div className="groupChoresList">
       <MessageSender />
-      {status === "success" ? displayChores(data.chores) : "Loading...."}
+      {status === "success" ? displayChores(data.chores) : <CircularProgress />}
 
       <Post
         message="Deals contact damage. Targets a random direction and moves quickly along a straight path from one side of the screen to the other, rapidly firing bullets behind it, bouncing off the walls."

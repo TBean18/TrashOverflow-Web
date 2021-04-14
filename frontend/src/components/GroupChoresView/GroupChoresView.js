@@ -4,6 +4,7 @@ import GroupChoresList from "./GroupChores/GroupChoresList";
 import Header from "../../js/Header";
 import { useLoggedOutRedirect } from "../../hooks/useLoggedOutRedirect";
 import { GlobalContext } from "../../context/GlobalState";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 function GroupChoresView() {
   useLoggedOutRedirect(GlobalContext);
@@ -14,6 +15,7 @@ function GroupChoresView() {
       <div className="groupChoresView__body">
         <GroupChoresList />
       </div>
+      <ReactQueryDevtools />
     </div>
   );
 }

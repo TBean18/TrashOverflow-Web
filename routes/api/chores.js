@@ -5,9 +5,7 @@ const jwt = require("../../util/jwt");
 
 const group = require("../../models/group");
 const user = require("../../models/user");
-const {
-  model
-} = require("../../models/chore");
+const { model } = require("../../models/chore");
 const chore = model;
 // Route        GET api/chores/
 // Description  Get the Chore list for the given user
@@ -20,16 +18,17 @@ router.get("/user_chores", jwt.authenticateUser, (req, res) => {
   //Each user has an array of groups
   try {
     user.getChoreList(user_ID, (err, ret) => {
-      if (err) return res.status(404).json({
-        error: err
-      });
+      if (err)
+        return res.status(404).json({
+          error: err,
+        });
       return res.json({
-        chores: ret
+        chores: ret,
       });
     });
   } catch (err) {
     res.status(404).json({
-      error: err
+      error: err,
     });
   }
   //
@@ -42,16 +41,19 @@ router.get("/user_chores", jwt.authenticateUser, (req, res) => {
 // Access       Public
 // Parameters
 //      group_id:   String - ID of group for which to return chore list
-router.get("/:group_ID", (req, res) => {
+router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
   //Do we need to verify the user on a chorelist lookup?
-
+  const user_ID = req.body.user_ID;
   // Retrieve all chore objects from the given group_ID
   group
     .findById(req.params.group_ID)
     .then((foundGroup) => {
+      //Get the groupmember for the user who made the request
+      let groupMember = foundGroup.findMemberByUser_ID(user_ID);
       //Return the populated Chore list
       res.json({
         chores: foundGroup.populateChoreList(foundGroup.group_chores),
+        groupMember,
         error: "",
       });
     })
@@ -82,12 +84,13 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
     .findById(req.body.group_ID)
     .then((g) => {
       // Verify Admin status of the user making the request
-      if (!g.verifyAdmin(user_ID)) {
-        //The user is not an admin ERROR
-        return res.status(404).json({
-          error: `User ${user_ID}: is not a Admin of group ${g.group_name}`,
-        });
-      }
+      let user_group_member = g.verifyAdmin(user_ID, (err, result) => {
+        if (err)
+          return res.status(404).json({
+            error: err,
+          });
+        if (result) return result;
+      });
 
       // Person to be assigned to the chore first and their index in the array.
       let assigned_person = req.body.chore_assigned_user;
@@ -141,14 +144,18 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 //      user_ID:      String - ID of the user trying to delete the chores
 //      token:        String - Token to verify the user
 router.post("/delete", (req, res) => {
-  group.findById(req.body.group_ID)
-    .then(async g => {
+  group
+    .findById(req.body.group_ID)
+    .then(async (g) => {
       // Verify user is admin
-      if (!g.verifyAdmin(req.body.user_ID)) {
-        return res.status(401).json({
-          error: "Permission Denied"
-        });
-      }
+
+      const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
+        if (err)
+          return res.status(401).json({
+            error: err,
+          });
+        return result;
+      });
 
       // Find the chore.
       let choreIndex = -1;
@@ -162,7 +169,7 @@ router.post("/delete", (req, res) => {
       // If we didn't find the chore.
       if (choreIndex === -1) {
         return res.status(404).json({
-          error: "Could Not Remove Chore"
+          error: "Could Not Remove Chore",
         });
       }
 
@@ -170,17 +177,20 @@ router.post("/delete", (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      let chores = await group.removeChore(g._id, g.group_chores[choreIndex]._id);
+      let chores = await group.removeChore(
+        g._id,
+        g.group_chores[choreIndex]._id
+      );
       res.json({
-        chores: chores
+        chores: chores,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: "Could Not Delete Chore"
+        error: "Could Not Delete Chore",
       });
-    })
+    });
 
   // chore
   //   .findById(req.params.id)
@@ -210,11 +220,13 @@ router.post("/delete", (req, res) => {
 router.post("/edit", (req, res) => {
   chore
     .findByIdAndUpdate(
-      req.body.chore_ID, {
+      req.body.chore_ID,
+      {
         chore_name: req.body.chore_name,
         chore_description: req.body.chore_description,
         chore_point_value: req.body.chore_point_value,
-      }, {
+      },
+      {
         // Return updated changed with c in .then
         new: true,
       }
@@ -263,7 +275,8 @@ router.post("/assignUser", (req, res) => {
       // Update database.
       c.update({
         chore_user_pool: c.chore_user_pool,
-        chore_assigned_user_index: (c.chore_assigned_user_index + 1) % pool_length,
+        chore_assigned_user_index:
+          (c.chore_assigned_user_index + 1) % pool_length,
       });
 
       // Return the entire chore for now.

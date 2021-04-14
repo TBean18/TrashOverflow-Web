@@ -55,7 +55,6 @@ function AddCard() {
     setAdding(!adding);
   };
 
-  console.log("test");
   return (
     <div
       className={`row ${adding ? "addCard" : "addCard__initial"}`}

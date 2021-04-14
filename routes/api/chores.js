@@ -199,33 +199,77 @@ router.post("/delete", (req, res) => {
   //   );
 });
 
-// Route        POST api/chores
+// Route        POST api/chores/edit
 // Description  Edit chore (name, description, point value)
 // Access       Public
 // Parameters
-//      chore_ID:            String - ID of chore to be modified
-//      chore_name:     String - Name of chore to be modified
-//  chore_description:  String - Description of chore to be modified
-//  chore_point_value:  Number - Point value of chore to be modified
+//      user_ID:                  String - ID of admin editing chore
+//      group_ID:                 String - ID of the group
+//      chore_ID:                 String - ID of chore to be modified
+//      chore_name:               String - Name of chore to be modified
+//      chore_description:        String - Description of chore to be modified
+//      chore_point_value:        Number - Point value of chore to be modified
 router.post("/edit", (req, res) => {
-  chore
-    .findByIdAndUpdate(
-      req.body.chore_ID, {
-        chore_name: req.body.chore_name,
-        chore_description: req.body.chore_description,
-        chore_point_value: req.body.chore_point_value,
-      }, {
-        // Return updated changed with c in .then
-        new: true,
-      }
-    )
-    .then((c) => res.json(c))
-    .catch((err) => {
-      console.log(err);
-      res.json({
-        error: "Could Not Edit Your Chore",
+
+  group.findById(req.body.group_ID)
+  .then(async g => {
+
+    // Verify user is admin
+    if (!g.verifyAdmin(req.body.user_ID)) {
+      return res.status(401).json({
+        error: "Permission Denied"
       });
+    }
+
+    // Look for the chore in the group.
+    let chore_index = -1;
+    for (let i = 0; i < g.group_chores.length; i++) {
+      if (g.group_chores[i]._id == req.body.chore_ID) {
+        chore_index = i;
+        break;
+      }
+    }
+
+    // If we could not find the chore.
+    if (chore_index === -1) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
+      });
+    }
+
+    const updatedChore = await group.editChore(g._id, req.body.chore_ID, {
+      chore_name: req.body.chore_name,
+      chore_description: req.body.chore_description,
+      chore_point_value: req.body.chore_point_value
     });
+
+    res.json(updatedChore);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json({
+      error: "Could Not Modify the Chore"
+    })
+  })
+
+  // chore
+  //   .findByIdAndUpdate(
+  //     req.body.chore_ID, {
+  //       chore_name: req.body.chore_name,
+  //       chore_description: req.body.chore_description,
+  //       chore_point_value: req.body.chore_point_value,
+  //     }, {
+  //       // Return updated changed with c in .then
+  //       new: true,
+  //     }
+  //   )
+  //   .then((c) => res.json(c))
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res.status(404).json({
+  //       error: "Could Not Edit Your Chore",
+  //     });
+  //   });
 });
 
 // Route                POST api/chores

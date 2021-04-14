@@ -1,10 +1,7 @@
 import { Avatar } from "@material-ui/core";
 import React, { useState } from "react";
 import "../css/MessageSender.css";
-import VideocamIcon from "@material-ui/icons/Videocam";
-import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
-import logo from "../public/images/Trash_Overflow_Icon_Test.svg";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 function MessageSender() {
   const [input, setInput] = useState("");
@@ -22,7 +19,8 @@ function MessageSender() {
   return (
     <div className="messageSender">
       <div className="messageSender__top">
-        <Avatar src={logo} />
+        {/* <Avatar src={logo} /> */}
+        <AddCircleOutlineIcon fontSize="large" />
         <form>
           <input
             value={input}

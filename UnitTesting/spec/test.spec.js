@@ -810,7 +810,122 @@ describe("Chore Related Endpoints", () => {
     });
 
     describe("Existing Chores", () => {
+
+        const group = {
+            group_name: "Group C",
+            group_description: "C",
+            _id: "60709a48e325890fdf912bfe",
+            // user_name not needed for each member in these tests, but put in for readability/context.
+            group_members: [
+                {
+                    _id: "60709a48e325890fdf912c00",
+                    user_name: "Forgetful User"
+                },
+                {
+                    _id: "60710483dbf6e524460f1df3",
+                    user_name: "My Awesome Test"
+                }
+            ]
+        };
+
+        const chore = {
+            chore_assigned_user_index: 0,
+            chore_user_pool: [
+                "60710483dbf6e524460f1df3",
+                "60709a48e325890fdf912c00"
+            ],
+            chore_description: "An Amazing Task",
+            chore_completion_status: "TODO",
+            _id: "60776cb03c08599e052e424a",
+            chore_assigned_user: "60710483dbf6e524460f1df3",
+            chore_name: "Make Dinner"
+        };
+
+        const user = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        };
+
+        const admin = {
+            name: "Forgetful User",
+            password_hash: "password",
+            email: "short-term-memory@email.com"
+        };
         
+        it("Should Make an Admin Login Before Doing Chore Stuff", async () => {
+
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(admin),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            admin._id = res.user._id;
+            admin.token = res.token;
+
+            expect(status).toBe(200);
+            expect(admin._id).toBeDefined();
+            expect(admin.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+        });
+
+        it("Should Allow an Admin to Edit The Chore", async () => {
+
+            const response = await fetch(`${base_url}/chores/edit`, {
+                method: "post",
+                body: JSON.stringify({
+                    chore_ID: chore._id,
+                    chore_name: "Not Making Dinner",
+                    chore_description: "Picking up food from some place good",
+                    chore_point_value: 1000000
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res).not.toBe(null);
+
+            console.log(res);
+        });
+
+        it("Should Allow an Admin to Edit The Chore Back", async () => {
+
+            const response = await fetch(`${base_url}/chores/edit`, {
+                method: "post",
+                body: JSON.stringify({
+                    chore_ID: chore._id,
+                    chore_name: chore.chore_name,
+                    chore_description: chore.chore_description,
+                    chore_point_value: 0
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res).toBeDefined();
+        });
     });
 
 });

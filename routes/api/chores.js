@@ -205,11 +205,13 @@ router.post("/edit", (req, res) => {
   group.findById(req.body.group_ID)
   .then(async g => {
     // Verify user is admin
-    if (!g.verifyAdmin(req.body.user_ID)) {
-      return res.status(401).json({
-        error: "Permission Denied"
-      });
-    }
+    const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
+      if (err)
+        return res.status(401).json({
+          error: "Permission Denied",
+        });
+      return result;
+    });
 
     const updatedChore = await group.editChore({
       group_ID: g._id,
@@ -249,11 +251,13 @@ router.post("/assignUser", (req, res) => {
   group.findById(req.body.group_ID)
   .then(async g => {
     // Verify user is admin
-    if (!g.verifyAdmin(req.body.admin_user_ID)) {
-      return res.status(401).json({
-        error: "Permission Denied"
-      });
-    }
+    const adminMember = g.verifyAdmin(req.body.admin_user_ID, (err, result) => {
+      if (err)
+        return res.status(401).json({
+          error: "Permission Denied",
+        });
+      return result;
+    });
 
     // Check if user is in the group.
     let personIndex = -1;
@@ -317,11 +321,13 @@ router.post("/removeUser", (req, res) => {
   group.findById(req.body.group_ID)
   .then(g => {
     // Verify user is admin
-    if (!g.verifyAdmin(req.body.admin_user_ID)) {
-      return res.status(401).json({
-        error: "Permission Denied"
-      });
-    }
+    const adminMember = g.verifyAdmin(req.body.admin_user_ID, (err, result) => {
+      if (err)
+        return res.status(401).json({
+          error: "Permission Denied",
+        });
+      return result;
+    });
 
     // Check if user is in the group.
     let personIndex = -1;

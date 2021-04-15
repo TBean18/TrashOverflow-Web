@@ -119,7 +119,7 @@ GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
 // Callback Function = (err, result)
 // result will always be null unless the user has passed the admid verification
 GroupSchema.methods.verifyAdmin = function (curUserID, cb) {
-  let res = this.findMemberByUser_ID(curUser_ID, cb);
+  let res = this.findMemberByUser_ID(curUserID, cb);
   if (!res) {
     // User does not exist in the group
     return cb(this.ERROR_USER(curUserID), null);

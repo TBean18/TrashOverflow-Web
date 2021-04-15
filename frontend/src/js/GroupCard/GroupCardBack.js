@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
-import '../../css/GroupCardBack.css';
-
-import { GlobalContext } from '../../context/GlobalState';
-import { AwesomeButton } from 'react-awesome-button';
-import 'react-awesome-button/dist/themes/theme-blue.css';
-import '../../css/GroupCardBackButton.css';
-import GroupCardMember from '../../components/GroupView/GroupCardMember';
+import React, { useContext } from "react";
+import "../../css/GroupCardBack.css";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import { GlobalContext } from "../../context/GlobalState";
+import "react-awesome-button/dist/themes/theme-blue.css";
+import GroupCardMember from "../../components/GroupView/GroupCardMember";
+import PostOption from "../Post/PostOption";
+import { NavLink } from "react-router-dom";
 
 function GroupCardBack({ curGroup }) {
   const { groups } = useContext(GlobalContext);
-
+  const groupChoresURL = `/groupchores/${curGroup._id}`;
   function displayMembers(group) {
     let members = group.group_members;
     if (!Array.isArray(members)) return;
@@ -20,27 +21,31 @@ function GroupCardBack({ curGroup }) {
 
   return (
     <div className="groupCardBack">
-      <div className="groupCardBack__top">
-        <div className="groupCardBack__topInfo">
-          <h3>{curGroup.group_name}</h3>
-        </div>
-      </div>
       <div className="groupCardBack__body">
-        <>{displayMembers(groups)}</>
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
-        <GroupCardMember name="Jason Terry" points={31} />
+        <h4>Description</h4>
+        <p>{curGroup.group_description}</p>
       </div>
       <div className="groupCardBack__bottom">
-        <div className="groupCardBack__bottomButton">
-          <AwesomeButton size="medium" type="primary">
-            Select
-          </AwesomeButton>
+        <h4>Members</h4>
+        <div className="groupCardBack__bottomMembers">
+          <>{displayMembers(curGroup)}</>
+          <GroupCardMember name="Jason Terry" points={31} />
+          <GroupCardMember name="Jason Terry" points={31} />
         </div>
+      </div>
+      <div className="groupCardBack__button">
+        <NavLink
+          to={groupChoresURL}
+          className="groupCardBack__buttonLink"
+          style={{ textDecoration: "none" }}
+        >
+          <PostOption
+            Icon={CheckCircleOutlineIcon}
+            title="Select"
+            color="grey"
+          />
+        </NavLink>
+        <PostOption Icon={EditOutlinedIcon} title="Edit" color="grey" />
       </div>
     </div>
   );

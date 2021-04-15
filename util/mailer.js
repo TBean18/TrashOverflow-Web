@@ -27,14 +27,14 @@ exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
 };
 
 exports.sendPasswordRecovery = (recipientEmail, token, cb) => {
-  const url = `http://localhost:5000/api/user/forgot_password/${token}`;
+  const url = `http://localhost:3000/reset/${token}`;
 
   const msg = {
     to: recipientEmail, // Change to your recipient
     from: "noReply@TrashOverflow.tech", // Change to your verified sender
     subject: "TrashOverflow | Password Recovery",
     text: "Please click on the link below to recover your password LINK",
-    html: `'<p>Please click on the link below to verfiy your email</p>
+    html: `'<p>Please click on the link below to recover your password</p>
     <a href="${url}">LINK</a>`,
   };
   sgMail

@@ -103,7 +103,7 @@ GroupSchema.methods.promoteGroupMember = function (curUser_ID, doSave, cb) {
   return true;
 };
 
-// ***ASSUMES curUser_ID IS THE ID OF AN EXISTING GROUP MEMBER***
+// ***ASSUMES curUser_ID IS THE ID OF AN EXISTING USER who is a GROUP MEMBER***
 // Demotes a group member from admin
 GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
   this.group_members.filter(
@@ -114,14 +114,19 @@ GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
   return true;
 };
 
-// Returns admin if admin is a member of this group, empty string otherwise
+// Returnsthe group member object if admin is a member of this group.
 // curMemberID = the User_ID of the group Member
-GroupSchema.methods.verifyAdmin = function (curMemberID, cb) {
-  let res = this.group_members.filter(
-    (mem) => curMemberID == mem.user_ID && mem.admin === true
-  );
+// Callback Function = (err, result)
+// result will always be null unless the user has passed the admid verification
+GroupSchema.methods.verifyAdmin = function (curUserID, cb) {
+  let res = this.findMemberByUser_ID(curUser_ID, cb);
+  if (!res) {
+    // User does not exist in the group
+    return cb(this.ERROR_USER(curUserID), null);
+  }
+  if (!res.admin) return cb(this.ERROR_ADMIN, null);
   // should just be length 1 if admin found, but just in case...
-  return res.length >= 1 ? res[0] : "";
+  return cb(null, res);
 };
 
 // Returns member if member is a member of this group, empty string otherwise
@@ -154,6 +159,8 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
       chore_user_pool: choreList[i].chore_user_pool.map((user) =>
         this.group_members.id(user)
       ),
+      chore_point_value: choreList[i].chore_point_value,
+      chore_completion_status: choreList[i].chore_completion_status,
     };
 
     ret.push(obj);
@@ -172,7 +179,7 @@ GroupSchema.methods.getChoresForMember = function (member, cb) {
 };
 
 // Removes a chore from the group array and returns the updated chore list.
-GroupSchema.statics.removeChore = function(group_ID, chore_ID) {
+GroupSchema.statics.removeChore = function (group_ID, chore_ID) {
   return this.findOneAndUpdate(
     { _id: group_ID },
     { $pull: { group_chores: { _id: chore_ID } } },
@@ -198,6 +205,10 @@ GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
 };
 
 GroupSchema.methods.ERROR_MEMBER = function (curMemberID) {
+  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_name})`;
+};
+
+GroupSchema.methods.ERROR_USER = function (curUserID) {
   return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_name})`;
 };
 

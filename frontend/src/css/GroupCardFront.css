@@ -1,7 +1,7 @@
 .groupCardFront {
     padding: 0 0 0 0 ;
-    width: 256px;
-    height: 250px;
+    width: 320px;
+    height: 312.5px;
     margin: 15px 15px 15px 15px;
     border-radius: 15px;
     background-color: var(--post-color);

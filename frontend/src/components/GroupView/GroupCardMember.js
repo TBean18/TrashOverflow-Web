@@ -4,7 +4,7 @@ import './GroupCardMember.css'
 function GroupCardMember({name, points}) {
     return (
         <div className="groupCardMember">
-            <ul>{name}: {points}</ul>
+            <p>{name}: {points}</p>
         </div>
     )
 }

@@ -984,6 +984,14 @@ describe("Chore Related Endpoints", () => {
             expect(status).toBe(401);
             expect(res.error).toBe("Permission Denied");
         });
+
+        it("Should Allow an Admin to Assign a User to a Chore", async () => {
+
+        });
+
+        it("Should Allow an Admin to Remove a User From a Chore", async () => {
+
+        });
     });
 
 });

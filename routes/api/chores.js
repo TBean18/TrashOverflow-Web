@@ -5,10 +5,7 @@ const jwt = require("../../util/jwt");
 
 const group = require("../../models/group");
 const user = require("../../models/user");
-const {
-  model
-} = require("../../models/chore");
-const { update } = require("../../models/group");
+const { model } = require("../../models/chore");
 const chore = model;
 // Route        GET api/chores/
 // Description  Get the Chore list for the given user
@@ -228,25 +225,6 @@ router.post("/edit", (req, res) => {
       error: "Could Not Update Chore"
     });
   });
-
-  // chore
-  //   .findByIdAndUpdate(
-  //     req.body.chore_ID, {
-  //       chore_name: req.body.chore_name,
-  //       chore_description: req.body.chore_description,
-  //       chore_point_value: req.body.chore_point_value,
-  //     }, {
-  //       // Return updated changed with c in .then
-  //       new: true,
-  //     }
-  //   )
-  //   .then((c) => res.json(c))
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.status(404).json({
-  //       error: "Could Not Edit Your Chore",
-  //     });
-  //   });
 });
 
 // Route                POST api/chores

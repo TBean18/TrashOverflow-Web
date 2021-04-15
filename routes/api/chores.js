@@ -8,6 +8,7 @@ const user = require("../../models/user");
 const {
   model
 } = require("../../models/chore");
+const { update } = require("../../models/group");
 const chore = model;
 // Route        GET api/chores/
 // Description  Get the Chore list for the given user
@@ -180,23 +181,7 @@ router.post("/delete", (req, res) => {
       res.status(404).json({
         error: "Could Not Delete Chore"
       });
-    })
-
-  // chore
-  //   .findById(req.params.id)
-  //   .then((item) => {
-  //     let deleted_chore = {
-  //       chore_name: item.chore_name,
-  //       delete_success: true,
-  //     };
-
-  //     item.remove().then(() => res.json(deleted_chore));
-  //   })
-  //   .catch((err) =>
-  //     res.status(404).json({
-  //       error: "Unable to Delete Chore",
-  //     })
-  //   );
+    });
 });
 
 // Route        POST api/chores/edit
@@ -213,7 +198,6 @@ router.post("/edit", (req, res) => {
 
   group.findById(req.body.group_ID)
   .then(async g => {
-
     // Verify user is admin
     if (!g.verifyAdmin(req.body.user_ID)) {
       return res.status(401).json({
@@ -221,36 +205,29 @@ router.post("/edit", (req, res) => {
       });
     }
 
-    // Look for the chore in the group.
-    let chore_index = -1;
-    for (let i = 0; i < g.group_chores.length; i++) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        chore_index = i;
-        break;
-      }
-    }
-
-    // If we could not find the chore.
-    if (chore_index === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
-      });
-    }
-
-    const updatedChore = await group.editChore(g._id, req.body.chore_ID, {
+    const updatedChore = await group.editChore({
+      group_ID: g._id,
+      chore_ID: req.body.chore_ID
+    }, {
       chore_name: req.body.chore_name,
       chore_description: req.body.chore_description,
       chore_point_value: req.body.chore_point_value
     });
+
+    if (updatedChore == null) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
+      });
+    }
 
     res.json(updatedChore);
   })
   .catch(err => {
     console.log(err);
     res.status(404).json({
-      error: "Could Not Modify the Chore"
-    })
-  })
+      error: "Could Not Update Chore"
+    });
+  });
 
   // chore
   //   .findByIdAndUpdate(

@@ -52,13 +52,13 @@ function Reset() {
       .then((res) => {
         console.log(res);
 
-        setMessage(res.data.user.name);
+        // setMessage(res.data.user.name);
         history.push("/signin");
       })
       //Display error if error is caught
       .catch((error) => {
         console.log(error);
-        setMessage(error);
+        setMessage(error.response);
       });
   };
 

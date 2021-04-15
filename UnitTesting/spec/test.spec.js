@@ -810,7 +810,180 @@ describe("Chore Related Endpoints", () => {
     });
 
     describe("Existing Chores", () => {
+
+        const group = {
+            group_name: "Group C",
+            group_description: "C",
+            _id: "60709a5be325890fdf912c06",
+            // user_name not needed for each member in these tests, but put in for readability/context.
+            group_members: [
+                {
+                    _id: "60709a48e325890fdf912c00",
+                    user_name: "Forgetful User"
+                },
+                {
+                    _id: "60710483dbf6e524460f1df3",
+                    user_name: "My Awesome Test"
+                }
+            ]
+        };
+
+        const chore = {
+            chore_assigned_user_index: 0,
+            chore_user_pool: [
+                "60710483dbf6e524460f1df3",
+                "60709a48e325890fdf912c00"
+            ],
+            chore_description: "An Amazing Task",
+            chore_completion_status: "TODO",
+            _id: "60776cb03c08599e052e424a",
+            chore_assigned_user: "60710483dbf6e524460f1df3",
+            chore_name: "Make Dinner",
+            chore_point_value: 0
+        };
+
+        const user = {
+            name: "My Awesome Test",
+            password_hash: "password",
+            phone_number: "1564654564",
+            email: "verifyagain@email.com"
+        };
+
+        const admin = {
+            name: "Forgetful User",
+            password_hash: "password",
+            email: "short-term-memory@email.com"
+        };
         
+        it("Should Make an Admin Login Before Doing Chore Stuff", async () => {
+
+            const response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(admin),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            admin._id = res.user._id;
+            admin.token = res.token;
+
+            expect(status).toBe(200);
+            expect(admin._id).toBeDefined();
+            expect(admin.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+        });
+
+        it("Should Allow an Admin to Edit The Chore", async () => {
+
+            const response = await fetch(`${base_url}/chores/edit`, {
+                method: "post",
+                body: JSON.stringify({
+                    user_ID: admin._id,
+                    group_ID: group._id,
+                    chore_ID: chore._id,
+                    chore_name: "Not Making Dinner",
+                    chore_description: "Picking up food from some place good",
+                    chore_point_value: 1000000
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.group_chores[0].chore_name).not.toBe(chore.chore_name);
+            expect(res.group_chores[0].chore_description).not.toBe(chore.chore_description);
+            expect(res.group_chores[0].chore_point_value).not.toBe(chore.chore_point_value);
+
+        });
+
+        it("Should Allow an Admin to Edit The Chore Back", async () => {
+
+            const response = await fetch(`${base_url}/chores/edit`, {
+                method: "post",
+                body: JSON.stringify({
+                    user_ID: admin._id,
+                    group_ID: group._id,
+                    chore_ID: chore._id,
+                    chore_name: chore.chore_name,
+                    chore_description: chore.chore_description,
+                    chore_point_value: 0
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.group_chores[0].chore_name).toBe(chore.chore_name);
+            expect(res.group_chores[0].chore_description).toBe(chore.chore_description);
+            expect(res.group_chores[0].chore_point_value).toBe(chore.chore_point_value);
+        });
+
+        it("Should Not Allow a Non-Admin to Edit a Chore", async () => {
+
+            // Login non-admin
+            let response = await fetch(`${base_url}/user/login`, {
+                method: "post",
+                body: JSON.stringify(user),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            let res = await response.json();
+            let status = await response.status;
+
+            user._id = res.user._id;
+            user.token = res.token;
+
+            expect(status).toBe(200);
+            expect(user._id).toBeDefined();
+            expect(user.token).toBeDefined();
+            // expect(res.user.name).toBe(payload.name);
+            // expect(res.user.phone_number).toBe(payload.phone_number);
+            // expect(res.user.email).toBe(payload.email);
+            // expect(res.user.password_hash).toBe(hashed_password);
+            // expect(res.user.password_hash).not.toBe(payload.password_hash);
+            // expect(res.user._id).toBe(id);
+
+            // Make non-admin try to edit
+            response = await fetch(`${base_url}/chores/edit`, {
+                method: "post",
+                body: JSON.stringify({
+                    user_ID: user._id,
+                    group_ID: group._id,
+                    chore_ID: chore._id,
+                    chore_name: "A Fake Chore Name",
+                    chore_description: "A Fake Chore Description",
+                    chore_point_value: 100
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            res = await response.json();
+            status = await response.status;
+
+            expect(status).toBe(401);
+            expect(res.error).toBe("Permission Denied");
+        });
     });
 
 });

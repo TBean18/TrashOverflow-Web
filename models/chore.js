@@ -100,5 +100,11 @@ ChoreSchema.statics.findChore = function (chore_ID, cb) {
     .catch((err) => cb(err, null));
 };
 
+ChoreSchema.statics.editChore = function(group_ID, chore_ID, choreUpdates) {
+  Group.findById(group_ID, {
+    
+  });
+}
+
 const model = mongoose.model("chore", ChoreSchema);
 module.exports = { model, ChoreSchema };

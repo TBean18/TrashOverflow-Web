@@ -187,6 +187,19 @@ GroupSchema.statics.removeChore = function (group_ID, chore_ID) {
   ).exec();
 };
 
+// Edits the chore name, description, and point value.
+GroupSchema.statics.editChore = function(IDs, updates) {
+  return this.findOneAndUpdate(
+    { _id: IDs.group_ID, "group_chores._id": IDs.chore_ID },
+    { $set: { 
+      "group_chores.$.chore_name": updates.chore_name,
+      "group_chores.$.chore_description": updates.chore_description,
+      "group_chores.$.chore_point_value": updates.chore_point_value
+    }},
+    { new: true }
+  ).exec();
+}
+
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 };

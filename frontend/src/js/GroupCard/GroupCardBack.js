@@ -9,7 +9,7 @@ import PostOption from "../Post/PostOption";
 import { NavLink } from "react-router-dom";
 
 function GroupCardBack({ curGroup }) {
-  const { groups } = useContext(GlobalContext);
+  const { selectGroup } = useContext(GlobalContext);
   const groupChoresURL = `/groupchores/${curGroup._id}`;
   function displayMembers(group) {
     let members = group.group_members;
@@ -43,6 +43,9 @@ function GroupCardBack({ curGroup }) {
             Icon={CheckCircleOutlineIcon}
             title="Select"
             color="grey"
+            onClick={() => {
+              selectGroup(curGroup);
+            }}
           />
         </NavLink>
         <PostOption Icon={EditOutlinedIcon} title="Edit" color="grey" />

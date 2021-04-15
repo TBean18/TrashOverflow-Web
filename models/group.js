@@ -180,6 +180,7 @@ GroupSchema.statics.removeChore = function(group_ID, chore_ID) {
   ).exec();
 };
 
+// Edits the chore name, description, and point value.
 GroupSchema.statics.editChore = function(IDs, updates) {
   return this.findOneAndUpdate(
     { _id: IDs.group_ID, "group_chores._id": IDs.chore_ID },

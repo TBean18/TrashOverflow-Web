@@ -380,7 +380,7 @@ router.post("/removeUser", (req, res) => {
 
 // Route                POST api/chores
 // Description          Update user chore queue
-//                      This endpoint will get hit when a user completes a chore or skips because of points.
+//                      This endpoint will get hit when a user skips because of points.
 // Access               Public
 // Parameters
 //      group_ID    String - ID of the group
@@ -404,6 +404,7 @@ router.post("/updatePool", (req, res) => {
       });
     }
 
+    // g.group_chores[choreIndex].rotateAssignedUser(true);
     g.rotateAssignedUser(choreIndex, true);
     
     res.json(g.group_chores[choreIndex]);
@@ -420,21 +421,50 @@ router.post("/updatePool", (req, res) => {
 // Description          Updates the chore status and rotates the user if chore is finished.
 // Access               Public
 // Parameters
-//      _id:    String - ID of the chore that will have to status updated
+//      group_ID:     String - ID of the group
+//      chore_ID:     String - ID of the chore that will have to status updated
 router.post("/updateStatus", (req, res) => {
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      c.checkCompletionStatus((err) => {
-        throw err;
+
+  group.findById(req.body.group_ID)
+  .then(g => {
+    let choreIndex = -1;
+    for (let i in g.group_chores) {
+      if (g.group_chores[i]._id == req.body.chore_ID) {
+        choreIndex = i;
+        break;
+      }
+    }
+
+    if (choreIndex === -1) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
       });
+    }
+
+    g.group_chores[choreIndex].checkCompletionStatus();
+
+    res.json(g.group_chores[choreIndex]);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json({
+      error: "Could Not Update the Chore Status"
     })
-    .catch((err) => {
-      console.log(err);
-      res.json({
-        error: "Could Not Update the Chore Status",
-      });
-    });
+  })
+
+  // chore
+  //   .findById(req.body._id)
+  //   .then((c) => {
+  //     c.checkCompletionStatus((err) => {
+  //       throw err;
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res.json({
+  //       error: "Could Not Update the Chore Status",
+  //     });
+  //   });
 });
 
 module.exports = router;

@@ -200,6 +200,16 @@ GroupSchema.statics.editChore = function(IDs, updates) {
   ).exec();
 }
 
+GroupSchema.methods.rotateAssignedUser = function (chore_index, save, cb) {
+  //Set the assigned_user to the next user in the user_pool
+  this.group_chores[chore_index].chore_assigned_user_index =
+    (this.group_chores[chore_index].chore_assigned_user_index + 1) % this.group_chores[chore_index].chore_user_pool.length;
+  this.group_chores[chore_index].chore_assigned_user = this.group_chores[chore_index].chore_user_pool[
+    this.group_chores[chore_index].chore_assigned_user_index
+  ];
+  if (save) this.save(cb);
+};
+
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 };

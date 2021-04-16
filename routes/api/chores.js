@@ -484,8 +484,8 @@ router.post("/updateStatus", (req, res) => {
     console.log(err);
     res.status(404).json({
       error: "Could Not Update the Chore Status"
-    })
-  })
+    });
+  });
 });
 
 module.exports = router;

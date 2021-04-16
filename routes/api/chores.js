@@ -388,14 +388,29 @@ router.post("/complete", (req, res) => {
   group.findById(req.body.group_ID)
   .then(g => {
 
+    let choreIndex = -1;
+    for (let i in g.group_chores) {
+      if (g.group_chores[i]._id == req.body.chore_ID) {
+        choreIndex = i;
+        break;
+      }
+    }
 
+    if (choreIndex === -1) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
+      });
+    }
+
+    g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+    g.save().then(() => res.json(g.group_chores[choreIndex]));
   })
   .catch(err => {
     console.log(err);
     res.status(404).json({
       error: "Could Not Mark the Chore as Complete"
     });
-  })
+  });
 });
 
 // Route                POST api/chores

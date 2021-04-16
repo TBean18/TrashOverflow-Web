@@ -21,7 +21,6 @@ router.post("/create", (req, res) => {
 
   group.findById(req.body.group_ID)
   .then(g => {
-
     // Make sure user is admin.
     const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
       if (err)
@@ -77,45 +76,95 @@ router.post("/create", (req, res) => {
 // Route        POST api/schedules/
 // Description  Updates the schedule.
 // Access       Public
-// Note: This endpoints updates everything passed even if it is not actually different.
+// Required Parameters
+//      user_ID:                        String - ID of the group admin editing the schedule
+//      group_ID:                       String - ID of the group
+//      chore_ID:                       String - ID of the chore
+// Optional Parameters
+//      schedule_due_date:              Date - new date chore needs to be finished by 
+//      schedule_recurrence_type:       recurrenceSchema - new recurrence for chore
 router.post("/edit", (req, res) => {
-  // TODO: possibly make this admin only priviledges.
 
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      const payload = {};
-      if (req.body.hasOwnProperty("schedule_due_date"))
-        payload["schedule_due_date"] = req.body["schedule_due_date"];
-      if (req.body.hasOwnProperty("schedule_user_rotation_type"))
-        payload["schedule_user_rotation_type"] =
-          req.body["schedule_user_rotation_type"];
-
-      // This may need to change depending on how the data gets sent from backend.
-      if (req.body.hasOwnProperty("schedule_recurrence_type"))
-        payload["schedule_recurrence_type"] =
-          req.body["schedule_recurrence_type"];
-
-      // Updates the chore schedule object associated with the chore found.
-      c.chore_schedule
-        .update(playload)
-        .then((item) => res.json(item))
-        .catch((err) => {
-          console.log(err);
-          res.json({
-            error: err,
-          });
+  group.findById(req.body.group_ID)
+  .then(async g => {
+    // Make sure user is admin.
+    const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
+      if (err)
+        return res.status(401).json({
+          error: "Permission Denied",
         });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({
-        error: "Could Not Update the Schedule For Your Chore",
-      });
+      return result;
     });
+
+    // Look for chore.
+    let choreIndex = -1;
+    for (let i in g.group_chores) {
+      if (g.group_chores[i]._id == req.body.chore_ID) {
+        choreIndex = i;
+        break;
+      }
+    }
+    // If we could not find the chore.
+    if (choreIndex === -1) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
+      });
+    }
+
+    if (!g.group_chores[choreIndex].chore_schedule) {
+      return res.status(404).json({
+        error: "Please Create a Chore Schedule"
+      });
+    }
+
+    const payload = g.group_chores[choreIndex].chore_schedule;
+    if (req.body.hasOwnProperty("schedule_due_date"))
+      payload.schedule_due_date = req.body.schedule_due_date;
+    if (req.body.hasOwnProperty("schedule_recurrence_type"))
+      payload.schedule_recurrence_type = req.body.schedule_recurrence_type;
+    
+    g.save(payload).then(() => res.json(g.group_chores[choreIndex]));
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json({
+      error: "Could Not Update Chore Schedule"
+    });
+  })
+  
+
+  // chore
+  //   .findById(req.body._id)
+  //   .then((c) => {
+  //     const payload = {};
+  //     if (req.body.hasOwnProperty("schedule_due_date"))
+  //       payload["schedule_due_date"] = req.body["schedule_due_date"];
+  //     if (req.body.hasOwnProperty("schedule_user_rotation_type"))
+  //       payload["schedule_user_rotation_type"] =
+  //         req.body["schedule_user_rotation_type"];
+
+  //     // This may need to change depending on how the data gets sent from backend.
+  //     if (req.body.hasOwnProperty("schedule_recurrence_type"))
+  //       payload["schedule_recurrence_type"] =
+  //         req.body["schedule_recurrence_type"];
+
+  //     // Updates the chore schedule object associated with the chore found.
+  //     c.chore_schedule
+  //       .update(playload)
+  //       .then((item) => res.json(item))
+  //       .catch((err) => {
+  //         console.log(err);
+  //         res.json({
+  //           error: err,
+  //         });
+  //       });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res.json({
+  //       error: "Could Not Update the Schedule For Your Chore",
+  //     });
+  //   });
 });
 
-// create schedule
-
-// update schedule
 module.exports = router;

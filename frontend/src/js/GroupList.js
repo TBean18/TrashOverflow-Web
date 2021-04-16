@@ -1,15 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import "../css/GroupList.css";
 import GroupCard from "./GroupCard/GroupCard";
-import { GlobalContext } from "../context/GlobalState";
-import useGroupRefresh from "../hooks/useGroupRefresh";
 import AddCard from "../components/GroupView/AddCard";
 import useGroups from "../hooks/useGroups";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { CircularProgress } from "@material-ui/core";
 
 function GroupList() {
-  const { groups } = useContext(GlobalContext);
   const exampleImg =
     "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallsdesk.com%2Fwp-content%2Fuploads%2F2016%2F03%2FGiraffe-Wallpaper-for-Computer.jpg&f=1&nofb=1";
 

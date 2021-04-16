@@ -5,7 +5,7 @@ const axios = require("axios").default;
 //Initial State
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || "",
-  groups: JSON.parse(localStorage.getItem("groups")) || "",
+  currentGroup: JSON.parse(localStorage.getItem("currentGroup")) || "",
   jwt: JSON.parse(localStorage.getItem("JWT")) || "",
 };
 
@@ -24,13 +24,13 @@ export const GlobalProvider = function (props) {
   //Create the JWT state
   const [jwt, setJWT] = useState(initialState.jwt);
   //Create the Groups State
-  const [groups, setGroups] = useState(initialState.groups);
+  const [currentGroup, setCurrentGroup] = useState(initialState.currentGroup);
 
   //ACTIONS
 
   //Function used to store the JWT token from the API responce
   function storeJWT(webToken) {
-    if (webToken == undefined) return;
+    if (webToken === undefined) return;
     localStorage.setItem("JWT", JSON.stringify(webToken));
     axios.defaults.headers.common["x-auth-token"] = webToken;
     setJWT(webToken);
@@ -44,24 +44,17 @@ export const GlobalProvider = function (props) {
     storeJWT(webToken);
 
     //Gather the group info from
-    let curGroups = [];
-    userObject.groups.map((g) => {
-      curGroups.push(g.group_ID);
-    });
-    storeGroups(curGroups);
+    // let curGroups = [];
+    // userObject.groups.map((g) => {
+    //   curGroups.push(g.group_ID);
+    // });
+    // selectGroup(curGroups);
   }
 
-  //Logout function used to remove user data from global state
-  function logOut() {
-    localStorage.setItem("user", "");
-    setUser("");
-    storeJWT("");
-    storeGroups("");
-  }
-
-  function storeGroups(curGroups) {
-    localStorage.setItem("groups", JSON.stringify(curGroups));
-    setGroups(curGroups);
+  function selectGroup(curGroups) {
+    localStorage.setItem("currentGroup", JSON.stringify(curGroups));
+    console.log(curGroups);
+    setCurrentGroup(curGroups);
   }
 
   //What the GlobalProvider componet 'renders'
@@ -70,11 +63,10 @@ export const GlobalProvider = function (props) {
       value={{
         user: user,
         jwt: jwt,
-        groups,
+        currentGroup,
         logIn,
-        logOut,
         storeJWT,
-        storeGroups,
+        selectGroup,
       }}
     >
       {props.children}

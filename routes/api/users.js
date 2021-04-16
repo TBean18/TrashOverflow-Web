@@ -247,7 +247,7 @@ router.post("/forgot_password", (req, res) => {
           .json({ error: "No Account Found with given Email" });
 
       //Send Email
-      mailer.sendVerficationEmailSendGrid(
+      mailer.sendPasswordRecovery(
         user.email,
         jwt.createEmailVerficationToken(user._id),
         (err, info) => {
@@ -270,12 +270,16 @@ router.post("/forgot_password/:token", (req, res) => {
         console.log(
           `${item.name} has changed their password (User_ID:${item._id})`
         );
-        return res.redirect("http://localhost:3000/signin");
+        return res.status(200).json({
+          user: {
+            name: item.name,
+          },
+        });
       });
     });
   } catch (err) {
     console.log(err);
-    res.status(404).send(err);
+    res.status(404).send({ error: "Password could not be changed" });
   }
 });
 

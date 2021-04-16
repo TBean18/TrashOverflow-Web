@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./GroupChoresList.css";
 import MessageSender from "../../../js/MessageSender";
 import Post from "../../../js/Post/Post";
 import useGroupChores from "../../../hooks/useGroupChores";
 import { useParams } from "react-router";
 import { CircularProgress } from "@material-ui/core";
+import { GlobalContext } from "../../../context/GlobalState";
 
 function GroupChoresList() {
   const { group_ID } = useParams();
   const { data, status } = useGroupChores(group_ID);
+  const { currentGroup } = useContext(GlobalContext);
   function displayChores(chores) {
     if (!Array.isArray(chores)) return;
     return chores.map((chore) => (
@@ -17,13 +19,14 @@ function GroupChoresList() {
         taskTitle={chore.chore_name}
         points={chore.chore_point_value}
         members={chore.chore_user_pool}
+        key={chore._id}
       />
     ));
   }
 
   return (
     <div className="groupChoresList">
-      <MessageSender />
+      <MessageSender group={currentGroup} />
       {status === "success" ? displayChores(data.chores) : <CircularProgress />}
 
       <Post

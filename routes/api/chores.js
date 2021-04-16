@@ -378,6 +378,26 @@ router.post("/removeUser", (req, res) => {
   });
 });
 
+// Router               POST api/chores/complete
+// Description          This endpoint will be hit when a user completes their chore.
+// Access               Public
+// Parameters
+//      group_ID:     String - ID of the group
+//      chore_ID:     String - ID of the chore
+router.post("/complete", (req, res) => {
+  group.findById(req.body.group_ID)
+  .then(g => {
+
+
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json({
+      error: "Could Not Mark the Chore as Complete"
+    });
+  })
+});
+
 // Route                POST api/chores
 // Description          Update user chore queue
 //                      This endpoint will get hit when a user skips because of points.
@@ -451,20 +471,6 @@ router.post("/updateStatus", (req, res) => {
       error: "Could Not Update the Chore Status"
     })
   })
-
-  // chore
-  //   .findById(req.body._id)
-  //   .then((c) => {
-  //     c.checkCompletionStatus((err) => {
-  //       throw err;
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.json({
-  //       error: "Could Not Update the Chore Status",
-  //     });
-  //   });
 });
 
 module.exports = router;

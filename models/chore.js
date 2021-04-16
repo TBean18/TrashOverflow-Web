@@ -105,7 +105,7 @@ ChoreSchema.methods.assignUser = function(member_ID) {
   // The weird math for first splice param is to avoid getting a negative index.
   this.chore_user_pool.splice(
     // Place we are adding the user.
-    (this.chore_assigned_user_index + this.chore_user_pool.length - 1) % this.chore_user_pool.length,
+    (this.chore_assigned_user_index + this.chore_user_pool.length) % this.chore_user_pool.length,
     // Delete nobody.
     0,
     // Group member we are adding.
@@ -146,9 +146,9 @@ ChoreSchema.methods.removeUser = function(member_ID) {
   this.chore_user_pool.splice(personIndex, 1);
 
   // If the person we are removing has a lower index than the person assigned,
-  // (or if they were the same) it messes up the queue, so fix it.
+  // it messes up the queue, so fix it.
   if (personIndex <= this.chore_assigned_user_index)
-    this.chore_assigned_user_index =  personIndex - 1;
+    this.chore_assigned_user_index -= 1;
 
   // Return the updated chore.
   return this;

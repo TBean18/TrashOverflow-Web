@@ -219,7 +219,7 @@ GroupSchema.methods.ERROR_MEMBER = function (curMemberID) {
 };
 
 GroupSchema.methods.ERROR_USER = function (curUserID) {
-  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_name})`;
+  return `(Member: ${curUserID}) is not a member of group (Group: ${this.group_name})`;
 };
 
 const Group = mongoose.model("group", GroupSchema);

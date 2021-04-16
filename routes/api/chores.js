@@ -380,25 +380,40 @@ router.post("/removeUser", (req, res) => {
 
 // Route                POST api/chores
 // Description          Update user chore queue
+//                      This endpoint will get hit when a user completes a chore or skips because of points.
 // Access               Public
 // Parameters
-//      _id:     String - ID of chore
+//      group_ID    String - ID of the group
+//      chore_ID:   String - ID of chore
 router.post("/updatePool", (req, res) => {
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      // Current assignee moves to end of queue
-      // Top member of queue is now assignee
-      c.rotateAssignedUser(true, (err) => {
-        throw err;
+
+  group.findById(req.body.group_ID)
+  .then(g => {
+
+    let choreIndex = -1;
+    for (let i in g.group_chores) {
+      if (g.group_chores[i]._id == req.body.chore_ID) {
+        choreIndex = i;
+        break;
+      }
+    }
+
+    if (choreIndex === -1) {
+      return res.status(404).json({
+        error: "Could Not Find Chore"
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({
-        error: "Unable to Update User Chore Pool",
-      });
+    }
+
+    g.rotateAssignedUser(choreIndex, true);
+    
+    res.json(g.group_chores[choreIndex]);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(404).json({
+      error: "Unable to Update User Chore Pool"
     });
+  });
 });
 
 // Route                POST api/chores

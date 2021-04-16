@@ -130,41 +130,7 @@ router.post("/edit", (req, res) => {
     res.status(404).json({
       error: "Could Not Update Chore Schedule"
     });
-  })
-  
-
-  // chore
-  //   .findById(req.body._id)
-  //   .then((c) => {
-  //     const payload = {};
-  //     if (req.body.hasOwnProperty("schedule_due_date"))
-  //       payload["schedule_due_date"] = req.body["schedule_due_date"];
-  //     if (req.body.hasOwnProperty("schedule_user_rotation_type"))
-  //       payload["schedule_user_rotation_type"] =
-  //         req.body["schedule_user_rotation_type"];
-
-  //     // This may need to change depending on how the data gets sent from backend.
-  //     if (req.body.hasOwnProperty("schedule_recurrence_type"))
-  //       payload["schedule_recurrence_type"] =
-  //         req.body["schedule_recurrence_type"];
-
-  //     // Updates the chore schedule object associated with the chore found.
-  //     c.chore_schedule
-  //       .update(playload)
-  //       .then((item) => res.json(item))
-  //       .catch((err) => {
-  //         console.log(err);
-  //         res.json({
-  //           error: err,
-  //         });
-  //       });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.json({
-  //       error: "Could Not Update the Schedule For Your Chore",
-  //     });
-  //   });
+  });
 });
 
 module.exports = router;

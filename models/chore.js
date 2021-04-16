@@ -57,7 +57,7 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
     // Check to see if the due_date has passed,
     // if so, then it reverts to 'TODO' and is passed to the next available user
     case "COMPLETED":
-      if (Date.now > currentDate) {
+      if (Date.now() > currentDate) {
         //Due date has passed
         this.chore_completion_status = "TODO";
         //Passing true will save the document after assigning the new user
@@ -68,7 +68,7 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
     // Check to see if the due_date has passed,
     // if so, then it reverts to 'LATE'
     case "TODO":
-      if (Date.now > currentDate) {
+      if (Date.now() > currentDate) {
         //Due date has passed
         this.chore_completion_status = "LATE";
         this.save(cb);

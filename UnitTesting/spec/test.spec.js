@@ -818,11 +818,13 @@ describe("Chore Related Endpoints", () => {
             // user_name not needed for each member in these tests, but put in for readability/context.
             group_members: [
                 {
-                    _id: "60709a48e325890fdf912c00",
+                    _id: "60709a5be325890fdf912c08",
+                    user_ID: "606b963c02208d20de99c790",
                     user_name: "Forgetful User"
                 },
                 {
-                    _id: "60710483dbf6e524460f1df3",
+                    _id: "60776c633c08599e052e4247",
+                    user_ID: "606b4f3e1d737c0953e54746",
                     user_name: "My Awesome Test"
                 }
             ]
@@ -983,6 +985,52 @@ describe("Chore Related Endpoints", () => {
 
             expect(status).toBe(401);
             expect(res.error).toBe("Permission Denied");
+        });
+
+        it("Should Allow an Admin to Assign a User to a Chore", async () => {
+
+            const response = await fetch(`${base_url}/chores/assignUser`, {
+                method: "post",
+                body: JSON.stringify({
+                    admin_user_ID: admin._id,
+                    member_ID: group.group_members[1]._id,
+                    group_ID: group._id,
+                    chore_ID: chore._id,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.chore_user_pool).toContain(group.group_members[1]._id);
+            expect(res.chore_assigned_user_index).toBeLessThan(res.chore_user_pool.length);
+        });
+
+        it("Should Allow an Admin to Remove a User From a Chore", async () => {
+
+            const response = await fetch(`${base_url}/chores/removeUser`, {
+                method: "post",
+                body: JSON.stringify({
+                    admin_user_ID: admin._id,
+                    member_ID: group.group_members[1]._id,
+                    group_ID: group._id,
+                    chore_ID: chore._id,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+            expect(res.chore_user_pool).not.toContain(group.group_members[1]._id);
+            expect(res.chore_assigned_user_index).toBeGreaterThan(-1);
         });
     });
 

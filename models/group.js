@@ -119,7 +119,7 @@ GroupSchema.methods.demoteGroupMember = function (curUser_ID, cb) {
 // Callback Function = (err, result)
 // result will always be null unless the user has passed the admid verification
 GroupSchema.methods.verifyAdmin = function (curUserID, cb) {
-  let res = this.findMemberByUser_ID(curUser_ID, cb);
+  let res = this.findMemberByUser_ID(curUserID, cb);
   if (!res) {
     // User does not exist in the group
     return cb(this.ERROR_USER(curUserID), null);
@@ -200,6 +200,16 @@ GroupSchema.statics.editChore = function(IDs, updates) {
   ).exec();
 }
 
+GroupSchema.methods.rotateAssignedUser = function (chore_index, save, cb) {
+  //Set the assigned_user to the next user in the user_pool
+  this.group_chores[chore_index].chore_assigned_user_index =
+    (this.group_chores[chore_index].chore_assigned_user_index + 1) % this.group_chores[chore_index].chore_user_pool.length;
+  this.group_chores[chore_index].chore_assigned_user = this.group_chores[chore_index].chore_user_pool[
+    this.group_chores[chore_index].chore_assigned_user_index
+  ];
+  if (save) this.save(cb);
+};
+
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;
 };
@@ -209,7 +219,7 @@ GroupSchema.methods.ERROR_MEMBER = function (curMemberID) {
 };
 
 GroupSchema.methods.ERROR_USER = function (curUserID) {
-  return `(Member: ${curMemberID}) is not a member of group (Group: ${this.group_name})`;
+  return `(Member: ${curUserID}) is not a member of group (Group: ${this.group_name})`;
 };
 
 const Group = mongoose.model("group", GroupSchema);

@@ -118,16 +118,32 @@ const Footer = () => {
               Trash Overflow © {new Date().getFullYear()}
             </WebsiteRights>
             <SocialIcons>
-              <SocialIconLink href="/" target="_blank" aria-label="Facebook">
+              <SocialIconLink
+                href="//www.facebook.com/ucfknights"
+                target="_blank"
+                aria-label="Facebook"
+              >
                 <FaFacebook />
               </SocialIconLink>
-              <SocialIconLink href="/" target="_blank" aria-label="Instagram">
+              <SocialIconLink
+                href="//www.instagram.com/ucf.football/"
+                target="_blank"
+                aria-label="Instagram"
+              >
                 <FaInstagram />
               </SocialIconLink>
-              <SocialIconLink href="/" target="_blank" aria-label="Youtube">
+              <SocialIconLink
+                href="//www.youtube.com/watch?v=dQw4w9WgXcQ"
+                target="_blank"
+                aria-label="Youtube"
+              >
                 <FaYoutube />
               </SocialIconLink>
-              <SocialIconLink href="/" target="_blank" aria-label="Twitter">
+              <SocialIconLink
+                href="//twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+                target="_blank"
+                aria-label="Twitter"
+              >
                 <FaTwitter />
               </SocialIconLink>
               <SocialIconLink

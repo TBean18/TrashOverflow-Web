@@ -31,9 +31,9 @@ const Footer = () => {
 
   return (
     <FooterContainer>
-      Meet the Team
       <FooterWrap>
         <TeamMeet />
+        Meet the Team
         <FooterLinksContainer>
           <FooterLinksWrapper>
             <FooterLinkItems>

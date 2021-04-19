@@ -6,7 +6,7 @@ export const FooterContainer = styled.footer`
 `;
 export const FooterWrap = styled.div`
   color: #fff;
-  padding: 48px 24px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,11 +17,12 @@ export const FooterWrap = styled.div`
 `;
 
 export const TeamMeet = styled.div`
+  margin-bottom: 100px;
+  padding-top: 20px;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   max-width: 1400px;
   margin: 0 auto;
 `;
@@ -44,6 +45,7 @@ export const FooterLinksWrapper = styled.div`
 `;
 
 export const FooterLinkItems = styled.div`
+  padding-top: 25px;
   display: flex;
   flex-direction: column;
   text-align: center;

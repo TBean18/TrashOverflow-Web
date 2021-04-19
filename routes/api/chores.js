@@ -179,7 +179,7 @@ router.post("/delete", (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      let chores = await group.removeChore(
+      const chores = await group.removeChore(
         g._id,
         g.group_chores[choreIndex]._id
       );
@@ -210,11 +210,13 @@ router.post("/edit", (req, res) => {
     .findById(req.body.group_ID)
     .then(async (g) => {
       // Verify user is admin
-      if (!g.verifyAdmin(req.body.user_ID)) {
-        return res.status(401).json({
-          error: "Permission Denied",
-        });
-      }
+      const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
+        if (err)
+          return res.status(401).json({
+            error: "Permission Denied",
+          });
+        return result;
+      });
 
       const updatedChore = await group.editChore(
         {
@@ -227,7 +229,6 @@ router.post("/edit", (req, res) => {
           chore_point_value: req.body.chore_point_value,
         }
       );
-
       if (updatedChore == null) {
         return res.status(404).json({
           error: "Could Not Find Chore",
@@ -242,73 +243,79 @@ router.post("/edit", (req, res) => {
         error: "Could Not Update Chore",
       });
     });
-
-  // chore
-  //   .findByIdAndUpdate(
-  //     req.body.chore_ID, {
-  //       chore_name: req.body.chore_name,
-  //       chore_description: req.body.chore_description,
-  //       chore_point_value: req.body.chore_point_value,
-  //     }, {
-  //       // Return updated changed with c in .then
-  //       new: true,
-  //     }
-  //   )
-  //   .then((c) => res.json(c))
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.status(404).json({
-  //       error: "Could Not Edit Your Chore",
-  //     });
-  //   });
 });
 
 // Route                POST api/chores
 // Desc                 Assigns a user to the chore queue.
 // Access               Public
 // Parameters
-//      _id:        String - ID of the chore
-//      user_ID:    String - ID of the user to be assigned to the chore
+//      admin_user_ID:    String - ID of the group admin
+//      member_ID:        String - Member ID of the user to be assigned to the chore
+//      group_ID:         String - ID of the group
+//      chore_ID:         String - ID of the chore
 router.post("/assignUser", (req, res) => {
-  // TODO: only allow admin priviledges.
-
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      // Check if the user is already in the queue.
-      const personIndex = c.chore_user_pool.findIndex((person) => {
-        person.user_ID === req.body.user_ID;
-      });
-
-      // If findIndex ^ returns something other than -1, the user is in the pool.
-      if (personIndex !== -1)
-        throw `${c.chore_user_pool[personIndex].user_name} is already in the chore pool`;
-
-      // Because this is a circular queue, we may have to add someone in the middle
-      // of the array to add them at the end of the line.
-      // The weird math for first splice param is to avoid getting a negative index.
-      let pool_length = c.chore_user_pool.length;
-      c.chore_user_pool.splice(
-        (c.chore_assigned_user_index + pool_length - 1) % pool_length++,
-        0,
-        req.body.user_ID
+  group
+    .findById(req.body.group_ID)
+    .then(async (g) => {
+      // Verify user is admin
+      const adminMember = g.verifyAdmin(
+        req.body.admin_user_ID,
+        (err, result) => {
+          if (err)
+            return res.status(401).json({
+              error: "Permission Denied",
+            });
+          return result;
+        }
       );
 
-      // FIXME: may be slow but will work for testing right now.
-      // Update database.
-      c.update({
-        chore_user_pool: c.chore_user_pool,
-        chore_assigned_user_index:
-          (c.chore_assigned_user_index + 1) % pool_length,
-      });
+      // Check if user is in the group.
+      let personIndex = -1;
+      for (let i in g.group_members) {
+        if (g.group_members[i]._id == req.body.member_ID) {
+          personIndex = i;
+          break;
+        }
+      }
 
-      // Return the entire chore for now.
-      res.json(c);
+      // If we did not find the user to be added.
+      if (personIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find User in the Group",
+        });
+      }
+
+      // Find Chore.
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
+      }
+
+      // Did not find chore.
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      const updatedChore = g.group_chores[choreIndex].assignUser(
+        req.body.member_ID
+      );
+      if (updatedChore.error) {
+        return res.status(404).json({
+          error: updatedChore.error,
+        });
+      }
+
+      g.save(updatedChore).then(() => res.json(updatedChore));
     })
     .catch((err) => {
       console.log(err);
-      res.json({
-        error: "Unable to Assign User to Chore",
+      res.status(404).json({
+        error: "Could Not Assign User To Chore",
       });
     });
 });
@@ -317,99 +324,145 @@ router.post("/assignUser", (req, res) => {
 // Desc                 Removes the user from the chore queue
 // Access               Public
 // Parameters
-//      _id:        String - ID of the chore.
-//      user_ID:    String - ID of user to be removed from the chore.
-//      user_name:  String - Name of user to be removed from the chore.
+//      admin_user_ID:    String - ID of a group admin
+//      member_ID:        String - Member ID of user to be removed from the chore
+//      group_ID:         String - ID of the group
+//      chore_ID:         String - ID of the chore
 router.post("/removeUser", (req, res) => {
-  // TODO: only allow admin priviledges.
-
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      // Find the index of the person to remove.
-      const personIndex = c.chore_user_pool.findIndex(
-        (person) => person.user_ID === req.body.user_ID
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      // Verify user is admin
+      const adminMember = g.verifyAdmin(
+        req.body.admin_user_ID,
+        (err, result) => {
+          if (err)
+            return res.status(401).json({
+              error: "Permission Denied",
+            });
+          return result;
+        }
       );
 
-      // If the person is not found, we cannot remove them.
-      if (personIndex === -1)
-        throw `${req.body.user_name} is not in the user pool`;
+      // Check if user is in the group.
+      let personIndex = -1;
+      for (let i in g.group_members) {
+        if (g.group_members[i]._id == req.body.member_ID) {
+          personIndex = i;
+          break;
+        }
+      }
 
-      // If the person we are removing is the person assigned,
-      // rotate the assigned users.
-      if (personIndex === c.chore_assigned_user_index)
-        c.rotateAssignedUser(true, (err) => {
-          throw err;
-        });
-
-      // Remove the person from the array.
-      const person = c.chore_user_pool.splice(personIndex, 1);
-      // FIXME: this may be slow but it should work for testing.
-      c.update({
-        chore_user_pool: c.chore_user_pool,
-      });
-
-      // If the person we are removing has a lower index than the person assigned,
-      // (or if they were the same) it messes up the queue, so fix it.
-      if (personIndex <= c.chore_assigned_user_index) {
-        c.update({
-          chore_assigned_user_index: personIndex - 1,
+      // If we did not find the user to be removed.
+      if (personIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find User in the Group",
         });
       }
 
-      // Return the person we removed and the new user pool.
-      res.json({
-        deleted_user: person,
-        new_chore_pool: c.chore_user_pool,
-      });
+      // Find Chore.
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
+      }
+
+      // Did not find chore.
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      const updatedChore = g.group_chores[choreIndex].removeUser(
+        req.body.member_ID
+      );
+      if (updatedChore.error) {
+        return res.status(404).json({
+          error: updatedChore.error,
+        });
+      }
+
+      g.save(updatedChore).then(() => res.json(updatedChore));
     })
     .catch((err) => {
       console.log(err);
-      res.json({
-        error: "Could Not Remove User From the Chore",
+      res.status(404).json({
+        error: "Could Not Remove the User",
       });
     });
+});
 
-  // Remove the person from the array.
-  const person = c.chore_user_pool.splice(personIndex, 1);
-  // FIXME: this may be slow but it should work for testing.
-  c.update({
-    chore_user_pool: c.chore_user_pool,
-  });
+// Router               POST api/chores/complete
+// Description          This endpoint will be hit when a user completes their chore.
+// Access               Public
+// Parameters
+//      group_ID:     String - ID of the group
+//      chore_ID:     String - ID of the chore
+router.post("/complete", (req, res) => {
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
+      }
 
-  // If the person we are removing has a lower index than the person assigned,
-  // (or if they were the same) it messes up the queue, so fix it.
-  if (personIndex <= c.chore_assigned_user_index) {
-    c.update({
-      chore_assigned_user_index: personIndex - 1,
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      g.save().then(() => res.json(g.group_chores[choreIndex]));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Mark the Chore as Complete",
+      });
     });
-  }
-
-  // Return the person we removed and the new user pool.
-  res.json({
-    deleted_user: person,
-    new_chore_pool: c.chore_user_pool,
-  });
 });
 
 // Route                POST api/chores
 // Description          Update user chore queue
+//                      This endpoint will get hit when a user skips because of points.
 // Access               Public
 // Parameters
-//      _id:     String - ID of chore
+//      group_ID    String - ID of the group
+//      chore_ID:   String - ID of chore
 router.post("/updatePool", (req, res) => {
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      // Current assignee moves to end of queue
-      // Top member of queue is now assignee
-      c.rotateAssignedUser(true, (err) => {
-        throw err;
-      });
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
+      }
+
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      // g.group_chores[choreIndex].rotateAssignedUser(true);
+      g.rotateAssignedUser(choreIndex, true);
+
+      res.json(g.group_chores[choreIndex]);
     })
     .catch((err) => {
       console.log(err);
-      res.json({
+      res.status(404).json({
         error: "Unable to Update User Chore Pool",
       });
     });
@@ -419,18 +472,33 @@ router.post("/updatePool", (req, res) => {
 // Description          Updates the chore status and rotates the user if chore is finished.
 // Access               Public
 // Parameters
-//      _id:    String - ID of the chore that will have to status updated
+//      group_ID:     String - ID of the group
+//      chore_ID:     String - ID of the chore that will have to status updated
 router.post("/updateStatus", (req, res) => {
-  chore
-    .findById(req.body._id)
-    .then((c) => {
-      c.checkCompletionStatus((err) => {
-        throw err;
-      });
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
+      }
+
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      g.group_chores[choreIndex].checkCompletionStatus();
+
+      res.json(g.group_chores[choreIndex]);
     })
     .catch((err) => {
       console.log(err);
-      res.json({
+      res.status(404).json({
         error: "Could Not Update the Chore Status",
       });
     });

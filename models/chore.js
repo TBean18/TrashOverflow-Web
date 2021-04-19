@@ -58,7 +58,7 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
     // Check to see if the due_date has passed,
     // if so, then it reverts to 'TODO' and is passed to the next available user
     case "COMPLETED":
-      if (Date.now > currentDate) {
+      if (Date.now() > currentDate) {
         //Due date has passed
         this.chore_completion_status = "TODO";
         //Passing true will save the document after assigning the new user
@@ -69,7 +69,7 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
     // Check to see if the due_date has passed,
     // if so, then it reverts to 'LATE'
     case "TODO":
-      if (Date.now > currentDate) {
+      if (Date.now() > currentDate) {
         //Due date has passed
         this.chore_completion_status = "LATE";
         this.save(cb);
@@ -92,6 +92,71 @@ ChoreSchema.statics.removeMemberFromChore = function (member_ID, chore_ID) {
   ).exec();
 };
 
+// Assigns a user to a chore and returns the updated chore for saving.
+ChoreSchema.methods.assignUser = function (member_ID) {
+  // Make sure user is not already assigned to this chore.
+  for (let i in this.chore_user_pool) {
+    if (this.chore_user_pool[i] == member_ID)
+      return { error: "User Is Already Assigned To This Chore" };
+  }
+
+  // Because this is a circular queue, we may have to add someone in the middle
+  // of the array to add them at the end of the line.
+  // The weird math for first splice param is to avoid getting a negative index.
+  this.chore_user_pool.splice(
+    // Place we are adding the user.
+    (this.chore_assigned_user_index + this.chore_user_pool.length) %
+      this.chore_user_pool.length,
+    // Delete nobody.
+    0,
+    // Group member we are adding.
+    member_ID
+  );
+
+  // Fix the assigned user back to what it was.
+  this.chore_assigned_user_index =
+    (this.chore_assigned_user_index + 1) % this.chore_user_pool.length;
+
+  // Return updated chore.
+  return this;
+};
+
+// Removes a user from a chore and returns the updated chore for saving.
+ChoreSchema.methods.removeUser = function (member_ID) {
+  // Make the the user is assigned to the chore.
+  let personIndex = -1;
+  for (let i in this.chore_user_pool) {
+    if (this.chore_user_pool[i] == member_ID) {
+      personIndex = i;
+      break;
+    }
+  }
+
+  // If they are not assigned to this chore.
+  if (personIndex === -1) {
+    return {
+      error: "The User You Were Trying to Remove Is Not Assigned to This Chore",
+    };
+  }
+  // If they are the person who is supposed to do the job, rotate.
+  if (personIndex == this.chore_assigned_user_index) {
+    this.rotateAssignedUser(true, (err) => {
+      return { error: err };
+    });
+  }
+
+  // Remove the person.
+  this.chore_user_pool.splice(personIndex, 1);
+
+  // If the person we are removing has a lower index than the person assigned,
+  // it messes up the queue, so fix it.
+  if (personIndex <= this.chore_assigned_user_index)
+    this.chore_assigned_user_index -= 1;
+
+  // Return the updated chore.
+  return this;
+};
+
 //Chore static function used to find a chore with a populated groupMember
 // Callback Structure cb(Error, Chore)
 ChoreSchema.statics.findChore = function (chore_ID, cb) {
@@ -99,10 +164,6 @@ ChoreSchema.statics.findChore = function (chore_ID, cb) {
     .populate("groupMember")
     .then((chore) => cb(null, chore))
     .catch((err) => cb(err, null));
-};
-
-ChoreSchema.statics.editChore = function (group_ID, chore_ID, choreUpdates) {
-  Group.findById(group_ID, {});
 };
 
 const model = mongoose.model("chore", ChoreSchema);

@@ -83,6 +83,8 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {
+      if (!g) throw "No Group Found";
+
       // Verify Admin status of the user making the request
       let user_group_member = g.verifyAdmin(user_ID, (err, result) => {
         if (err)
@@ -129,7 +131,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).json({
+      res.status(500).json({
         error: "Could Not Add Your New Chore",
       });
     });
@@ -204,39 +206,42 @@ router.post("/delete", (req, res) => {
 //      chore_description:        String - Description of chore to be modified
 //      chore_point_value:        Number - Point value of chore to be modified
 router.post("/edit", (req, res) => {
+  group
+    .findById(req.body.group_ID)
+    .then(async (g) => {
+      // Verify user is admin
+      if (!g.verifyAdmin(req.body.user_ID)) {
+        return res.status(401).json({
+          error: "Permission Denied",
+        });
+      }
 
-  group.findById(req.body.group_ID)
-  .then(async g => {
-    // Verify user is admin
-    if (!g.verifyAdmin(req.body.user_ID)) {
-      return res.status(401).json({
-        error: "Permission Denied"
+      const updatedChore = await group.editChore(
+        {
+          group_ID: g._id,
+          chore_ID: req.body.chore_ID,
+        },
+        {
+          chore_name: req.body.chore_name,
+          chore_description: req.body.chore_description,
+          chore_point_value: req.body.chore_point_value,
+        }
+      );
+
+      if (updatedChore == null) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      res.json(updatedChore);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Update Chore",
       });
-    }
-
-    const updatedChore = await group.editChore({
-      group_ID: g._id,
-      chore_ID: req.body.chore_ID
-    }, {
-      chore_name: req.body.chore_name,
-      chore_description: req.body.chore_description,
-      chore_point_value: req.body.chore_point_value
     });
-
-    if (updatedChore == null) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
-      });
-    }
-
-    res.json(updatedChore);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Update Chore"
-    });
-  });
 
   // chore
   //   .findByIdAndUpdate(

@@ -31,8 +31,9 @@ const Footer = () => {
 
   return (
     <FooterContainer>
+      Meet the Team
       <FooterWrap>
-        <TeamMeet /> Meet the Team
+        <TeamMeet />
         <FooterLinksContainer>
           <FooterLinksWrapper>
             <FooterLinkItems>
@@ -62,7 +63,6 @@ const Footer = () => {
                 GitHub
               </FooterLink>
             </FooterLinkItems>
-
             <FooterLinkItems>
               <FooterLinkTitle>Adrian Cooper</FooterLinkTitle>
               <FooterLink
@@ -115,7 +115,7 @@ const Footer = () => {
               TrashOverflow
             </SocialLogo>
             <WebsiteRights>
-              Trash Overflow © {new Date().getFullYear()} All rights reserved.
+              Trash Overflow © {new Date().getFullYear()}
             </WebsiteRights>
             <SocialIcons>
               <SocialIconLink href="/" target="_blank" aria-label="Facebook">

@@ -46,9 +46,9 @@ export const FooterLinksWrapper = styled.div`
 export const FooterLinkItems = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  text-align: center;
+  align-items: flex;
   margin: 16px;
-  text-align: left;
   width: 160px;
   box-sizing: border-box;
   color: #fff;
@@ -86,7 +86,7 @@ export const SocialMediaWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
-  margin: 40px auto 0 auto;
+  margin: 40px;
   font-size: 14px;
 
   @media screen and (max-width: 820px) {
@@ -109,6 +109,7 @@ export const SocialLogo = styled(Link)`
 
 export const WebsiteRights = styled.small`
   color: #fff;
+  margin-left: 75px;
   margin-bottom: 16px;
 `;
 
@@ -116,7 +117,7 @@ export const SocialIcons = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 240px;
+  width: 200px;
 `;
 
 export const SocialIconLink = styled.a`

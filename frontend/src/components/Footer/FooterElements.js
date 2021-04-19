@@ -30,6 +30,7 @@ export const TeamMeet = styled.div`
 export const FooterLinksContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding-top: 20px;
 
   @media screen and (max-width: 820px) {
     padding-top: 32px;
@@ -45,7 +46,6 @@ export const FooterLinksWrapper = styled.div`
 `;
 
 export const FooterLinkItems = styled.div`
-  padding-top: 25px;
   display: flex;
   flex-direction: column;
   text-align: center;

@@ -251,10 +251,11 @@ router.post("/forgot_password", (req, res) => {
         user.email,
         jwt.createEmailVerficationToken(user._id),
         (err, info) => {
-          if (err) console.log(err);
+          if (err) throw err;
           return console.log(info);
         }
       );
+      res.json({ message: "Sent Password Reset Email" });
     })
     .catch((err) => {
       res.status(404).json({ error: err });

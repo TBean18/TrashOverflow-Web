@@ -43,15 +43,18 @@ function Forget() {
       .then((res) => {
         console.log(res);
         setMessage("Check Email");
-        history.push("/chores");
       })
       //Display error if error is caught
       .catch((error) => {
         //Check if the API sent an error
         if (error.response) {
-          const err = error.response.data.error;
-          console.log(err);
-          setMessage(err);
+          try {
+            const err = error.response.data.error;
+            console.log(err);
+            setMessage(err);
+          } catch (err) {
+            console.log(err);
+          }
         }
       });
   };

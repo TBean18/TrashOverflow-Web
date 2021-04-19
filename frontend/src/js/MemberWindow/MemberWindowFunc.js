@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import "../../css/MemberWindow.css";
 import MemberWindowMember from "./MemberWindowMember";
-import JoIcon from "../../public/images/JoIcon.png";
-import onClickOutside from "react-onclickoutside";
 import { GlobalContext } from "../../context/GlobalState";
 
 function MemberWindowFunc(props) {
@@ -11,9 +9,6 @@ function MemberWindowFunc(props) {
 
   MemberWindowFunc.handleClickOutside = () => {
     this.props.hideMembers();
-  };
-  const clickOutsideConfig = {
-    handleClickOutside: () => MemberWindowFunc.handleClickOutside,
   };
 
   // componentDidMount() {
@@ -65,7 +60,6 @@ function MemberWindowFunc(props) {
           <div className="memberWindow__member">
             {displayAssignedMembers()}
             {displayRemainingMembers()}
-            <MemberWindowMember src={JoIcon} name="Jo Johnson" />
           </div>
         </div>
       </div>
@@ -73,4 +67,4 @@ function MemberWindowFunc(props) {
   );
 }
 
-export default onClickOutside(MemberWindowFunc);
+export default MemberWindowFunc;

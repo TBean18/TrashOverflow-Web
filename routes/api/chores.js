@@ -83,6 +83,8 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {
+      if (!g) throw "No Group Found";
+
       // Verify Admin status of the user making the request
       let user_group_member = g.verifyAdmin(user_ID, (err, result) => {
         if (err)
@@ -129,7 +131,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).json({
+      res.status(500).json({
         error: "Could Not Add Your New Chore",
       });
     });
@@ -177,7 +179,10 @@ router.post("/delete", (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      const chores = await group.removeChore(g._id, g.group_chores[choreIndex]._id);
+      const chores = await group.removeChore(
+        g._id,
+        g.group_chores[choreIndex]._id
+      );
       res.json({
         chores: chores,
       });
@@ -201,41 +206,43 @@ router.post("/delete", (req, res) => {
 //      chore_description:        String - Description of chore to be modified
 //      chore_point_value:        Number - Point value of chore to be modified
 router.post("/edit", (req, res) => {
-
-  group.findById(req.body.group_ID)
-  .then(async g => {
-    // Verify user is admin
-    const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
-      if (err)
-        return res.status(401).json({
-          error: "Permission Denied",
-        });
-      return result;
-    });
-
-    const updatedChore = await group.editChore({
-      group_ID: g._id,
-      chore_ID: req.body.chore_ID
-    }, {
-      chore_name: req.body.chore_name,
-      chore_description: req.body.chore_description,
-      chore_point_value: req.body.chore_point_value
-    });
-
-    if (updatedChore == null) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+  group
+    .findById(req.body.group_ID)
+    .then(async (g) => {
+      // Verify user is admin
+      const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
+        if (err)
+          return res.status(401).json({
+            error: "Permission Denied",
+          });
+        return result;
       });
-    }
 
-    res.json(updatedChore);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Update Chore"
+      const updatedChore = await group.editChore(
+        {
+          group_ID: g._id,
+          chore_ID: req.body.chore_ID,
+        },
+        {
+          chore_name: req.body.chore_name,
+          chore_description: req.body.chore_description,
+          chore_point_value: req.body.chore_point_value,
+        }
+      );
+      if (updatedChore == null) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      res.json(updatedChore);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Update Chore",
+      });
     });
-  });
 });
 
 // Route                POST api/chores
@@ -247,65 +254,70 @@ router.post("/edit", (req, res) => {
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
 router.post("/assignUser", (req, res) => {
+  group
+    .findById(req.body.group_ID)
+    .then(async (g) => {
+      // Verify user is admin
+      const adminMember = g.verifyAdmin(
+        req.body.admin_user_ID,
+        (err, result) => {
+          if (err)
+            return res.status(401).json({
+              error: "Permission Denied",
+            });
+          return result;
+        }
+      );
 
-  group.findById(req.body.group_ID)
-  .then(async g => {
-    // Verify user is admin
-    const adminMember = g.verifyAdmin(req.body.admin_user_ID, (err, result) => {
-      if (err)
-        return res.status(401).json({
-          error: "Permission Denied",
+      // Check if user is in the group.
+      let personIndex = -1;
+      for (let i in g.group_members) {
+        if (g.group_members[i]._id == req.body.member_ID) {
+          personIndex = i;
+          break;
+        }
+      }
+
+      // If we did not find the user to be added.
+      if (personIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find User in the Group",
         });
-      return result;
-    });
-
-    // Check if user is in the group.
-    let personIndex = -1;
-    for (let i in g.group_members) {
-      if (g.group_members[i]._id == req.body.member_ID) {
-        personIndex = i;
-        break;
       }
-    }
 
-    // If we did not find the user to be added.
-    if (personIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find User in the Group"
-      });
-    }
-
-    // Find Chore.
-    let choreIndex = -1;
-    for (let i in g.group_chores) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        choreIndex = i;
-        break;
+      // Find Chore.
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
       }
-    }
 
-    // Did not find chore.
-    if (choreIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+      // Did not find chore.
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      const updatedChore = g.group_chores[choreIndex].assignUser(
+        req.body.member_ID
+      );
+      if (updatedChore.error) {
+        return res.status(404).json({
+          error: updatedChore.error,
+        });
+      }
+
+      g.save(updatedChore).then(() => res.json(updatedChore));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Assign User To Chore",
       });
-    }
-
-    const updatedChore = g.group_chores[choreIndex].assignUser(req.body.member_ID);
-    if (updatedChore.error) {
-      return res.status(404).json({
-        error: updatedChore.error
-      });
-    }
-
-    g.save(updatedChore).then(() => res.json(updatedChore));
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Assign User To Chore"
     });
-  });
 });
 
 // Route                POST api/chores
@@ -317,65 +329,70 @@ router.post("/assignUser", (req, res) => {
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
 router.post("/removeUser", (req, res) => {
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      // Verify user is admin
+      const adminMember = g.verifyAdmin(
+        req.body.admin_user_ID,
+        (err, result) => {
+          if (err)
+            return res.status(401).json({
+              error: "Permission Denied",
+            });
+          return result;
+        }
+      );
 
-  group.findById(req.body.group_ID)
-  .then(g => {
-    // Verify user is admin
-    const adminMember = g.verifyAdmin(req.body.admin_user_ID, (err, result) => {
-      if (err)
-        return res.status(401).json({
-          error: "Permission Denied",
+      // Check if user is in the group.
+      let personIndex = -1;
+      for (let i in g.group_members) {
+        if (g.group_members[i]._id == req.body.member_ID) {
+          personIndex = i;
+          break;
+        }
+      }
+
+      // If we did not find the user to be removed.
+      if (personIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find User in the Group",
         });
-      return result;
-    });
-
-    // Check if user is in the group.
-    let personIndex = -1;
-    for (let i in g.group_members) {
-      if (g.group_members[i]._id == req.body.member_ID) {
-        personIndex = i;
-        break;
       }
-    }
 
-    // If we did not find the user to be removed.
-    if (personIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find User in the Group"
-      });
-    }
-
-    // Find Chore.
-    let choreIndex = -1;
-    for (let i in g.group_chores) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        choreIndex = i;
-        break;
+      // Find Chore.
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
       }
-    }
 
-    // Did not find chore.
-    if (choreIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+      // Did not find chore.
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      const updatedChore = g.group_chores[choreIndex].removeUser(
+        req.body.member_ID
+      );
+      if (updatedChore.error) {
+        return res.status(404).json({
+          error: updatedChore.error,
+        });
+      }
+
+      g.save(updatedChore).then(() => res.json(updatedChore));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Remove the User",
       });
-    }
-
-    const updatedChore = g.group_chores[choreIndex].removeUser(req.body.member_ID);
-    if (updatedChore.error) {
-      return res.status(404).json({
-        error: updatedChore.error
-      });
-    }
-
-    g.save(updatedChore).then(() => res.json(updatedChore));
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Remove the User"
     });
-  });
 });
 
 // Router               POST api/chores/complete
@@ -385,32 +402,32 @@ router.post("/removeUser", (req, res) => {
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore
 router.post("/complete", (req, res) => {
-  group.findById(req.body.group_ID)
-  .then(g => {
-
-    let choreIndex = -1;
-    for (let i in g.group_chores) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        choreIndex = i;
-        break;
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
       }
-    }
 
-    if (choreIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      g.save().then(() => res.json(g.group_chores[choreIndex]));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Mark the Chore as Complete",
       });
-    }
-
-    g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
-    g.save().then(() => res.json(g.group_chores[choreIndex]));
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Mark the Chore as Complete"
     });
-  });
 });
 
 // Route                POST api/chores
@@ -421,35 +438,34 @@ router.post("/complete", (req, res) => {
 //      group_ID    String - ID of the group
 //      chore_ID:   String - ID of chore
 router.post("/updatePool", (req, res) => {
-
-  group.findById(req.body.group_ID)
-  .then(g => {
-
-    let choreIndex = -1;
-    for (let i in g.group_chores) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        choreIndex = i;
-        break;
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
       }
-    }
 
-    if (choreIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      // g.group_chores[choreIndex].rotateAssignedUser(true);
+      g.rotateAssignedUser(choreIndex, true);
+
+      res.json(g.group_chores[choreIndex]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Unable to Update User Chore Pool",
       });
-    }
-
-    // g.group_chores[choreIndex].rotateAssignedUser(true);
-    g.rotateAssignedUser(choreIndex, true);
-    
-    res.json(g.group_chores[choreIndex]);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Unable to Update User Chore Pool"
     });
-  });
 });
 
 // Route                POST api/chores
@@ -459,33 +475,33 @@ router.post("/updatePool", (req, res) => {
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore that will have to status updated
 router.post("/updateStatus", (req, res) => {
-
-  group.findById(req.body.group_ID)
-  .then(g => {
-    let choreIndex = -1;
-    for (let i in g.group_chores) {
-      if (g.group_chores[i]._id == req.body.chore_ID) {
-        choreIndex = i;
-        break;
+  group
+    .findById(req.body.group_ID)
+    .then((g) => {
+      let choreIndex = -1;
+      for (let i in g.group_chores) {
+        if (g.group_chores[i]._id == req.body.chore_ID) {
+          choreIndex = i;
+          break;
+        }
       }
-    }
 
-    if (choreIndex === -1) {
-      return res.status(404).json({
-        error: "Could Not Find Chore"
+      if (choreIndex === -1) {
+        return res.status(404).json({
+          error: "Could Not Find Chore",
+        });
+      }
+
+      g.group_chores[choreIndex].checkCompletionStatus();
+
+      res.json(g.group_chores[choreIndex]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        error: "Could Not Update the Chore Status",
       });
-    }
-
-    g.group_chores[choreIndex].checkCompletionStatus();
-
-    res.json(g.group_chores[choreIndex]);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(404).json({
-      error: "Could Not Update the Chore Status"
     });
-  });
 });
 
 module.exports = router;

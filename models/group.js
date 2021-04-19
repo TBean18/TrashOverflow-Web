@@ -171,7 +171,11 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
 GroupSchema.methods.getChoresForMember = function (member, cb) {
   let ret = [];
   this.group_chores.forEach((chore) => {
-    if (!chore.chore_assigned_user.equals(member._id)) return;
+    if (
+      !chore.chore_assigned_user ||
+      !chore.chore_assigned_user.equals(member._id)
+    )
+      return;
     console.log(chore);
     ret.push(chore);
   });
@@ -188,17 +192,19 @@ GroupSchema.statics.removeChore = function (group_ID, chore_ID) {
 };
 
 // Edits the chore name, description, and point value.
-GroupSchema.statics.editChore = function(IDs, updates) {
+GroupSchema.statics.editChore = function (IDs, updates) {
   return this.findOneAndUpdate(
     { _id: IDs.group_ID, "group_chores._id": IDs.chore_ID },
-    { $set: { 
-      "group_chores.$.chore_name": updates.chore_name,
-      "group_chores.$.chore_description": updates.chore_description,
-      "group_chores.$.chore_point_value": updates.chore_point_value
-    }},
+    {
+      $set: {
+        "group_chores.$.chore_name": updates.chore_name,
+        "group_chores.$.chore_description": updates.chore_description,
+        "group_chores.$.chore_point_value": updates.chore_point_value,
+      },
+    },
     { new: true }
   ).exec();
-}
+};
 
 GroupSchema.methods.rotateAssignedUser = function (chore_index, save, cb) {
   //Set the assigned_user to the next user in the user_pool

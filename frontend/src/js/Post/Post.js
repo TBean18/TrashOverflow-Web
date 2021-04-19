@@ -22,6 +22,7 @@ import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
 import onClickOutside from "react-onclickoutside";
 import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import MemberWindowFunc from "../MemberWindow/MemberWindowFunc";
 
 class Post extends React.Component {
   constructor(props) {
@@ -240,7 +241,7 @@ class Post extends React.Component {
               />
             </div>
             {this.state.showMembers && (
-              <MemberWindow
+              <MemberWindowFunc
                 hideMembers={this.hideMembers}
                 eventTypes={["mouseup"]}
                 members={this.props.members}

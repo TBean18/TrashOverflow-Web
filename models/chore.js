@@ -8,7 +8,7 @@ const ChoreSchema = new Schema({
   chore_assigned_user: {
     type: Schema.Types.ObjectID,
     ref: "groupMember",
-    required: true,
+    default: null,
   },
   chore_assigned_user_index: {
     type: Number,
@@ -18,6 +18,7 @@ const ChoreSchema = new Schema({
     type: [Schema.Types.ObjectID],
     ref: "groupMember",
     required: true,
+    // default: [],
   },
   chore_name: {
     type: String,
@@ -83,7 +84,7 @@ ChoreSchema.methods.checkCompletionStatus = function (cb) {
 };
 
 // Removes a member from a chore and returns the updated user pool.
-ChoreSchema.statics.removeMemberFromChore = function(member_ID, chore_ID) {
+ChoreSchema.statics.removeMemberFromChore = function (member_ID, chore_ID) {
   return this.findByIdAndUpdate(
     { _id: chore_ID },
     { $pull: { chore_user_pool: { _id: member_ID } } },
@@ -100,11 +101,9 @@ ChoreSchema.statics.findChore = function (chore_ID, cb) {
     .catch((err) => cb(err, null));
 };
 
-ChoreSchema.statics.editChore = function(group_ID, chore_ID, choreUpdates) {
-  Group.findById(group_ID, {
-    
-  });
-}
+ChoreSchema.statics.editChore = function (group_ID, chore_ID, choreUpdates) {
+  Group.findById(group_ID, {});
+};
 
 const model = mongoose.model("chore", ChoreSchema);
 module.exports = { model, ChoreSchema };

@@ -1,12 +1,12 @@
-import React from 'react';
-import { animateScroll as scroll } from 'react-scroll';
+import React from "react";
+import { animateScroll as scroll } from "react-scroll";
 import {
   FaFacebook,
   FaInstagram,
   FaYoutube,
   FaTwitter,
-  FaLinkedin
-} from 'react-icons/fa';
+  FaLinkedin,
+} from "react-icons/fa";
 import {
   FooterContainer,
   FooterWrap,
@@ -21,8 +21,8 @@ import {
   WebsiteRights,
   SocialIcons,
   SocialIconLink,
-  TeamMeet
-} from './FooterElements';
+  TeamMeet,
+} from "./FooterElements";
 
 const Footer = () => {
   const toggleHome = () => {
@@ -32,7 +32,8 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterWrap>
-        <TeamMeet /> Meet the Team
+        <TeamMeet />
+        Meet the Team
         <FooterLinksContainer>
           <FooterLinksWrapper>
             <FooterLinkItems>
@@ -62,8 +63,6 @@ const Footer = () => {
                 GitHub
               </FooterLink>
             </FooterLinkItems>
-          </FooterLinksWrapper>
-          <FooterLinksWrapper>
             <FooterLinkItems>
               <FooterLinkTitle>Adrian Cooper</FooterLinkTitle>
               <FooterLink
@@ -76,6 +75,8 @@ const Footer = () => {
                 GitHub
               </FooterLink>
             </FooterLinkItems>
+          </FooterLinksWrapper>
+          <FooterLinksWrapper>
             <FooterLinkItems>
               <FooterLinkTitle>Taylor Bean</FooterLinkTitle>
               <FooterLink to="//github.com/TBean18" target="_blank">
@@ -111,10 +112,10 @@ const Footer = () => {
         <SocialMedia>
           <SocialMediaWrap>
             <SocialLogo to="/" onClick={toggleHome}>
-              Trash Overflow
+              TrashOverflow
             </SocialLogo>
             <WebsiteRights>
-              Trash Overflow © {new Date().getFullYear()} All rights reserved.
+              Trash Overflow © {new Date().getFullYear()}
             </WebsiteRights>
             <SocialIcons>
               <SocialIconLink href="/" target="_blank" aria-label="Facebook">

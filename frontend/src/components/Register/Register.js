@@ -1,7 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../../context/GlobalState';
-import { useForm } from '../../hooks/useForm';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from "react";
+import { useForm } from "../../hooks/useForm";
 import {
   FormButton,
   Text,
@@ -13,23 +11,20 @@ import {
   FormInput,
   FormLabel,
   FormWrap,
-  Icon
-} from './RegisterElements';
+  Icon,
+} from "./RegisterElements";
 
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 function Register() {
-  //Bring in the userState form the global context
-  const { logIn, user, storeJWT } = useContext(GlobalContext);
   //Store all form input in a JSON where key == component name(prop)
   const [values, setValues] = useForm({
-    name: '',
-    password_hash: '',
-    phone_number: '',
-    email: ''
+    name: "",
+    password_hash: "",
+    phone_number: "",
+    email: "",
   });
-  const [message, setMessage] = useState('');
-  const history = useHistory();
+  const [message, setMessage] = useState("");
 
   // Register function called when register button is pressed
   const doRegister = async (event) => {
@@ -39,19 +34,19 @@ function Register() {
 
     //Make the register API call
     axios
-      .post('/api/user/register', {
+      .post("/api/user/register", {
         name: values.name,
         password_hash: values.password_hash,
         phone_number: values.phone_number,
-        email: values.email
+        email: values.email,
       })
       //Display Message
       .then((res) => {
-        if (res.data.error !== '') return handleRegisterError(res.data.error);
+        if (res.data.error !== "") return handleRegisterError(res.data.error);
         console.log(res);
 
         //Since the user just registered, they need to verifiy the email
-        setMessage('Please Check Your Email For Verification');
+        setMessage("Please Check Your Email For Verification");
       })
       //Display error if error is caught
       .catch((error) => {

@@ -11,11 +11,9 @@ import {
   FormWrap,
   Icon,
 } from "./ResetPasswordElements";
-import React, { useState, useContext } from "react";
-import { GlobalContext } from "../../context/GlobalState";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
-import { Label } from "@material-ui/icons";
 const axios = require("axios").default;
 
 function Reset() {

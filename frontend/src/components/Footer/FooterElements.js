@@ -55,6 +55,10 @@ export const FooterLinkItems = styled.div`
   box-sizing: border-box;
   color: #fff;
 
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+  }
+
   @media screen and (max-width: 420px) {
     margin: 0;
     padding: 10px;
@@ -113,6 +117,10 @@ export const WebsiteRights = styled.small`
   color: #fff;
   margin-left: 75px;
   margin-bottom: 16px;
+
+  @media screen and (max-width: 820px) {
+    margin-left: 0;
+  }
 `;
 
 export const SocialIcons = styled.div`

@@ -13,9 +13,12 @@ import onClickOutside from "react-onclickoutside";
 // import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import MemberWindowFunc from "../MemberWindow/MemberWindowFunc";
 import useComponentVisible from "../../hooks/useComponentVisible";
+import { useChoreDeletion } from "../../hooks/useChoreDeletion";
+import { useChoreEditor } from "../../hooks/useChoreEditor";
+import { useParams } from "react-router-dom";
 
 function Chore(props) {
-  //Prop destructuring
+  //Prop Destructuring Definitions
   const {
     profilePic,
     image,
@@ -24,7 +27,11 @@ function Chore(props) {
     message,
     points,
     members,
+    key,
   } = props;
+
+  //Get Group_ID from the URL Param
+  const { group_ID } = useParams();
 
   //Visibility State
   const [hidden, setHidden] = useState(false);
@@ -49,6 +56,10 @@ function Chore(props) {
   // We will handle adding and deleting from this array in the groupMember window Component
   const [assignedMembers, setAssignedMembers] = useState(members);
   const [newDate, setNewDate] = useState();
+
+  // Chore API Hooks
+  const removeChore = useChoreDeletion();
+  const editChore = useChoreEditor();
 
   function expand() {
     expandedVis.setIsComponentVisible(true);
@@ -108,6 +119,10 @@ function Chore(props) {
   };
   const handleDelete = (e) => {
     setHidden(true);
+    removeChore({
+      group_ID,
+      chore_ID: key,
+    });
   };
   // This is the function that will handle the saving of an edited chore
   const handleSave = (e) => {

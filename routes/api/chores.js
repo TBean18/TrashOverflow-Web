@@ -40,7 +40,7 @@ router.get("/user_chores", jwt.authenticateUser, (req, res) => {
 // Description  Get the Chore list for a given group
 // Access       Public
 // Parameters
-//      group_id:   String - ID of group for which to return chore list
+//      group_ID:   String - ID of group for which to return chore list
 router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
   //Do we need to verify the user on a chorelist lookup?
   const user_ID = req.body.user_ID;
@@ -76,7 +76,6 @@ router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
 // Optional Parameters
 //      chore_description:      String - Description of new chore
 //      chore_point_value:      Number - Value of points this chore is worth completing
-//      chore_schedule:         Schedule - Frequency of chore occurance
 router.post("/add", jwt.authenticateUser, (req, res) => {
   const user_ID = req.body.user_ID;
 
@@ -117,8 +116,6 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
         payload["chore_description"] = req.body["chore_description"];
       if (req.body.hasOwnProperty("chore_point_value"))
         payload["chore_point_value"] = req.body["chore_point_value"];
-      if (req.body.hasOwnProperty("chore_schedule"))
-        payload["chore_schedule"] = req.body["chore_schedule"];
 
       // Update the group by adding the new chore to the chore list.
       const newChore = new chore(payload);
@@ -144,13 +141,12 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 //      chore_ID:     String - ID of the chore to be deleted
 //      group_ID:     String - ID of the group
 //      user_ID:      String - ID of the user trying to delete the chores
-//      token:        String - Token to verify the user
+//      token:        String - Token to verify the user (Can be x-auth header instead)
 router.post("/delete", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then(async (g) => {
       // Verify user is admin
-
       const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
         if (err)
           return res.status(401).json({
@@ -492,8 +488,7 @@ router.post("/updateStatus", jwt.authenticateUser, (req, res) => {
         });
       }
 
-      g.group_chores[choreIndex].checkCompletionStatus();
-
+      g.checkCompletionStatus(choreIndex);
       res.json(g.group_chores[choreIndex]);
     })
     .catch((err) => {

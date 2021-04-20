@@ -17,7 +17,7 @@ const group = require("../../models/group");
 //      schedule_due_date:            Date - Date chore is due
 // Optional Parameters
 //      schedule_recurrence_type:     reccurenceSchema - How often the chore repeats
-router.post("/create", (req, res) => {
+router.post("/create", jwt.authenticateUser, (req, res) => {
 
   group.findById(req.body.group_ID)
   .then(g => {
@@ -54,7 +54,7 @@ router.post("/create", (req, res) => {
 
     // Create the schedule object.
     const payload = {
-      schedule_due_date: req.body.schedule_due_date,
+      schedule_due_date: new Date(req.body.schedule_due_date),
       schedule_recurrence_type: req.body.schedule_recurrence_type || {
         reccurence_name: "WEEKLY",
         reccurence_days: 7
@@ -83,7 +83,7 @@ router.post("/create", (req, res) => {
 // Optional Parameters
 //      schedule_due_date:              Date - new date chore needs to be finished by 
 //      schedule_recurrence_type:       recurrenceSchema - new recurrence for chore
-router.post("/edit", (req, res) => {
+router.post("/edit", jwt.authenticateUser, (req, res) => {
 
   group.findById(req.body.group_ID)
   .then(async g => {

@@ -4,6 +4,7 @@ import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined"
 // import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneAllOutlinedIcon from "@material-ui/icons/DoneAllOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import ArrowDropDownOutlinedIcon from "@material-ui/icons/ArrowDropDownOutlined";
 // import ExpandMoreOutlinedIcon from "@material-ui/icons/ExpandMoreOutlined";
 import TodayOutlinedIcon from "@material-ui/icons/TodayOutlined";
 import PostOption from "./PostOption";
@@ -41,6 +42,7 @@ function Chore(props) {
   const [showPoints, setShowPoints] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [hidMembersBlur, setHidMembersBlur] = useState(false);
 
   // Custom hook used to collapse on offClick
@@ -94,11 +96,18 @@ function Chore(props) {
   function revealTitle() {
     setShowTitle(true);
   }
+
+  function toggleDropdown(e) {
+    e.preventDefault();
+    setShowDropdown(!showDropdown);
+  }
+
   function toggleDelete() {
     setShowDelete(!showDelete);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
+    setShowDropdown(false);
   }
   const handleClickOutside = () => {
     memberWindowVis.setIsComponentVisible(false);
@@ -204,9 +213,31 @@ function Chore(props) {
           <div className="post__topRightDate">
             <p>Due: 04/23/2021</p>
           </div>
-          <div className="post__topRightPoints">
-            <p>Repeats: Weekly</p>
-          </div>
+
+          {expandedVis.isComponentVisible ? (
+            <div className="post__dropdown">
+              <p>Repeats:</p>
+              <div className="post__dropdownButton" onClick={toggleDropdown}>
+                <PostOption
+                  Icon={ArrowDropDownOutlinedIcon}
+                  title="Weekly"
+                  color="grey"
+                />
+              </div>
+              {showDropdown && expandedVis.isComponentVisible ? (
+                <div className="post__dropdownMenu">
+                  <button>Daily</button>
+                  <button>Weekly</button>
+                  <button>Monthly</button>
+                  <button>Annually</button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="post__topRightPoints">
+              <p>Repeats: Weekly</p>
+            </div>
+          )}
         </div>
       </div>
       <div

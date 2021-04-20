@@ -141,6 +141,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 //      chore_ID:     String - ID of the chore to be deleted
 //      group_ID:     String - ID of the group
 //      user_ID:      String - ID of the user trying to delete the chores
+//      token:        String - Token to verify the user (Can be x-auth header instead)
 router.post("/delete", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
@@ -469,7 +470,7 @@ router.post("/updatePool", jwt.authenticateUser, (req, res) => {
 // Parameters
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore that will have to status updated
-router.post("/updateStatus", (req, res) => {
+router.post("/updateStatus", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {

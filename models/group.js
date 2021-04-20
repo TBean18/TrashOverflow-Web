@@ -161,6 +161,7 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
       ),
       chore_point_value: choreList[i].chore_point_value,
       chore_completion_status: choreList[i].chore_completion_status,
+      _id: choreList[i]._id,
     };
 
     ret.push(obj);
@@ -214,6 +215,7 @@ GroupSchema.methods.rotateAssignedUser = function (chore_index, save) {
     this.group_chores[chore_index].chore_assigned_user_index
   ];
   if (save) this.save();
+
 };
 
 

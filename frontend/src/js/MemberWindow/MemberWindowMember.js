@@ -20,7 +20,7 @@ const colorGenerator = (name) => {
   return hash % 360;
 };
 
-function MemberWindowMember({ src, name }) {
+function MemberWindowMember({ src, name, assigned }) {
   const color = colorGenerator(name);
   const props = {
     backgroundColor: color,
@@ -36,7 +36,7 @@ function MemberWindowMember({ src, name }) {
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
 
       <h4>{name}</h4>
-      <DoneOutlinedIcon />
+      {assigned && <DoneOutlinedIcon />}
     </div>
   );
 }

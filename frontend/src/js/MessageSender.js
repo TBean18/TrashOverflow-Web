@@ -2,15 +2,29 @@ import { Avatar } from "@material-ui/core";
 import React, { useState } from "react";
 import "../css/MessageSender.css";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import { useChoreCreation } from "../hooks/useChoreCreation";
+import { useParams } from "react-router-dom";
 
 function MessageSender() {
+  const { group_ID } = useParams();
   const [input, setInput] = useState("");
   const [imgUrl, setImageUrl] = useState("");
+  const newChore = useChoreCreation(group_ID);
 
   const handleSubmit = (e) => {
+    console.log(group_ID);
     e.preventDefault();
 
-    // DB stuff
+    // --------------------------------------------------------
+    // Here we define the new chore to be added to the group
+    // Currently we only support adding a chore by name but notice how
+    // we support adding all values of the payload as well
+    newChore({
+      group_ID,
+      chore_name: input,
+      chore_assigned_user: "",
+      chore_user_pool: [],
+    });
 
     setInput("");
     setImageUrl("");

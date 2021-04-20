@@ -6,14 +6,15 @@ import { useAPIErrorChecking } from "./useAPIErrorChecking";
 export const useChoreCreation = (group_ID) => {
   const errCheck = useAPIErrorChecking();
 
-  const postNewChore = (chore_name, chore_assigned_user, chore_user_pool) => {
+  //This function calls the add endpoint
+  // Parameters:
+  //      group_ID: MANDATORY
+  //      chore_name: MANDATORY
+  //      chore_assigned_user: Can be left empty
+  //      chore_user_pool: Mandatory but can be [] *empty array*
+  const postNewChore = (newChore) => {
     return axios
-      .post("/api/chores/add", {
-        group_ID,
-        chore_name,
-        chore_assigned_user,
-        chore_user_pool,
-      })
+      .post("/api/chores/add", newChore)
       .then((res) => res.data)
       .catch((err) => errCheck(err));
   };
@@ -26,7 +27,13 @@ export const useChoreCreation = (group_ID) => {
     },
   });
 
-  return (chore_name, chore_assigned_user, chore_user_pool) => {
-    mutation.mutate(chore_name, chore_assigned_user, chore_user_pool);
+  //This function calls the add endpoint
+  // Parameters:
+  //      group_ID: MANDATORY
+  //      chore_name: MANDATORY
+  //      chore_assigned_user: Can be left empty
+  //      chore_user_pool: Mandatory but can be [] *empty array*
+  return (newChore) => {
+    mutation.mutate(newChore);
   };
 };

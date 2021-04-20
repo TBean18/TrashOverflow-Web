@@ -206,15 +206,76 @@ GroupSchema.statics.editChore = function (IDs, updates) {
   ).exec();
 };
 
-GroupSchema.methods.rotateAssignedUser = function (chore_index, save, cb) {
+GroupSchema.methods.rotateAssignedUser = function (chore_index, save) {
   //Set the assigned_user to the next user in the user_pool
   this.group_chores[chore_index].chore_assigned_user_index =
     (this.group_chores[chore_index].chore_assigned_user_index + 1) % this.group_chores[chore_index].chore_user_pool.length;
   this.group_chores[chore_index].chore_assigned_user = this.group_chores[chore_index].chore_user_pool[
     this.group_chores[chore_index].chore_assigned_user_index
   ];
-  if (save) this.save(cb);
+  if (save) this.save();
 };
+
+
+//Function Used to check the completion for a given chore
+GroupSchema.methods.checkCompletionStatus = function (chore_index, cb) {
+
+  const chore = this.group_chores[chore_index];
+  
+  const currentDate = new Date(chore.chore_schedule.schedule_due_date);
+  console.log(currentDate);
+  switch (chore.chore_completion_status) {
+    //The Chore has been completed
+    // Check to see if the due_date has passed,
+    // if so, then it reverts to 'TODO' and is passed to the next available user
+    case "COMPLETED":
+      if (Date.now() > currentDate) {
+        //Due date has passed
+        chore.chore_completion_status = "TODO";
+        //Passing true will save the document after assigning the new user
+        this.rotateAssignedUser(chore_index, false);
+        chore.chore_schedule.schedule_due_date = this.getNewDueDate(chore);
+      }
+      break;
+    // The Chore is waiting to be completed
+    // Check to see if the due_date has passed,
+    // if so, then it reverts to 'LATE'
+    case "TODO":
+      if (Date.now() > currentDate) {
+        //Due date has passed
+        chore.chore_completion_status = "LATE";
+      }
+      break;
+    // If the Chore is late, then it will continue to be late
+    // Until the next api/chores/complete call for the given chore
+    case "LATE":
+      return;
+  }
+
+  this.save(cb);
+  return;
+};
+
+//Function used to set the new due date based off of the reccurance_type property
+GroupSchema.methods.getNewDueDate = function(chore) {
+
+  const wasLate = Date.now() > chore.chore_schedule.schedule_due_date;
+  // If the chore was late, we do not want to set the next due date to another "LATE" date.
+  // Get today's date if it was late.
+  const currentDate = wasLate ? new Date() : new Date(chore.chore_schedule.schedule_due_date);
+  switch(chore.chore_schedule.schedule_recurrence_type.reccurence_name) {
+    case 'DAILY':
+      currentDate.setDate(currentDate.getDate() + 1);
+      return currentDate;
+    case 'WEEKLY':
+      currentDate.setDate(currentDate.getDate() + 7);
+      return currentDate;
+    case 'MONTHLY':
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      return currentDate;
+  }
+}
+
 
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;

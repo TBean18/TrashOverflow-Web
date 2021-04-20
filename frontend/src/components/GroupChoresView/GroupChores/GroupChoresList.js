@@ -19,7 +19,7 @@ function GroupChoresList() {
         message={chore.chore_description}
         taskTitle={chore.chore_name}
         points={chore.chore_point_value}
-        members={chore.chore_user_pool}
+        memberPool={chore.chore_user_pool}
         key={chore._id}
         chore_ID={chore._id}
       />

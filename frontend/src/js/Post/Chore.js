@@ -27,7 +27,7 @@ function Chore(props) {
     timestamp,
     message,
     points,
-    members,
+    memberPool,
     chore_ID,
   } = props;
 
@@ -57,7 +57,7 @@ function Chore(props) {
   const [newDescription, setNewDescription] = useState("");
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
-  const [assignedMembers, setAssignedMembers] = useState(members);
+  const [assignedMembers, setAssignedMembers] = useState(memberPool);
   const [newDate, setNewDate] = useState();
 
   // Chore API Hooks
@@ -291,7 +291,7 @@ function Chore(props) {
               refForward={memberWindowVis.ref}
               hideMembers={hideMembers}
               eventTypes={["mouseup"]}
-              members={props.members}
+              memberPool={memberPool}
             />
           )}
 

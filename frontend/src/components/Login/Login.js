@@ -70,17 +70,24 @@ function Login() {
       });
   };
 
+  const doReg = async (event) => {
+    history.push("/register");
+  };
+
+  const doForgot = async (event) => {
+    history.push("/forgot");
+  };
+
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doLogin}>
+        <FormWrap>
           <Icon to="/">TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doLogin}>
+            <Form>
               <FormH1>Sign In</FormH1>
               <FormLabel>Email</FormLabel>
               <FormInput
-                required
                 type="email"
                 name="email"
                 placeholder="Email"
@@ -88,7 +95,6 @@ function Login() {
               />
               <FormLabel>Password</FormLabel>
               <FormInput
-                required
                 type="password"
                 name="password_hash"
                 placeholder="Password"
@@ -97,9 +103,17 @@ function Login() {
               <FormButton type="submit" onClick={doLogin}>
                 Sign In
               </FormButton>
-              {!isPageWide && <NewButton>Need a New Account?</NewButton>}
+              {!isPageWide && (
+                <NewButton type="submit" onClick={doReg}>
+                  Need a New Account?
+                </NewButton>
+              )}
               {isPageWide && <TextL to="/register">Need a New Account?</TextL>}
-              {!isPageWide && <ForgotButton>Forgot Password?</ForgotButton>}
+              {!isPageWide && (
+                <ForgotButton type="submit" onClick={doForgot}>
+                  Forgot Password?
+                </ForgotButton>
+              )}
               {isPageWide && <TextL to="/forgot">Forgot Password?</TextL>}
               <Text id="registerResult">{message}</Text>
             </Form>

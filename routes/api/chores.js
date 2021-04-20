@@ -432,7 +432,7 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
 // Parameters
 //      group_ID    String - ID of the group
 //      chore_ID:   String - ID of chore
-router.post("/updatePool", (req, res) => {
+router.post("/updatePool", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {

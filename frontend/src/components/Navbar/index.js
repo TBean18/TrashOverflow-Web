@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { FaBars } from 'react-icons/fa';
-import { IconContext } from 'react-icons/lib';
-import { animateScroll as scroll } from 'react-scroll';
+import React, { useState, useEffect } from "react";
+import { FaBars } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
+import { animateScroll as scroll } from "react-scroll";
 import {
   Nav,
   NavbarContainer,
@@ -11,8 +11,8 @@ import {
   NavItem,
   NavLinks,
   NavButton,
-  NavButtonLink
-} from './NavbarElements';
+  NavButtonLink,
+} from "./NavbarElements";
 
 const Navbar = ({ toggle }) => {
   const [scrollNav, setScrollNav] = useState(false);
@@ -26,7 +26,7 @@ const Navbar = ({ toggle }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', changeNav);
+    window.addEventListener("scroll", changeNav);
   }, []);
 
   const toggleHome = () => {
@@ -35,7 +35,7 @@ const Navbar = ({ toggle }) => {
 
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
+      <IconContext.Provider value={{ color: "#fff" }}>
         <Nav scrollNav={scrollNav}>
           <NavbarContainer>
             <NavLogo to="/" onClick={toggleHome}>
@@ -66,7 +66,7 @@ const Navbar = ({ toggle }) => {
                   exact="true"
                   offset={-80}
                 >
-                  Discover
+                  Our App
                 </NavLinks>
               </NavItem>
               <NavItem>
@@ -78,7 +78,7 @@ const Navbar = ({ toggle }) => {
                   exact="true"
                   offset={-80}
                 >
-                  Services
+                  Features
                 </NavLinks>
               </NavItem>
               <NavItem>

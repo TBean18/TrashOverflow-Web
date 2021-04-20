@@ -6,7 +6,7 @@ import { Link as LinkR } from "react-router-dom";
 export const Button = styled(LinkS)`
   border-radius: 50px;
   // Buttons are either orange or black.
-  background: ${({ primary }) => (primary ? "#feb054" : "var(--dark-purple)")};
+  background: ${({ primary }) => (primary ? "#feb054" : "black")};
   white-space: nowrap;
   padding: ${({ big }) => (big ? "14px 48px" : "12px 30px")};
   color: ${({ dark }) => (dark ? "#010606" : "#fff")};
@@ -30,7 +30,7 @@ export const ButtonWithRoute = styled(LinkR)`
   border-radius: 50px;
   text-decoration: none;
   // Buttons are either orange or dark purple.
-  background: ${({ primary }) => (primary ? "#feb054" : "var(--dark-purple)")};
+  background: ${({ primary }) => (primary ? "#feb054" : "black")};
   white-space: nowrap;
   padding: ${({ big }) => (big ? "14px 48px" : "12px 30px")};
   color: ${({ dark }) => (dark ? "#010606" : "#fff")};

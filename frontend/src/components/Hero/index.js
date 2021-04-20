@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   HeroContainer,
   HeroBackground,
@@ -8,9 +8,9 @@ import {
   HeroP,
   HeroButtonWrapper,
   ArrowForward,
-  ArrowRight
-} from './HeroElements';
-import { Button } from '../ButtonElement';
+  ArrowRight,
+} from "./HeroElements";
+import { Button } from "../ButtonElement";
 
 const Hero = () => {
   const [hover, setHover] = useState(false);
@@ -26,9 +26,7 @@ const Hero = () => {
       </HeroBackground>
       <HeroContent>
         <HeroH1>The Dishes are Still in the Sink</HeroH1>
-        <HeroP>
-          Because we all know your roommate isn't going to do it, anyway.
-        </HeroP>
+        <HeroP>Let's get that taken care of.</HeroP>
         <HeroButtonWrapper>
           <Button
             to="signup"

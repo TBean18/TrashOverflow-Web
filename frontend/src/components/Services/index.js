@@ -1,7 +1,7 @@
-import React from 'react';
-import Icon1 from '../../public/images/svg-1.svg';
-import Icon2 from '../../public/images/svg-2.svg';
-import Icon3 from '../../public/images/svg-3.svg';
+import React from "react";
+import Icon1 from "../../public/images/svg-1.svg";
+import Icon2 from "../../public/images/svg-2.svg";
+import Icon3 from "../../public/images/svg-3.svg";
 import {
   ServicesContainer,
   ServicesH1,
@@ -9,33 +9,31 @@ import {
   ServicesCard,
   ServicesIcon,
   ServicesH2,
-  ServicesP
-} from './ServicesElements';
+  ServicesP,
+} from "./ServicesElements";
 
 const Services = () => {
   return (
     <ServicesContainer id="services">
-      <ServicesH1>Our Services</ServicesH1>
+      <ServicesH1>Our Features</ServicesH1>
       <ServicesWrapper>
         <ServicesCard>
           <ServicesIcon src={Icon1} />
-          <ServicesH2>Reduce expenses</ServicesH2>
+          <ServicesH2>Chore Rotation</ServicesH2>
           <ServicesP>
-            We help reduce your fees and increase your overall revenue.
+            Ensures no one is stuck with the same chore each time.
           </ServicesP>
         </ServicesCard>
         <ServicesCard>
           <ServicesIcon src={Icon2} />
-          <ServicesH2>Virtual Offices</ServicesH2>
-          <ServicesP>
-            You can access our platform online anywhere in the world.
-          </ServicesP>
+          <ServicesH2>Groups & Households</ServicesH2>
+          <ServicesP>Join an existing group or create your own.</ServicesP>
         </ServicesCard>
         <ServicesCard>
           <ServicesIcon src={Icon3} />
-          <ServicesH2>Premium Benefits</ServicesH2>
+          <ServicesH2>Score Incentives</ServicesH2>
           <ServicesP>
-            Unlock our special membership card that returns 5% cash back.
+            Keep group members motivated with an active points system.
           </ServicesP>
         </ServicesCard>
       </ServicesWrapper>

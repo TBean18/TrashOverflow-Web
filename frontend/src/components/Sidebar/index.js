@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   SidebarContainer,
   Icon,
@@ -7,8 +7,8 @@ import {
   SidebarMenu,
   SidebarLink,
   SideButtonWrap,
-  SidebarRoute
-} from './SidebarElements';
+  SidebarRoute,
+} from "./SidebarElements";
 
 const Sidebar = ({ isOpen, toggle }) => {
   return (
@@ -22,10 +22,10 @@ const Sidebar = ({ isOpen, toggle }) => {
             About
           </SidebarLink>
           <SidebarLink to="discover" onClick={toggle}>
-            Discover
+            Our App
           </SidebarLink>
           <SidebarLink to="services" onClick={toggle}>
-            Services
+            Features
           </SidebarLink>
           <SidebarLink to="signup" onClick={toggle}>
             Sign Up

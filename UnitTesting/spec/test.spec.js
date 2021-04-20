@@ -890,6 +890,7 @@ describe("Chore Related Endpoints", () => {
                 method: "post",
                 body: JSON.stringify({
                     user_ID: admin._id,
+                    token: admin.token,
                     group_ID: group._id,
                     chore_ID: chore._id,
                     chore_name: "Not Making Dinner",
@@ -917,6 +918,7 @@ describe("Chore Related Endpoints", () => {
                 method: "post",
                 body: JSON.stringify({
                     user_ID: admin._id,
+                    token: admin.token,
                     group_ID: group._id,
                     chore_ID: chore._id,
                     chore_name: chore.chore_name,
@@ -969,6 +971,7 @@ describe("Chore Related Endpoints", () => {
                 method: "post",
                 body: JSON.stringify({
                     user_ID: user._id,
+                    token: user.token,
                     group_ID: group._id,
                     chore_ID: chore._id,
                     chore_name: "A Fake Chore Name",
@@ -993,6 +996,7 @@ describe("Chore Related Endpoints", () => {
                 method: "post",
                 body: JSON.stringify({
                     admin_user_ID: admin._id,
+                    token: admin.token,
                     member_ID: group.group_members[1]._id,
                     group_ID: group._id,
                     chore_ID: chore._id,
@@ -1016,9 +1020,11 @@ describe("Chore Related Endpoints", () => {
                 method: "post",
                 body: JSON.stringify({
                     admin_user_ID: admin._id,
+                    token: admin.token,
                     member_ID: group.group_members[1]._id,
                     group_ID: group._id,
                     chore_ID: chore._id,
+                    token: admin.token,
                 }),
                 headers: {
                     "Content-Type": "application/json"

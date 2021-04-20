@@ -31,7 +31,11 @@ function MemberWindowFunc(props) {
   function displayAssignedMembers() {
     if (!Array.isArray(memberPool)) return;
     return memberPool.map((member) => (
-      <MemberWindowMember name={member.user_name} assigned={true} />
+      <MemberWindowMember
+        name={member.user_name}
+        assigned={true}
+        key={member._id}
+      />
     ));
   }
 
@@ -47,7 +51,11 @@ function MemberWindowFunc(props) {
       memberPool.every((assignedMember) => !member._id == assignedMember._id)
     );
     return remainingMembers.map((member) => (
-      <MemberWindowMember name={member.user_name} assigned={false} />
+      <MemberWindowMember
+        name={member.user_name}
+        assigned={false}
+        key={member._id}
+      />
     ));
   }
 

@@ -48,7 +48,7 @@ function MemberWindowFunc(props) {
   }
 
   return (
-    <div>
+    <div ref={props.refForward}>
       <div className="memberWindow">
         <div className="memberWindow__top">
           <h4>Members</h4>

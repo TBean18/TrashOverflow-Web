@@ -27,7 +27,7 @@ function Chore(props) {
     message,
     points,
     members,
-    key,
+    chore_ID,
   } = props;
 
   //Get Group_ID from the URL Param
@@ -121,7 +121,7 @@ function Chore(props) {
     setHidden(true);
     removeChore({
       group_ID,
-      chore_ID: key,
+      chore_ID,
     });
   };
   // This is the function that will handle the saving of an edited chore

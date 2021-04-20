@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '../ButtonElement';
+import React from "react";
+import { Button } from "../ButtonElement";
 import {
   InfoContainer,
   InfoWrapper,
@@ -12,8 +12,8 @@ import {
   Subtitle,
   ButtonWrap,
   ImgWrap,
-  Img
-} from './InfoElements';
+  Img,
+} from "./InfoElements";
 
 const InfoSection = ({
   lightBg,
@@ -29,7 +29,7 @@ const InfoSection = ({
   alt,
   primary,
   dark,
-  dark2
+  dark2,
 }) => {
   return (
     <>
@@ -43,7 +43,7 @@ const InfoSection = ({
                 <Subtitle darkText={darkText}>{description}</Subtitle>
                 <ButtonWrap>
                   <Button
-                    to="home"
+                    to="signup"
                     smooth={true}
                     duration={500}
                     spy={true}

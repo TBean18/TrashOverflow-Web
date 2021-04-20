@@ -36,6 +36,7 @@ class Post extends React.Component {
       showTitle: true,
       showDelete: false,
       hidMembersBlur: false,
+      showDropdown: false,
     };
     this.expand = this.expand.bind(this);
     this.toggleMembers = this.toggleMembers.bind(this);
@@ -198,6 +199,24 @@ class Post extends React.Component {
               <p>Due: 04/23/2021</p>
             </div>
             <div className="post__topRightPoints">
+              <button>
+                Repeats: Weekly
+              </button>
+
+              {
+                this.state.showDropdown ?
+                (
+                  <div className="post__dropdown">
+                    <button>Daily</button>
+                    <button>Weekly</button>
+                    <button>Monthly</button>
+                    <button>Yearly</button>
+                  </div>
+                )
+                : (
+                  null
+                )
+              }
               <p>Repeats: Weekly</p>
             </div>
           </div>

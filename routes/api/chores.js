@@ -492,8 +492,7 @@ router.post("/updateStatus", (req, res) => {
         });
       }
 
-      g.group_chores[choreIndex].checkCompletionStatus();
-
+      g.checkCompletionStatus(choreIndex);
       res.json(g.group_chores[choreIndex]);
     })
     .catch((err) => {

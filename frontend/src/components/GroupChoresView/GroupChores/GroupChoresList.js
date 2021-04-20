@@ -6,6 +6,7 @@ import useGroupChores from "../../../hooks/useGroupChores";
 import { useParams } from "react-router";
 import { CircularProgress } from "@material-ui/core";
 import { GlobalContext } from "../../../context/GlobalState";
+import Chore from "../../../js/Post/Chore";
 
 function GroupChoresList() {
   const { group_ID } = useParams();
@@ -14,7 +15,7 @@ function GroupChoresList() {
   function displayChores(chores) {
     if (!Array.isArray(chores)) return;
     return chores.map((chore) => (
-      <Post
+      <Chore
         message={chore.chore_description}
         taskTitle={chore.chore_name}
         points={chore.chore_point_value}

@@ -47,6 +47,7 @@ function Chore(props) {
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
+  const recurrenceDropdownVis = useComponentVisible(false);
   const memberWindowVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
 
@@ -66,6 +67,14 @@ function Chore(props) {
   function expand() {
     expandedVis.setIsComponentVisible(true);
   }
+
+  // function collapse() {
+  //   setShowMessage(true);
+  //   setShowPoints(true);
+  //   setShowTitle(true);
+  //   recurrenceDropdownVis.setIsComponentVisible(false);
+  //   memberWindowVis.setIsComponentVisible(false);
+  // }
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
   }
@@ -99,7 +108,9 @@ function Chore(props) {
 
   function toggleDropdown(e) {
     e.preventDefault();
-    setShowDropdown(!showDropdown);
+    recurrenceDropdownVis.setIsComponentVisible(
+      !recurrenceDropdownVis.isComponentVisible
+    );
   }
 
   function toggleDelete() {
@@ -107,7 +118,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDropdown(false);
+    recurrenceDropdownVis.setIsComponentVisible(false);
   }
   const handleClickOutside = () => {
     memberWindowVis.setIsComponentVisible(false);
@@ -215,7 +226,7 @@ function Chore(props) {
           </div>
 
           {expandedVis.isComponentVisible ? (
-            <div className="post__dropdown">
+            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
               <p>Repeats:</p>
               <div className="post__dropdownButton" onClick={toggleDropdown}>
                 <PostOption
@@ -224,7 +235,8 @@ function Chore(props) {
                   color="grey"
                 />
               </div>
-              {showDropdown && expandedVis.isComponentVisible ? (
+              {recurrenceDropdownVis.isComponentVisible &&
+              expandedVis.isComponentVisible ? (
                 <div className="post__dropdownMenu">
                   <button>Daily</button>
                   <button>Weekly</button>

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   min-height: 692px;
@@ -43,7 +43,13 @@ export const Icon = styled(Link)`
   @media screen and (max-width: 480px) {
     font-size: 60px;
     margin-left: 16px;
-    margin-top: 50px;
+    margin-top: 80px;
+    margin-bottom: 25px;
+  }
+
+  @media screen and (max-width: 340px) {
+    margin-top: 60px;
+    margin-bottom: 50px;
   }
 `;
 
@@ -128,6 +134,54 @@ export const FormButton = styled.button`
     transition: all 0.2s ease-in-out;
     // background color of icon when you hover over it
     background: #d17c60;
+    // text color of sign in button when you hover over it.
+    color: #fff;
+  }
+`;
+
+export const ForgotButton = styled.button`
+  background: var(--dark-purple);
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  outline: none;
+  margin-top: 10px;
+
+  @media screen and (max-width: 350px) {
+    font-size: 14px;
+  }
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    // background color of icon when you hover over it
+    background: var(--lighter-purple);
+    // text color of sign in button when you hover over it.
+    color: #fff;
+  }
+`;
+
+export const NewButton = styled.button`
+  background: var(--grey-purple);
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  outline: none;
+  margin-top: 10px;
+
+  @media screen and (max-width: 350px) {
+    font-size: 14px;
+  }
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    // background color of icon when you hover over it
+    background: var(--grey-pink);
     // text color of sign in button when you hover over it.
     color: #fff;
   }

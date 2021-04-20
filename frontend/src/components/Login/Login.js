@@ -1,5 +1,7 @@
 import {
   FormButton,
+  ForgotButton,
+  NewButton,
   Text,
   TextL,
   Container,
@@ -15,6 +17,7 @@ import React, { useState, useContext } from "react";
 import { GlobalContext } from "../../context/GlobalState";
 import { useHistory } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
+import { useMediaQuery } from "@material-ui/core";
 const axios = require("axios").default;
 
 function Login() {
@@ -24,6 +27,8 @@ function Login() {
     email: "",
     password_hash: "",
   });
+
+  const isPageWide = useMediaQuery("(min-width: 768px)");
 
   const history = useHistory();
 
@@ -92,8 +97,10 @@ function Login() {
               <FormButton type="submit" onClick={doLogin}>
                 Sign In
               </FormButton>
-              <TextL to="/forgot">Forgot password?</TextL>
-              <TextL to="/register">Need a new account?</TextL>
+              {!isPageWide && <NewButton>Need a New Account?</NewButton>}
+              {isPageWide && <TextL to="/register">Need a New Account?</TextL>}
+              {!isPageWide && <ForgotButton>Forgot Password?</ForgotButton>}
+              {isPageWide && <TextL to="/forgot">Forgot Password?</TextL>}
               <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>

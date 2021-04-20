@@ -17,15 +17,16 @@ import useComponentVisible from "../../hooks/useComponentVisible";
 import { useChoreDeletion } from "../../hooks/useChoreDeletion";
 import { useChoreEditor } from "../../hooks/useChoreEditor";
 import { useParams } from "react-router-dom";
+import { useForm } from "../../hooks/useForm";
 
 function Chore(props) {
   //Prop Destructuring Definitions
   const {
     profilePic,
     image,
-    taskTitle,
+    chore_name,
     timestamp,
-    message,
+    description,
     points,
     memberPool,
     chore_ID,
@@ -55,6 +56,10 @@ function Chore(props) {
   const [newName, setNewName] = useState();
   const [newPointVal, setNewPointVal] = useState(null);
   const [newDescription, setNewDescription] = useState("");
+  const [values, setValues] = useForm({
+    chore_description: "",
+  });
+
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
   const [assignedMembers, setAssignedMembers] = useState(memberPool);
@@ -182,13 +187,13 @@ function Chore(props) {
         <div className="post__topTitle">
           {showTitle ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-              {taskTitle === undefined ? "No Title" : taskTitle}
+              {chore_name === undefined ? "No Title" : chore_name}
             </h3>
           ) : (
             <form>
               <input
                 type="text"
-                placeholder={taskTitle}
+                placeholder={chore_name}
                 onBlur={() => revealTitle()}
                 onFocus={() => hideTitle()}
                 tabIndex="0"
@@ -262,7 +267,7 @@ function Chore(props) {
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
             {showMessage ? (
-              <p onClick={hideMessage}>{message}</p>
+              <p onClick={hideMessage}>{description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
                 <form>
@@ -270,8 +275,10 @@ function Chore(props) {
                     onBlur={() => revealMessage()}
                     onFocus={() => hideMessage()}
                     tabIndex="0"
+                    name="chore_description"
+                    onChange={(e) => setValues(e)}
                   >
-                    {message}
+                    {description}
                   </textarea>
                 </form>
               </div>

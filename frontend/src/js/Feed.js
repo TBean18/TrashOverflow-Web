@@ -12,8 +12,8 @@ function Feed() {
     if (!Array.isArray(chores)) return;
     return chores.map((chore) => (
       <Chore
-        message={chore.chore_description}
-        taskTitle={chore.chore_name}
+        description={chore.chore_description}
+        chore_name={chore.chore_name}
         points={chore.chore_point_value}
         memberPool={chore.chore_user_pool}
       />

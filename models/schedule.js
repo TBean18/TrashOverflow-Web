@@ -33,6 +33,7 @@ const ScheduleSchema = new Schema({
 //Schema Functions ----------------------------------
 //Function used to set the new due date based off of the reccurance_type property
 ScheduleSchema.methods.setNewDueDate = function(cb){
+  console.log("WARNING: schedule.setNewDueDate use is deprecated, please use group.getNewDueDate instead");
   const currentDate = new Date(this.schedule_due_date);
   switch(this.schedule_recurrence_type.reccurence_name){
     case 'DAILY':

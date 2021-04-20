@@ -41,6 +41,7 @@ const ChoreSchema = new Schema({
 });
 
 ChoreSchema.methods.rotateAssignedUser = function (save, cb) {
+  console.log("WARNING: chore.rotateAssignedUser use is deprecated, please use group.rotateAssignedUser instead");
   //Set the assigned_user to the next user in the user_pool
   this.chore_assigned_user_index =
     (this.chore_assigned_user_index + 1) % this.chore_user_pool.length;
@@ -52,6 +53,9 @@ ChoreSchema.methods.rotateAssignedUser = function (save, cb) {
 
 //Function Used to check the completion for a given chore
 ChoreSchema.methods.checkCompletionStatus = function (cb) {
+
+  console.log("WARNING: chore.checkCompletionStatus use is deprecated, please use group.checkCompletionStatus instead");
+
   const currentDate = new Date(this.chore_schedule.schedule_due_date);
   switch (this.chore_completion_status) {
     //The Chore has been completed

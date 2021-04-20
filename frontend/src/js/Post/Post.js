@@ -21,7 +21,7 @@ import PostOption from "./PostOption";
 import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
 import onClickOutside from "react-onclickoutside";
-import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 
 class Post extends React.Component {
   constructor(props) {
@@ -49,6 +49,7 @@ class Post extends React.Component {
     this.showTitle = this.showTitle.bind(this);
     this.hideTitle = this.hideTitle.bind(this);
     this.toggleDelete = this.toggleDelete.bind(this);
+    this.showDropdown = this.showDropdown.bind(this);
   }
   expand() {
     this.setState({ expanded: true });
@@ -80,6 +81,11 @@ class Post extends React.Component {
   showTitle() {
     this.setState({ showTitle: true });
   }
+  showDropdown(event) {
+    event.preventDefault();
+    
+    this.setState({ showDropdown: !this.state.showDropdown });
+  }
   toggleDelete() {
     this.setState({
       showDelete: !this.state.showDelete,
@@ -95,6 +101,7 @@ class Post extends React.Component {
       showPoints: true,
       showTitle: true,
       showDelete: false,
+      showDropdown: false,
     });
   };
   handleDone = (e) => {
@@ -198,27 +205,42 @@ class Post extends React.Component {
             <div className="post__topRightDate">
               <p>Due: 04/23/2021</p>
             </div>
-            <div className="post__topRightPoints">
-              <button>
-                Repeats: Weekly
-              </button>
 
-              {
-                this.state.showDropdown ?
-                (
-                  <div className="post__dropdown">
-                    <button>Daily</button>
-                    <button>Weekly</button>
-                    <button>Monthly</button>
-                    <button>Yearly</button>
+            {
+              this.state.expanded ? 
+              (
+                <div className="post__dropdown">
+                  <p>Repeats:</p>
+                  <div className="post__dropdownButton" onClick={this.showDropdown}>
+                    <PostOption
+                      Icon={ArrowDropDownOutlinedIcon}
+                      title="Weekly"
+                      color="grey"
+                    />
                   </div>
-                )
-                : (
-                  null
-                )
-              }
-              <p>Repeats: Weekly</p>
-            </div>
+                  {
+                    this.state.showDropdown && this.state.expanded ?
+                    (
+                      <div className="post__dropdownMenu">
+                        <button>Daily</button>
+                        <button>Weekly</button>
+                        <button>Monthly</button>
+                        <button>Yearly</button>
+                     </div>
+                    )
+                    : (
+                     null
+                   )
+                  }
+                </div>
+              )
+              : (
+                <div className="post__topRightPoints">
+                  <p>Repeats: Weekly</p>
+                </div>
+              )
+            }
+            
           </div>
         </div>
         <div

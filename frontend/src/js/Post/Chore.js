@@ -15,7 +15,18 @@ import MemberWindowFunc from "../MemberWindow/MemberWindowFunc";
 import useComponentVisible from "../../hooks/useComponentVisible";
 
 function Chore(props) {
-  const [expanded, setExpanded] = useState(false);
+  //Prop destructuring
+  const {
+    profilePic,
+    image,
+    taskTitle,
+    timestamp,
+    message,
+    points,
+    members,
+  } = props;
+
+  //Visibility State
   const [hidden, setHidden] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -25,9 +36,19 @@ function Chore(props) {
   const [showDelete, setShowDelete] = useState(false);
   const [hidMembersBlur, setHidMembersBlur] = useState(false);
 
+  // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
   const memberWindowVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
+
+  //Input State
+  const [newName, setNewName] = useState();
+  const [newPointVal, setNewPointVal] = useState(null);
+  const [newDescription, setNewDescription] = useState("");
+  // For the assigned members we must start with the intial members array
+  // We will handle adding and deleting from this array in the groupMember window Component
+  const [assignedMembers, setAssignedMembers] = useState(members);
+  const [newDate, setNewDate] = useState();
 
   function expand() {
     expandedVis.setIsComponentVisible(true);
@@ -69,7 +90,7 @@ function Chore(props) {
     setShowTitle(true);
   }
   const handleClickOutside = () => {
-    setExpanded(false);
+    memberWindowVis.setIsComponentVisible(false);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
@@ -104,14 +125,12 @@ function Chore(props) {
   const handleCancel = (e) => {
     //Setting the state for hidden and unhidden components
 
-    setExpanded(false);
+    expandedVis.setIsComponentVisible(false);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
     setShowDelete(false);
   };
-
-  const { profilePic, image, taskTitle, timestamp, message, points } = props;
 
   return (
     <div

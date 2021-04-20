@@ -28,7 +28,7 @@ export const homeObjTwo = {
   headline: "Check out our App",
   description:
     "View your chores on the go. Our mobile app lets you see your upcoming chores from your phone.",
-  buttonLabel: "Get Started",
+  buttonLabel: "View the Repo",
   imgStart: true,
   img: require("../../public/images/svg-2.svg").default,
   alt: "Laptop",

@@ -26,7 +26,7 @@ const Hero = () => {
       </HeroBackground>
       <HeroContent>
         <HeroH1>The Dishes are Still in the Sink</HeroH1>
-        <HeroP>Let's finally get them taken care of</HeroP>
+        <HeroP>Let's get that taken care of.</HeroP>
         <HeroButtonWrapper>
           <Button
             to="signup"

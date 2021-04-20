@@ -15,7 +15,7 @@ import {
   Img,
 } from "./InfoElements";
 
-const InfoSection2 = ({
+const InfoSection3 = ({
   lightBg,
   id,
   imgStart,
@@ -43,7 +43,8 @@ const InfoSection2 = ({
                 <Subtitle darkText={darkText}>{description}</Subtitle>
                 <ButtonWrap>
                   <ButtonWithRoute
-                    to="/register"
+                    to="//github.com/conradsmi/TrashOverflow-Mobile"
+                    target="_blank"
                     smooth={true}
                     duration={500}
                     spy={true}
@@ -70,4 +71,4 @@ const InfoSection2 = ({
   );
 };
 
-export default InfoSection2;
+export default InfoSection3;

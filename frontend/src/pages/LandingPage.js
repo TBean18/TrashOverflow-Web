@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import InfoSection from "../components/InfoSection";
 import InfoSection2 from "../components/InfoSection/index2";
+import InfoSection3 from "../components/InfoSection/index3";
 import {
   homeObjOne,
   homeObjThree,
@@ -30,7 +31,7 @@ const LandingPage = () => {
       <Navbar toggle={toggle} />
       <Hero />
       <InfoSection {...homeObjOne} />
-      <InfoSection {...homeObjTwo} />
+      <InfoSection3 {...homeObjTwo} />
       <Services />
       <InfoSection2 {...homeObjThree} />
       <Footer />

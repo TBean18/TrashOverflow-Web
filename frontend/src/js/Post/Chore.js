@@ -27,9 +27,10 @@ function Chore(props) {
 
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
   const memberWindowVis = useComponentVisible(false);
+  const expandedVis = useComponentVisible(false);
 
   function expand() {
-    setExpanded(true);
+    expandedVis.setIsComponentVisible(true);
   }
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
@@ -92,7 +93,7 @@ function Chore(props) {
     //We need to send an API req to save the chore server side
 
     //Setting the state for hidden and unhidden components
-    setExpanded(false);
+    expandedVis.setIsComponentVisible(false);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
@@ -114,14 +115,19 @@ function Chore(props) {
 
   return (
     <div
+      ref={expandedVis.ref}
       className={`row ${
-        hidden ? "post-hidden" : expanded ? "post-expanded" : "post"
+        hidden
+          ? "post-hidden"
+          : expandedVis.isComponentVisible
+          ? "post-expanded"
+          : "post"
       }`}
     >
       <div className="post__top" onClick={expand}>
         <div className="post__topTitle">
           {showTitle ? (
-            <h3 onClick={expanded ? hideTitle : null}>
+            <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
               {taskTitle === undefined ? "No Title" : taskTitle}
             </h3>
           ) : (
@@ -141,7 +147,7 @@ function Chore(props) {
           <div className="post__points">
             <p>Points:</p>
             {showPoints ? (
-              <p onClick={expanded ? hidePoints : null}>
+              <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined ? "None" : points}
               </p>
             ) : (
@@ -170,7 +176,9 @@ function Chore(props) {
         </div>
       </div>
       <div
-        className={`row ${expanded ? "post__body-expanded" : "post__body"}`}
+        className={`row ${
+          expandedVis.isComponentVisible ? "post__body-expanded" : "post__body"
+        }`}
         onClick={expand}
       >
         <div className="post__bodyDescription">

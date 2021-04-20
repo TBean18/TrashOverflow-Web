@@ -145,7 +145,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 //      group_ID:     String - ID of the group
 //      user_ID:      String - ID of the user trying to delete the chores
 //      token:        String - Token to verify the user
-router.post("/delete", (req, res) => {
+router.post("/delete", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then(async (g) => {
@@ -205,7 +205,7 @@ router.post("/delete", (req, res) => {
 //      chore_name:               String - Name of chore to be modified
 //      chore_description:        String - Description of chore to be modified
 //      chore_point_value:        Number - Point value of chore to be modified
-router.post("/edit", (req, res) => {
+router.post("/edit", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then(async (g) => {
@@ -253,7 +253,7 @@ router.post("/edit", (req, res) => {
 //      member_ID:        String - Member ID of the user to be assigned to the chore
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
-router.post("/assignUser", (req, res) => {
+router.post("/assignUser", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then(async (g) => {
@@ -328,7 +328,7 @@ router.post("/assignUser", (req, res) => {
 //      member_ID:        String - Member ID of user to be removed from the chore
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
-router.post("/removeUser", (req, res) => {
+router.post("/removeUser", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -401,7 +401,7 @@ router.post("/removeUser", (req, res) => {
 // Parameters
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore
-router.post("/complete", (req, res) => {
+router.post("/complete", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -437,7 +437,7 @@ router.post("/complete", (req, res) => {
 // Parameters
 //      group_ID    String - ID of the group
 //      chore_ID:   String - ID of chore
-router.post("/updatePool", (req, res) => {
+router.post("/updatePool", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -474,7 +474,7 @@ router.post("/updatePool", (req, res) => {
 // Parameters
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore that will have to status updated
-router.post("/updateStatus", (req, res) => {
+router.post("/updateStatus", jwt.authenticateUser, (req, res) => {
   group
     .findById(req.body.group_ID)
     .then((g) => {

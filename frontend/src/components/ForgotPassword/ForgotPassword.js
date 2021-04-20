@@ -11,20 +11,14 @@ import {
   FormWrap,
   Icon,
 } from "./ForgotPasswordElements";
-import React, { useState, useContext } from "react";
-import { GlobalContext } from "../../context/GlobalState";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import { useForm } from "../../hooks/useForm";
 const axios = require("axios").default;
 
 function Forget() {
-  //Bring in the userState form the global context
-  const { logIn, user, storeJWT } = useContext(GlobalContext);
   const [values, setValues] = useForm({
     email: "",
   });
-
-  const history = useHistory();
 
   const [message, setMessage] = useState("");
 

@@ -37,7 +37,9 @@ const Footer = () => {
         <FooterLinksContainer>
           <FooterLinksWrapper>
             <FooterLinkItems>
-              <FooterLinkTitle>Phillip Mitchell</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Phillip Mitchell\nFront End"}
+              </FooterLinkTitle>
               <FooterLink
                 to="//www.linkedin.com/in/phillipmitchell90/"
                 target="_blank"
@@ -52,7 +54,9 @@ const Footer = () => {
               </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>Alexa Keene</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Alexa Keene\nAPI/Backend"}
+              </FooterLinkTitle>
               <FooterLink
                 to="//www.linkedin.com/in/alexakeene/"
                 target="_blank"
@@ -64,7 +68,9 @@ const Footer = () => {
               </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>Adrian Cooper</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Adrian Cooper\nAPI/Backend"}
+              </FooterLinkTitle>
               <FooterLink
                 to="//www.linkedin.com/in/adrian-cooper-ab38b2120/"
                 target="_blank"
@@ -78,25 +84,33 @@ const Footer = () => {
           </FooterLinksWrapper>
           <FooterLinksWrapper>
             <FooterLinkItems>
-              <FooterLinkTitle>Taylor Bean</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Taylor Bean\nProject Manager"}
+              </FooterLinkTitle>
               <FooterLink to="//github.com/TBean18" target="_blank">
                 GitHub
               </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>Conrad Smith</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Conrad Smith\nBackend/Mobile"}
+              </FooterLinkTitle>
               <FooterLink to="//github.com/conradsmi" target="_blank">
                 GitHub
               </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>Jo Johnson</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Jo Johnson\nFront End"}
+              </FooterLinkTitle>
               <FooterLink to="//github.com/jojohnson-jsj" target="_blank">
                 GitHub
               </FooterLink>
             </FooterLinkItems>
             <FooterLinkItems>
-              <FooterLinkTitle>Sam Eslick</FooterLinkTitle>
+              <FooterLinkTitle style={{ "white-space": "pre-wrap" }}>
+                {"Sam Eslick\nDesign/Mobile"}
+              </FooterLinkTitle>
               <FooterLink
                 to="//www.linkedin.com/in/samuel-eslick-3b59141b7/"
                 target="_blank"

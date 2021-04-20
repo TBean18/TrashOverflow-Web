@@ -92,7 +92,7 @@ export const SocialMediaWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
-  margin: 40px;
+  margin-top: 40px;
   font-size: 14px;
 
   @media screen and (max-width: 820px) {

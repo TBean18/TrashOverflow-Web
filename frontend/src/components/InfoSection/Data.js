@@ -47,8 +47,7 @@ export const homeObjThree = {
   lightTextDesc: false,
   topLine: "Sign up for a new account today",
   headline: "Easier than taking out the trash",
-  description:
-    "Join a group or create your own and get started on chores today.",
+  description: "Sign up for an account and get started on your chores today.",
   buttonLabel: "Sign Up",
   imgStart: false,
   img: require("../../public/images/svg-1.svg").default,

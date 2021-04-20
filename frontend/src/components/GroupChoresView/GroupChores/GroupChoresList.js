@@ -21,6 +21,7 @@ function GroupChoresList() {
         points={chore.chore_point_value}
         members={chore.chore_user_pool}
         key={chore._id}
+        chore_ID={chore._id}
       />
     ));
   }

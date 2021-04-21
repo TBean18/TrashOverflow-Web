@@ -17,9 +17,12 @@
   - [x] Java Web Token
 - [ ] Invitation to HouseHold System
   - [ ] Add / Remove Admins
+  - [ ] Invite Link Button
+  - [ ] Generate a Link that will add the user to a group
   - [x] Creator is permanate Admin
 - [x] Register / Log in
 - [ ] Creation of Households
+  - [ ] Selection to create or join a new group
   - [x] FrontEnd Button
   - [x] Backend Code
 - [x] View of Housegold info

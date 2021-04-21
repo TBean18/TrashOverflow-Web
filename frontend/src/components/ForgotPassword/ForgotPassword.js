@@ -42,7 +42,7 @@ function Forget() {
       //Display Message
       .then((res) => {
         console.log(res);
-        setMessage("Check Email");
+        setMessage("Please Check Your Email");
       })
       //Display error if error is caught
       .catch((error) => {

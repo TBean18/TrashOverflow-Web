@@ -11,6 +11,8 @@ export const useAPIErrorChecking = () => {
         //Log the User Out
         return logout();
       }
+    }
+    if (err.response.body) {
       return err.response.body.error;
     }
   };

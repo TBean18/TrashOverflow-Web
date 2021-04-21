@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
-const useComponentVisible = (initialIsVisible) => {
+// Parameters:
+//      offClickFunction: optional function to be called when offClick is registered
+const useComponentVisible = (initialIsVisible, offClickFunction) => {
   const [isComponentVisible, setIsComponentVisible] = useState(
     initialIsVisible
   );
@@ -9,12 +11,14 @@ const useComponentVisible = (initialIsVisible) => {
 
   const handleHideDropdown = (event) => {
     if (event.key === "Escape") {
+      if (offClickFunction) offClickFunction();
       setIsComponentVisible(false);
     }
   };
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
+      if (offClickFunction) offClickFunction();
       setIsComponentVisible(false);
     }
   };

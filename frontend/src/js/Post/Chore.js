@@ -17,17 +17,18 @@ import useComponentVisible from "../../hooks/useComponentVisible";
 import { useChoreDeletion } from "../../hooks/useChoreDeletion";
 import { useChoreEditor } from "../../hooks/useChoreEditor";
 import { useParams } from "react-router-dom";
+import { useForm } from "../../hooks/useForm";
 
 function Chore(props) {
   //Prop Destructuring Definitions
   const {
     profilePic,
     image,
-    taskTitle,
+    chore_name,
     timestamp,
-    message,
+    description,
     points,
-    members,
+    memberPool,
     chore_ID,
   } = props;
 
@@ -42,11 +43,11 @@ function Chore(props) {
   const [showPoints, setShowPoints] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [hidMembersBlur, setHidMembersBlur] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
+  const recurrenceDropdownVis = useComponentVisible(false);
   const memberWindowVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
 
@@ -54,9 +55,19 @@ function Chore(props) {
   const [newName, setNewName] = useState();
   const [newPointVal, setNewPointVal] = useState(null);
   const [newDescription, setNewDescription] = useState("");
+
+  const initialValues = {
+    chore_description: description,
+    chore_name: chore_name,
+    chore_user_pool: memberPool,
+    chore_point_value: points,
+  };
+
+  const [values, setValues, resetValues] = useForm(initialValues);
+
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
-  const [assignedMembers, setAssignedMembers] = useState(members);
+  const [assignedMembers, setAssignedMembers] = useState(memberPool);
   const [newDate, setNewDate] = useState();
 
   // Chore API Hooks
@@ -65,12 +76,18 @@ function Chore(props) {
 
   function expand() {
     expandedVis.setIsComponentVisible(true);
+    setShowDelete(false);
   }
+
+  // function collapse() {
+  //   setShowMessage(true);
+  //   setShowPoints(true);
+  //   setShowTitle(true);
+  //   recurrenceDropdownVis.setIsComponentVisible(false);
+  //   memberWindowVis.setIsComponentVisible(false);
+  // }
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
-  }
-  function hideMembers() {
-    setShowMembers(false);
   }
   function toggleCalendar() {
     setShowCalendar(!showCalendar);
@@ -99,7 +116,9 @@ function Chore(props) {
 
   function toggleDropdown(e) {
     e.preventDefault();
-    setShowDropdown(!showDropdown);
+    recurrenceDropdownVis.setIsComponentVisible(
+      !recurrenceDropdownVis.isComponentVisible
+    );
   }
 
   function toggleDelete() {
@@ -107,7 +126,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDropdown(false);
+    recurrenceDropdownVis.setIsComponentVisible(false);
   }
   const handleClickOutside = () => {
     memberWindowVis.setIsComponentVisible(false);
@@ -135,7 +154,16 @@ function Chore(props) {
   };
   // This is the function that will handle the saving of an edited chore
   const handleSave = (e) => {
+    e.preventDefault();
+
     //We need to send an API req to save the chore server side
+    editChore({
+      group_ID,
+      chore_ID,
+      chore_name: values.chore_name,
+      chore_description: values.chore_description,
+      chore_point_value: values.chore_point_value,
+    });
 
     //Setting the state for hidden and unhidden components
     expandedVis.setIsComponentVisible(false);
@@ -143,17 +171,26 @@ function Chore(props) {
     setShowPoints(true);
     setShowTitle(true);
     setShowDelete(false);
+
+    // the user is no longer editing
+    setIsEditing(false);
   };
 
   // This is the function that will handle the cancel button while editing chores
   const handleCancel = (e) => {
     //Setting the state for hidden and unhidden components
-
     expandedVis.setIsComponentVisible(false);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
     setShowDelete(false);
+
+    // reset back to initial values
+    resetValues(initialValues);
+    console.log(values);
+
+    // the user is no longer editing
+    setIsEditing(false);
   };
 
   return (
@@ -171,16 +208,24 @@ function Chore(props) {
         <div className="post__topTitle">
           {showTitle ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-              {taskTitle === undefined ? "No Title" : taskTitle}
+              {chore_name === undefined ? "No Title" : values.chore_name}
             </h3>
           ) : (
             <form>
+              {/* This is the input for the chore_name */}
+              {/* Notice how we set the value to be values.chore_name */}
               <input
                 type="text"
-                placeholder={taskTitle}
+                placeholder={chore_name}
                 onBlur={() => revealTitle()}
-                onFocus={() => hideTitle()}
+                onFocus={() => {
+                  setIsEditing(true);
+                  hideTitle();
+                }}
                 tabIndex="0"
+                name="chore_name"
+                onChange={(e) => setValues(e)}
+                value={values.chore_name}
               />
               <button onClick={handleSubmit} type="submit">
                 Hidden submit
@@ -191,7 +236,7 @@ function Chore(props) {
             <p>Points:</p>
             {showPoints ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
-                {points === undefined ? "None" : points}
+                {points === undefined ? "None" : values.chore_point_value}
               </p>
             ) : (
               <form>
@@ -199,8 +244,14 @@ function Chore(props) {
                   type="text"
                   placeholder={points}
                   onBlur={() => revealPoints()}
-                  onFocus={() => hidePoints()}
+                  onFocus={() => {
+                    setIsEditing(true);
+                    hidePoints();
+                  }}
                   tabIndex="0"
+                  name="chore_point_value"
+                  onChange={(e) => setValues(e)}
+                  value={values.chore_point_value}
                 />
                 <button onClick={handleSubmit} type="submit">
                   Hidden submit
@@ -215,7 +266,7 @@ function Chore(props) {
           </div>
 
           {expandedVis.isComponentVisible ? (
-            <div className="post__dropdown">
+            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
               <p>Repeats:</p>
               <div className="post__dropdownButton" onClick={toggleDropdown}>
                 <PostOption
@@ -224,7 +275,8 @@ function Chore(props) {
                   color="grey"
                 />
               </div>
-              {showDropdown && expandedVis.isComponentVisible ? (
+              {recurrenceDropdownVis.isComponentVisible &&
+              expandedVis.isComponentVisible ? (
                 <div className="post__dropdownMenu">
                   <button>Daily</button>
                   <button>Weekly</button>
@@ -250,16 +302,22 @@ function Chore(props) {
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
             {showMessage ? (
-              <p onClick={hideMessage}>{message}</p>
+              <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
                 <form>
                   <textarea
                     onBlur={() => revealMessage()}
-                    onFocus={() => hideMessage()}
+                    onFocus={() => {
+                      setIsEditing(true);
+                      hideMessage();
+                    }}
                     tabIndex="0"
+                    name="chore_description"
+                    onChange={(e) => setValues(e)}
+                    value={values.chore_description}
                   >
-                    {message}
+                    {description}
                   </textarea>
                 </form>
               </div>
@@ -277,9 +335,7 @@ function Chore(props) {
           {memberWindowVis.isComponentVisible && (
             <MemberWindowFunc
               refForward={memberWindowVis.ref}
-              hideMembers={hideMembers}
-              eventTypes={["mouseup"]}
-              members={props.members}
+              memberPool={memberPool}
             />
           )}
 
@@ -318,7 +374,7 @@ function Chore(props) {
             )}
           </div>
           <div className="post__bodyRightSave">
-            {!showMessage || !showPoints || !showTitle ? (
+            {isEditing ? (
               <div>
                 <div className="post__bodyRightSaveButton" onClick={handleSave}>
                   <p>Save</p>

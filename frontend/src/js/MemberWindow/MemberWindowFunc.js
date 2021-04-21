@@ -5,7 +5,7 @@ import { GlobalContext } from "../../context/GlobalState";
 
 function MemberWindowFunc(props) {
   const { currentGroup } = useContext(GlobalContext);
-  const { members } = props;
+  const { memberPool } = props;
 
   MemberWindowFunc.handleClickOutside = () => {
     this.props.hideMembers();
@@ -21,13 +21,21 @@ function MemberWindowFunc(props) {
   //   this.setState({ group });
   // }
 
+  // Function to display the current assigned member
+  // I also think that this function should remove the assigned member from the user pool to avoid recomputation
+  function displayCurrentAssignedMember() {}
+
   // Display the members passed as props
   // These are the groupMembers who will at somepoint perform the chore
   // Thus, all of these members should be displayed with a checkmark nex to their name (assigned = {true})
   function displayAssignedMembers() {
-    if (!Array.isArray(members)) return;
-    return members.map((member) => (
-      <MemberWindowMember name={member.user_name} assigned={true} />
+    if (!Array.isArray(memberPool)) return;
+    return memberPool.map((member) => (
+      <MemberWindowMember
+        name={member.user_name}
+        assigned={true}
+        key={member._id}
+      />
     ));
   }
 
@@ -36,14 +44,18 @@ function MemberWindowFunc(props) {
   function displayRemainingMembers() {
     const allMembers = currentGroup.group_members;
 
-    if (!Array.isArray(members) || !Array.isArray(allMembers)) return;
+    if (!Array.isArray(memberPool) || !Array.isArray(allMembers)) return;
 
     //Find the relative complement of the group_members and assigned_user_pool
     const remainingMembers = allMembers.filter((member) =>
-      members.every((assignedMember) => !member._id == assignedMember._id)
+      memberPool.every((assignedMember) => !member._id == assignedMember._id)
     );
     return remainingMembers.map((member) => (
-      <MemberWindowMember name={member.user_name} assigned={false} />
+      <MemberWindowMember
+        name={member.user_name}
+        assigned={false}
+        key={member._id}
+      />
     ));
   }
 

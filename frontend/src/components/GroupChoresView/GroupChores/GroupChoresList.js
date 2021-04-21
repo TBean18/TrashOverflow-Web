@@ -16,10 +16,10 @@ function GroupChoresList() {
     if (!Array.isArray(chores)) return;
     return chores.map((chore) => (
       <Chore
-        message={chore.chore_description}
-        taskTitle={chore.chore_name}
+        description={chore.chore_description}
+        chore_name={chore.chore_name}
         points={chore.chore_point_value}
-        members={chore.chore_user_pool}
+        memberPool={chore.chore_user_pool}
         key={chore._id}
         chore_ID={chore._id}
       />
@@ -30,11 +30,6 @@ function GroupChoresList() {
     <div className="groupChoresList">
       <MessageSender group={currentGroup} />
       {status === "success" ? displayChores(data.chores) : <CircularProgress />}
-
-      <Post
-        message="Deals contact damage. Targets a random direction and moves quickly along a straight path from one side of the screen to the other, rapidly firing bullets behind it, bouncing off the walls."
-        taskTitle="Take Out Trash"
-      />
     </div>
   );
 }

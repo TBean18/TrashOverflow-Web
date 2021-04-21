@@ -1,5 +1,6 @@
 import {
   FormButton,
+  RegisterButton,
   Text,
   TextL,
   Container,
@@ -12,6 +13,8 @@ import {
   Icon,
 } from "./ForgotPasswordElements";
 import React, { useState } from "react";
+import { useMediaQuery } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 const axios = require("axios").default;
 
@@ -19,6 +22,9 @@ function Forget() {
   const [values, setValues] = useForm({
     email: "",
   });
+
+  const isPageWide = useMediaQuery("(min-width: 768px)");
+  const history = useHistory();
 
   const [message, setMessage] = useState("");
 
@@ -53,13 +59,17 @@ function Forget() {
       });
   };
 
+  const goReg = () => {
+    history.push("/register");
+  };
+
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doForgot}>
+        <FormWrap>
           <Icon to="/">TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doForgot}>
+            <Form>
               <FormH1>Forgot Password</FormH1>
               <FormLabel>Email</FormLabel>
               <FormInput
@@ -72,7 +82,12 @@ function Forget() {
               <FormButton type="submit" onClick={doForgot}>
                 Send Recovery Email
               </FormButton>
-              <TextL to="/register">Need a new account?</TextL>
+              {!isPageWide && (
+                <RegisterButton type="submit" onClick={goReg}>
+                  Need a New Account?
+                </RegisterButton>
+              )}
+              {isPageWide && <TextL to="/signin">Need a New Account?</TextL>}
               <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>

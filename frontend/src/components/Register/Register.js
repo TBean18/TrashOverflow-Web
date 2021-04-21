@@ -27,6 +27,7 @@ function Register() {
     phone_number: "",
     email: "",
   });
+
   const isPageWide = useMediaQuery("(min-width: 768px)");
   const history = useHistory();
   const [message, setMessage] = useState("");
@@ -60,7 +61,7 @@ function Register() {
       });
   };
 
-  const goLog = async (event) => {
+  const goLog = () => {
     history.push("/signin");
   };
 

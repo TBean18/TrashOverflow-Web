@@ -466,4 +466,36 @@ router.post("/demote", jwt.authenticateUser, async (req, res) => {
   });
 });
 
+// Route        POST api/groups/demote
+// Description  Endpoint hit when a admin wants to demote another admin or themself
+// Access       Public
+// Parameters
+//      admin_user_ID:    String - ID of current user
+//      member_user_ID:   String - ID of user to be demoted
+//      group_ID:         String - ID of group where demotion will take place
+router.get("/info/:group_ID", async (req, res) => {
+  const group_ID = req.params.group_ID;
+
+  // find group
+  var foundGroup;
+  try {
+    foundGroup = await group.findById(group_ID).exec();
+    // we have awaited finding the group we can now access the data
+    res.json({
+      group: {
+        _id: foundGroup._id,
+        group_name: foundGroup.group_name,
+      },
+    });
+  } catch (err) {
+    console.log({
+      err,
+    });
+    res.status(401).json({
+      error: "Permission Denied",
+    });
+    return;
+  }
+});
+
 module.exports = router;

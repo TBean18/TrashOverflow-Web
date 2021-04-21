@@ -24,7 +24,7 @@ function JoinGroup() {
   // On Render the first time
   useEffect(() => {
     //Get the name of the group
-    const name = getGroupInfo(group_ID, setGroupName);
+    getGroupInfo(group_ID, setGroupName);
   }, []);
 
   //Login function called when login button is pressed

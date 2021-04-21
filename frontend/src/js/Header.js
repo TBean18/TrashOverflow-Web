@@ -9,7 +9,10 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PostOption from "./Post/PostOption";
 import { GlobalContext } from "../context/GlobalState";
 import useLogout from "../hooks/useLogout";
-function Header() {
+function Header(props) {
+  //Prop destructuring defs
+  const { isGroupView } = props;
+
   const { user } = useContext(GlobalContext);
   const logout = useLogout();
   const [linkCopied, setLinkCopied] = useState(false);
@@ -17,9 +20,12 @@ function Header() {
   function copyLink() {
     setLinkCopied(true);
 
-    setTimeout(function(){
-      setLinkCopied(false);
-    }.bind(this),2000);
+    setTimeout(
+      function () {
+        setLinkCopied(false);
+      }.bind(this),
+      2000
+    );
   }
 
   return (
@@ -49,27 +55,16 @@ function Header() {
         </NavLink>
       </div>
       <div className="header__right">
-        {
-          linkCopied ?
-          (
-            <div
-              className="header__rightCopiedLink"
-              
-            >
+        {isGroupView &&
+          (linkCopied ? (
+            <div className="header__rightCopiedLink">
               <p>Invite Link Copied</p>
             </div>
-          )
-          :
-          (
-            <div
-              className="header__rightGetLink"
-              onClick={copyLink}
-            >
+          ) : (
+            <div className="header__rightGetLink" onClick={copyLink}>
               <p>Get Invite Link</p>
             </div>
-          )
-
-        }
+          ))}
 
         <PostOption
           className="header__logout"

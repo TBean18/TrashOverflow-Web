@@ -10,7 +10,7 @@ function GroupChoresView() {
   useLoggedOutRedirect(GlobalContext);
   return (
     <div className="groupChoresView">
-      <Header selection={1} />
+      <Header selection={1} isGroupView={true} />
 
       <div className="groupChoresView__body">
         <GroupChoresList />

@@ -15,7 +15,7 @@
   - [ ] ReactNative Components
 - [x] Security
   - [x] Java Web Token
-- [ ] Invitation to HouseHold System
+- [x] Invitation to HouseHold System
   - [ ] Add / Remove Admins
   - [x] Invite Link Button
   - [x] Generate a Link that will add the user to a group
@@ -41,10 +41,13 @@
   - [ ] Set How Often the Chore Reccurs
     - [ ] If it even Reccurs
     - [ ] Reccurance Should be set with a drop down menu
-  - [ ] What do we do with Finished chores that still have time until the due date
-  - [x] Finish and Test Chores API
-  - [x] Create the Unit Testing
-  - [ ] Alert on Chore Deletion
+- [ ] Member List
+  - [ ] Promote
+  - [ ] Kick
+  - [ ] ? Sort By Score ?
+- [ ] What do we do with Finished chores that still have time until the due date
+- [x] Finish and Test Chores API
+- [x] Create the Unit Testing
 
 ## API Endpoints (API Team Please Change)
 

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "../../hooks/useForm";
+import { useHistory } from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
 import {
   FormButton,
+  LoginButton,
   Text,
   TextL,
   Container,
@@ -24,6 +27,8 @@ function Register() {
     phone_number: "",
     email: "",
   });
+  const isPageWide = useMediaQuery("(min-width: 768px)");
+  const history = useHistory();
   const [message, setMessage] = useState("");
 
   // Register function called when register button is pressed
@@ -55,6 +60,10 @@ function Register() {
       });
   };
 
+  const goLog = async (event) => {
+    history.push("/signin");
+  };
+
   const handleRegisterError = (err) => {
     setMessage(err);
   };
@@ -62,14 +71,13 @@ function Register() {
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doRegister}>
+        <FormWrap>
           <Icon to="/">TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doRegister}>
-              <FormH1>Register for Your Account</FormH1>
+            <Form>
+              <FormH1>Register</FormH1>
               <FormLabel>Name</FormLabel>
               <FormInput
-                required
                 type="text"
                 name="name"
                 placeholder="Name"
@@ -77,7 +85,6 @@ function Register() {
               />
               <FormLabel>Phone Number</FormLabel>
               <FormInput
-                required
                 type="text"
                 name="phone_number"
                 placeholder="Phone Number"
@@ -85,7 +92,6 @@ function Register() {
               />
               <FormLabel>Email</FormLabel>
               <FormInput
-                required
                 type="email"
                 name="email"
                 placeholder="Email"
@@ -93,7 +99,6 @@ function Register() {
               />
               <FormLabel>Password</FormLabel>
               <FormInput
-                required
                 type="password"
                 name="password_hash"
                 placeholder="Password"
@@ -102,7 +107,14 @@ function Register() {
               <FormButton type="submit" onClick={doRegister}>
                 Register
               </FormButton>
-              <TextL to="/signin">Already have an account?</TextL>
+              {!isPageWide && (
+                <LoginButton type="submit" onClick={goLog}>
+                  Already Have an Account?
+                </LoginButton>
+              )}
+              {isPageWide && (
+                <TextL to="/signin">Already Have an Account?</TextL>
+              )}
               <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>

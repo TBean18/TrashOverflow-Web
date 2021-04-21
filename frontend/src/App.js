@@ -15,6 +15,7 @@ import ForgotPassPage from "./pages/ForgotPassPage";
 import ResetPassPage from "./pages/ResetPassPage";
 import UserChoresPage from "./pages/UserChoresPage";
 import SamView from "./components/GroupChores/GroupChores";
+import JoinGroupPage from "./pages/JoinGroup";
 
 import useQueryClientCreator from "./hooks/useQueryClientCreator";
 import { GlobalProvider } from "./context/GlobalState";
@@ -56,6 +57,9 @@ function App() {
             </Route>
             <Route path="/reset/:token" exact>
               <ResetPassPage />
+            </Route>
+            <Route path="/join/:token" exact>
+              <JoinGroupPage />
             </Route>
             <Redirect to="/" />
           </Switch>

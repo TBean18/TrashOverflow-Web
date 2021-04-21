@@ -43,13 +43,16 @@ function MemberWindowFunc(props) {
   // These members are displayed without a checkmark
   function displayRemainingMembers() {
     const allMembers = currentGroup.group_members;
+    console.log(allMembers);
+    console.log(memberPool);
 
     if (!Array.isArray(memberPool) || !Array.isArray(allMembers)) return;
 
     //Find the relative complement of the group_members and assigned_user_pool
     const remainingMembers = allMembers.filter((member) =>
-      memberPool.every((assignedMember) => !member._id == assignedMember._id)
+      memberPool.every((assignedMember) => member._id !== assignedMember._id)
     );
+    console.log(remainingMembers);
     return remainingMembers.map((member) => (
       <MemberWindowMember
         name={member.user_name}

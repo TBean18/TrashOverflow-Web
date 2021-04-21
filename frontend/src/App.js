@@ -58,7 +58,7 @@ function App() {
             <Route path="/reset/:token" exact>
               <ResetPassPage />
             </Route>
-            <Route path="/join/:token" exact>
+            <Route path="/join/:group_ID" exact>
               <JoinGroupPage />
             </Route>
             <Redirect to="/" />

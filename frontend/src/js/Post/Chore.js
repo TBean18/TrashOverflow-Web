@@ -10,7 +10,6 @@ import TodayOutlinedIcon from "@material-ui/icons/TodayOutlined";
 import PostOption from "./PostOption";
 // import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
-import onClickOutside from "react-onclickoutside";
 // import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import MemberWindowFunc from "../MemberWindow/MemberWindowFunc";
 import useComponentVisible from "../../hooks/useComponentVisible";

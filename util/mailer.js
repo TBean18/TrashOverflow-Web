@@ -4,7 +4,7 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
-  const url = `http://localhost:5000/api/user/verify/${token}`;
+  const url = `http://trashoverflow.tech/api/user/verify/${token}`;
 
   const msg = {
     to: recipientEmail, // Change to your recipient
@@ -27,7 +27,7 @@ exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
 };
 
 exports.sendPasswordRecovery = (recipientEmail, token, cb) => {
-  const url = `http://localhost:3000/reset/${token}`;
+  const url = `http://trashoverflow.tech/reset/${token}`;
 
   const msg = {
     to: recipientEmail, // Change to your recipient

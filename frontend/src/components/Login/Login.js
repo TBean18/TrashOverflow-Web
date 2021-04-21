@@ -70,11 +70,11 @@ function Login() {
       });
   };
 
-  const doReg = async (event) => {
+  const doReg = () => {
     history.push("/register");
   };
 
-  const doForgot = async (event) => {
+  const doForgot = () => {
     history.push("/forgot");
   };
 

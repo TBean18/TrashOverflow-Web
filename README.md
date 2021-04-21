@@ -4,11 +4,11 @@
 
 - [ ] Email Verification
   - [x] Testing
-  - [ ] SendGrid
+  - [x] SendGrid
 - [ ] Forgot Password Email
-  - [ ] Testing
-  - [ ] SendGrid
-  - [ ] Forgot Password Page
+  - [x] Testing
+  - [x] SendGrid
+  - [x] Forgot Password Page
 - [ ] Mobile App
   - [x] ReactNative
   - [ ] Backend Code
@@ -35,28 +35,8 @@
     - [ ] If it even Reccurs
     - [ ] Reccurance Should be set with a drop down menu
   - [ ] What do we do with Finished chores that still have time until the due date
-- [ ] Editing Chores
-- [ ] Dark Mode
-- [ ] For Wednesday's Meeting
-  - [ ] Group Menu
-    - [ ] Group Items
-      - [ ] Group Name
-      - [ ] Icon
-  - [ ] Group View (Opened From Clicking on Group Item)
-    - [ ] Chore List
-      - [x] Chore Cards
-        - [x] Chore Name
-        - [x] Chore Description
-        - [x] Chore Due Date
-        - [x] Chore
-        - [x] Reccurance Type
-    - [x] Group List
-      - [x] Group Cards
-        - [x] Group Name
-        - [x] Group Admins
-        - [x] Group Members
-  - [ ] Finish and Test Chores API
-  - [ ] Create the Unit Testing Thing
+  - [x] Finish and Test Chores API
+  - [x] Create the Unit Testing
   - [ ] Alert on Chore Deletion
 
 ## API Endpoints (API Team Please Change)

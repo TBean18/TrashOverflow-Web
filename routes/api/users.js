@@ -132,6 +132,9 @@ router.post("/login", (req, res) => {
       //Check if we have found a user
       if (item == null) throw "No User Found";
 
+      // Check if they have verified their email
+      if (!item.email_verified) throw `Email: ${item.email} Not Verified`;
+
       //Compare the input password with the stored hash
       item.comparePassword(req.body.password_hash, (err, isMatch) => {
         if (err || !isMatch)
@@ -154,7 +157,7 @@ router.post("/login", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).json({
-        error: "Unable to Login",
+        error: err,
       });
     });
 });

@@ -5,7 +5,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useChoreCreation } from "../hooks/useChoreCreation";
 import { useParams } from "react-router-dom";
 
-function MessageSender() {
+function ChoreCreator() {
   const { group_ID } = useParams();
   const [input, setInput] = useState("");
   const [imgUrl, setImageUrl] = useState("");
@@ -52,4 +52,4 @@ function MessageSender() {
   );
 }
 
-export default MessageSender;
+export default ChoreCreator;

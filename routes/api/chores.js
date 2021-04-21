@@ -69,6 +69,7 @@ router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
 // Description          Adds a chore to the group.
 // Access               Public I think
 // Required Parameters
+//      user_ID                 The id of the admin trying to add the chore
 //      group_ID                The _id for the group adding the chore
 //      chore_assigned_user:    GroupMember - The _id Group member currently assigned to the chore.
 //      chore_user_pool:        [GroupMember] - Group members _ids that will rotate on this chore.

@@ -7,7 +7,7 @@ export const useAPIErrorChecking = () => {
     //Response was received
     if (err.response) {
       //Authentication Error
-      if (err.response.status === 400) {
+      if (err.response.status === 400 || err.response.status === 401) {
         //Log the User Out
         return logout();
       }

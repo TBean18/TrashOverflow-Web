@@ -1,79 +1,56 @@
 import {
   FormButton,
   Text,
-  TextL,
   Container,
   Form,
   FormContent,
   FormH1,
-  FormInput,
   FormLabel,
   FormWrap,
   Icon,
 } from "./JoinGroupElements";
-import React, { useState } from "react";
-import { useForm } from "../../hooks/useForm";
-const axios = require("axios").default;
+import React, { useEffect, useState } from "react";
+import useGroupJoin from "../../hooks/useGroupJoin";
+import { GlobalContext } from "../../context/GlobalState";
+import { useParams } from "react-router-dom";
+import useGroupInfo from "../../hooks/useGroupInfo";
 
 function JoinGroup() {
-  const [values, setValues] = useForm({
-    email: "",
-  });
+  const [groupName, setGroupName] = useState("");
+  const joinGroup = useGroupJoin(GlobalContext);
+  const getGroupInfo = useGroupInfo();
+  const { group_ID } = useParams();
 
-  const [message, setMessage] = useState("");
+  // On Render the first time
+  useEffect(() => {
+    //Get the name of the group
+    const name = getGroupInfo(group_ID, setGroupName);
+  }, []);
 
   //Login function called when login button is pressed
-  const doForgot = async (event) => {
+  const doJoin = (event) => {
     // I do not know what this line does, Phil?!?
     // https://www.robinwieruch.de/react-preventdefault <- Me neither, but this helps
     event.preventDefault();
 
-    //Make the login API call
-    axios
-      .post("/api/user/forgot_password", {
-        email: values.email,
-      })
-      //Display Message
-      .then((res) => {
-        console.log(res);
-        setMessage("Check Email");
-      })
-      //Display error if error is caught
-      .catch((error) => {
-        //Check if the API sent an error
-        if (error.response) {
-          try {
-            const err = error.response.data.error;
-            console.log(err);
-            setMessage(err);
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      });
+    joinGroup(group_ID);
   };
 
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doForgot}>
-          <Icon to="/">TrashOverflow</Icon>
+        <FormWrap>
+          <Icon>TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doForgot}>
-              <FormH1>Forgot Password</FormH1>
-              <FormLabel>Email</FormLabel>
-              <FormInput
-                required
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={(e) => setValues(e)}
-              />
-              <FormButton type="submit" onClick={doForgot}>
-                Send Recovery Email
+            <Form>
+              <FormH1>Join {groupName}</FormH1>
+              <FormLabel>
+                Please confirm you would like to join this new group by clicking
+                the button below.
+              </FormLabel>
+              <FormButton type="submit" onClick={doJoin}>
+                Join New Group
               </FormButton>
-              <TextL to="/register">Need a new account?</TextL>
-              <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>
         </FormWrap>

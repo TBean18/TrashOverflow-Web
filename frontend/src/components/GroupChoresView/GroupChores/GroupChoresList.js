@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./GroupChoresList.css";
-import MessageSender from "../../../js/MessageSender";
+import ChoreCreator from "../../../js/ChoreCreator";
 import Post from "../../../js/Post/Post";
 import useGroupChores from "../../../hooks/useGroupChores";
 import { useParams } from "react-router";
@@ -28,7 +28,7 @@ function GroupChoresList() {
 
   return (
     <div className="groupChoresList">
-      <MessageSender group={currentGroup} />
+      <ChoreCreator group={currentGroup} />
       {status === "success" ? displayChores(data.chores) : <CircularProgress />}
     </div>
   );

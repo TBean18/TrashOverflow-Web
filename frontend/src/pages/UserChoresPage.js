@@ -1,14 +1,14 @@
 import React from "react";
 import "../css/Main.css";
 
-import Feed from "./Feed";
-import Header from "./Header";
-import Sidebar from "./Sidebar/Sidebar";
-import Widgets from "./Widgets";
+import Feed from "../js/Feed";
+import Header from "../js/Header";
+import Sidebar from "../js/Sidebar/Sidebar";
+import Widgets from "../js/Widgets";
 
 import { useLoggedOutRedirect } from "../hooks/useLoggedOutRedirect";
 import { GlobalContext } from "../context/GlobalState";
-function Main() {
+function UserChoresPage() {
   useLoggedOutRedirect(GlobalContext);
 
   return (
@@ -24,4 +24,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default UserChoresPage;

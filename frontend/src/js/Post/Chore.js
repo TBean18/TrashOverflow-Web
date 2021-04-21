@@ -208,10 +208,12 @@ function Chore(props) {
         <div className="post__topTitle">
           {showTitle ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-              {chore_name === undefined ? "No Title" : chore_name}
+              {chore_name === undefined ? "No Title" : values.chore_name}
             </h3>
           ) : (
             <form>
+              {/* This is the input for the chore_name */}
+              {/* Notice how we set the value to be values.chore_name */}
               <input
                 type="text"
                 placeholder={chore_name}
@@ -223,6 +225,7 @@ function Chore(props) {
                 tabIndex="0"
                 name="chore_name"
                 onChange={(e) => setValues(e)}
+                value={values.chore_name}
               />
               <button onClick={handleSubmit} type="submit">
                 Hidden submit
@@ -233,7 +236,7 @@ function Chore(props) {
             <p>Points:</p>
             {showPoints ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
-                {points === undefined ? "None" : points}
+                {points === undefined ? "None" : values.chore_point_value}
               </p>
             ) : (
               <form>
@@ -241,10 +244,14 @@ function Chore(props) {
                   type="text"
                   placeholder={points}
                   onBlur={() => revealPoints()}
-                  onFocus={() => hidePoints()}
+                  onFocus={() => {
+                    setIsEditing(true);
+                    hidePoints();
+                  }}
                   tabIndex="0"
                   name="chore_point_value"
                   onChange={(e) => setValues(e)}
+                  value={values.chore_point_value}
                 />
                 <button onClick={handleSubmit} type="submit">
                   Hidden submit
@@ -295,16 +302,20 @@ function Chore(props) {
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
             {showMessage ? (
-              <p onClick={hideMessage}>{description}</p>
+              <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
                 <form>
                   <textarea
                     onBlur={() => revealMessage()}
-                    onFocus={() => hideMessage()}
+                    onFocus={() => {
+                      setIsEditing(true);
+                      hideMessage();
+                    }}
                     tabIndex="0"
                     name="chore_description"
                     onChange={(e) => setValues(e)}
+                    value={values.chore_description}
                   >
                     {description}
                   </textarea>

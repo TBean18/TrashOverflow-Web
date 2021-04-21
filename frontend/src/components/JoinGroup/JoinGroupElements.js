@@ -94,23 +94,12 @@ export const FormH1 = styled.h1`
 `;
 
 export const FormLabel = styled.label`
-  margin-bottom: 8px;
+  text-align: center;
+  margin-bottom: 32px;
   margin-left: 12px;
   font-size: 14px;
   // change email and password color above input boxes
   color: #000;
-`;
-
-export const FormInput = styled.input`
-  // this is the input spot background color
-  background: var(--header-input-color);
-  // This is the font color when typing an email or password
-  color: #000;
-  padding: 16px 16px;
-  margin-bottom: 32px;
-  border: none;
-  border-radius: 15px;
-  outline: none;
 `;
 
 export const FormButton = styled.button`
@@ -141,11 +130,4 @@ export const Text = styled.text`
   white-space: nowrap;
   overflow: hidden;
   color: var(--skin-orange-hover);
-`;
-
-export const TextL = styled(Link)`
-  text-align: center;
-  margin-top: 24px;
-  color: #000;
-  font-size: 14px;
 `;

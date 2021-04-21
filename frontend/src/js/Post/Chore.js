@@ -43,8 +43,7 @@ function Chore(props) {
   const [showPoints, setShowPoints] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [hidMembersBlur, setHidMembersBlur] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
@@ -56,9 +55,15 @@ function Chore(props) {
   const [newName, setNewName] = useState();
   const [newPointVal, setNewPointVal] = useState(null);
   const [newDescription, setNewDescription] = useState("");
-  const [values, setValues] = useForm({
-    chore_description: "",
-  });
+
+  const initialValues = {
+    chore_description: description,
+    chore_name: chore_name,
+    chore_user_pool: memberPool,
+    chore_point_value: points,
+  };
+
+  const [values, setValues, resetValues] = useForm(initialValues);
 
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
@@ -71,6 +76,7 @@ function Chore(props) {
 
   function expand() {
     expandedVis.setIsComponentVisible(true);
+    setShowDelete(false);
   }
 
   // function collapse() {
@@ -82,9 +88,6 @@ function Chore(props) {
   // }
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
-  }
-  function hideMembers() {
-    setShowMembers(false);
   }
   function toggleCalendar() {
     setShowCalendar(!showCalendar);
@@ -151,7 +154,16 @@ function Chore(props) {
   };
   // This is the function that will handle the saving of an edited chore
   const handleSave = (e) => {
+    e.preventDefault();
+
     //We need to send an API req to save the chore server side
+    editChore({
+      group_ID,
+      chore_ID,
+      chore_name: values.chore_name,
+      chore_description: values.chore_description,
+      chore_point_value: values.chore_point_value,
+    });
 
     //Setting the state for hidden and unhidden components
     expandedVis.setIsComponentVisible(false);
@@ -159,17 +171,26 @@ function Chore(props) {
     setShowPoints(true);
     setShowTitle(true);
     setShowDelete(false);
+
+    // the user is no longer editing
+    setIsEditing(false);
   };
 
   // This is the function that will handle the cancel button while editing chores
   const handleCancel = (e) => {
     //Setting the state for hidden and unhidden components
-
     expandedVis.setIsComponentVisible(false);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
     setShowDelete(false);
+
+    // reset back to initial values
+    resetValues(initialValues);
+    console.log(values);
+
+    // the user is no longer editing
+    setIsEditing(false);
   };
 
   return (
@@ -195,8 +216,13 @@ function Chore(props) {
                 type="text"
                 placeholder={chore_name}
                 onBlur={() => revealTitle()}
-                onFocus={() => hideTitle()}
+                onFocus={() => {
+                  setIsEditing(true);
+                  hideTitle();
+                }}
                 tabIndex="0"
+                name="chore_name"
+                onChange={(e) => setValues(e)}
               />
               <button onClick={handleSubmit} type="submit">
                 Hidden submit
@@ -217,6 +243,8 @@ function Chore(props) {
                   onBlur={() => revealPoints()}
                   onFocus={() => hidePoints()}
                   tabIndex="0"
+                  name="chore_point_value"
+                  onChange={(e) => setValues(e)}
                 />
                 <button onClick={handleSubmit} type="submit">
                   Hidden submit
@@ -296,8 +324,6 @@ function Chore(props) {
           {memberWindowVis.isComponentVisible && (
             <MemberWindowFunc
               refForward={memberWindowVis.ref}
-              hideMembers={hideMembers}
-              eventTypes={["mouseup"]}
               memberPool={memberPool}
             />
           )}
@@ -337,7 +363,7 @@ function Chore(props) {
             )}
           </div>
           <div className="post__bodyRightSave">
-            {!showMessage || !showPoints || !showTitle ? (
+            {isEditing ? (
               <div>
                 <div className="post__bodyRightSaveButton" onClick={handleSave}>
                   <p>Save</p>

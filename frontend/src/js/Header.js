@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../public/images/Trash_Overflow_Icon_Test.svg";
 import "../css/Header.css";
 import { NavLink } from "react-router-dom";
@@ -12,6 +12,15 @@ import useLogout from "../hooks/useLogout";
 function Header() {
   const { user } = useContext(GlobalContext);
   const logout = useLogout();
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  function copyLink() {
+    setLinkCopied(true);
+
+    setTimeout(function(){
+      setLinkCopied(false);
+    }.bind(this),2000);
+  }
 
   return (
     <div className="header">
@@ -40,6 +49,28 @@ function Header() {
         </NavLink>
       </div>
       <div className="header__right">
+        {
+          linkCopied ?
+          (
+            <div
+              className="header__rightCopiedLink"
+              
+            >
+              <p>Invite Link Copied</p>
+            </div>
+          )
+          :
+          (
+            <div
+              className="header__rightGetLink"
+              onClick={copyLink}
+            >
+              <p>Get Invite Link</p>
+            </div>
+          )
+
+        }
+
         <PostOption
           className="header__logout"
           Icon={ExitToAppIcon}

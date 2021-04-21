@@ -98,6 +98,7 @@
     border: none;
     background-color: transparent;
     outline-width: 0;
+    outline: none;
     color: var(--header-input-text);
 }
 
@@ -114,7 +115,7 @@
 }
 
 .addCardFront__groupDescription > textarea {
-    height: 100px;
+    height: 60px;
     border: none;
     resize: none;
     width: 200px;
@@ -128,6 +129,28 @@
 .addCardFront__groupDescription > input::placeholder {
     transform: translate3d(0,-40px,0);
     text-align: start;
+}
+
+.addCardFront__groupImage {
+    display: flex;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.addCardFront__groupImage > input {
+    border: none;
+    background-color: transparent;
+    outline-width: 0;
+    outline: none;
+    color: var(--header-input-text);
 }
 
 .addCard__front > form > button {

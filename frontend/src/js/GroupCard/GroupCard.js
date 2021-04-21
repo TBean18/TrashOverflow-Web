@@ -11,11 +11,16 @@ class GroupCard extends React.Component {
       isFlipped: false
     };
     this.handleClick = this.handleClick.bind(this);
+    this.keepCardFlipped = this.keepCardFlipped.bind(this);
   }
 
   handleClick(e) {
     e.preventDefault();
     this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
+  }
+
+  keepCardFlipped() {
+    this.setState({ isFlipped: true});
   }
 
   render() {
@@ -27,8 +32,8 @@ class GroupCard extends React.Component {
           <GroupCardFront curGroup={curGroup} image={image} />
         </div>
 
-        <div onClick={this.handleClick}>
-          <GroupCardBack curGroup={curGroup} />
+        <div>
+          <GroupCardBack curGroup={curGroup} handleClick={this.handleClick}/>
         </div>
       </ReactCardFlip>
     );

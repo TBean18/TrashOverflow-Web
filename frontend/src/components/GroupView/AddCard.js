@@ -11,15 +11,6 @@ import { GlobalContext } from "../../context/GlobalState";
 import { useGroupCreation } from "../../hooks/useGroupCreation";
 
 function AddCard() {
-  // Fragment from when this used to be a class based component
-  // constructor(props) {
-  //     super(props)
-  //     this.state = {
-  //       adding: false,
-  //       isFlipped: false,
-  //     }
-  //     this.toggleAdding = this.toggleAdding.bind(this);
-  // }
   const initialState = {
     groupName: "",
     groupDescription: "",
@@ -78,6 +69,15 @@ function AddCard() {
               placeholder="Description"
               onChange={(e) => setValues(e)}
               value={values.groupDescription}
+            />
+          </div>
+          <div className="addCardFront__groupImage">
+            <input
+              type="text"
+              name="groupImage"
+              placeholder="Image URL"
+              onChange={(e) => setValues(e)}
+              
             />
           </div>
           <button className="hiddenSubmit" onClick={handleSubmit} type="submit">

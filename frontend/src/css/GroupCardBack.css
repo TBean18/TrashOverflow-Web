@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 
     padding: 0 0 0 0;
     width: 320px;
@@ -20,19 +20,24 @@
     transform: scale(1.07);
 }
 
+.groupCardBackNotButtons {
+    height: 80%;
+    width: 100%;
+}
+
 .groupCardBack__body {
     margin-top: 25px;
     height: 35%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
 
     font-size: 12px;
 }
 
 .groupCardBack__body > h4 {
-    margin-left: 30px;
     margin-bottom: 5px;
     font-size: 15px;
 }
@@ -42,6 +47,103 @@
     padding: 0 15px;
 }
 
+.groupCardBack__body-editing {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    font-size: 12px;
+}
+
+.groupCardBack__body-editing > h4 {
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.groupCardBack__body-editing > p {
+    margin-left: 15px;
+    padding: 0 15px;
+}
+
+.groupCardBack__body-editing > form > button {
+    display: none;
+}
+
+.groupCardBack__bodyEditGroupName {
+    display: flex;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    
+    width: 250px;
+    margin-top: 20px;
+}
+
+.groupCardBack__bodyEditGroupName > input {
+    border: none;
+    background-color: transparent;
+    outline-width: 0;
+    outline: none;
+    color: var(--header-input-text);
+    width: 245px;
+}
+
+.groupCardBack__bodyEditGroupImage {
+    display: flex;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    
+    width: 250px;
+    margin-top: 10px;
+}
+
+.groupCardBack__bodyEditGroupImage > input {
+    border: none;
+    background-color: transparent;
+    outline-width: 0;
+    outline: none;
+    color: var(--header-input-text);
+    width: 245px;
+}
+
+.groupCardBack__bodyEditGroupDescription {
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--header-input-color-hover);
+    
+    color: var(--header-input-text);
+    padding: 5px 5px 5px 5px;
+    width: 250px;
+    height: 115px;
+    margin-top: 15px;
+}
+
+.groupCardBack__bodyEditGroupDescription > textarea {
+    height: 115px;
+    border: none;
+    resize: none;
+    width: 250px;
+
+    font-size: 15px;
+    background-color: transparent;
+    outline-width: 0;
+    color: var(--header-input-text);
+}
 .groupCardBack__bottom {
     padding-left: 0;
     display: flex;
@@ -73,3 +175,47 @@
     align-items: center;
     justify-content: space-between;
 }
+
+.groupCardBack__cancelButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 108px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: #62b7f7;
+  }
+  
+  .groupCardBack__cancelButton > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .groupCardBack__cancelButton:hover {
+    cursor: pointer;
+    background-color: #3b8ac6;
+  }
+  
+  .groupCardBack__saveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 108px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: #26ad41;
+  }
+  
+  .groupCardBack__saveButton > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .groupCardBack__saveButton:hover {
+    cursor: pointer;
+    background-color: #118428;
+  }

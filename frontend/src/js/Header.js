@@ -9,12 +9,14 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PostOption from "./Post/PostOption";
 import { GlobalContext } from "../context/GlobalState";
 import useLogout from "../hooks/useLogout";
+import useGroupLeave from "../hooks/useGroupLeave";
 function Header(props) {
   //Prop destructuring defs
   const { isGroupView } = props;
 
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
+  const leaveGroup = useGroupLeave(GlobalContext);
   const [linkCopied, setLinkCopied] = useState(false);
 
   function copyLink() {
@@ -33,10 +35,11 @@ function Header(props) {
     );
   }
 
-  function leaveGroup() {
+  //Function used to leave the currently slected group
+  function doLeaveGroup() {
     let leaving = window.confirm("You are Leaving a Group");
     if (!leaving) return;
-    console.log("HAHAHAHHA");
+    leaveGroup(currentGroup._id);
   }
 
   return (
@@ -79,7 +82,7 @@ function Header(props) {
           ))}
         {/* leave Group Button */}
         {isGroupView && (
-          <div className="header__rightGetLink" onClick={leaveGroup}>
+          <div className="header__rightGetLink" onClick={doLeaveGroup}>
             <p>Leave Group</p>
           </div>
         )}

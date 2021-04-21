@@ -207,12 +207,15 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
     .then(async (g) => {
       // Verify user is admin
       const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
-        if (err)
-          return res.status(401).json({
-            error: "Permission Denied",
-          });
+        if (err) return false;
         return result;
       });
+
+      // Member is not an Admin
+      if (!adminMember)
+        return res.status(401).json({
+          error: "Permission Denied",
+        });
 
       const updatedChore = await group.editChore(
         {

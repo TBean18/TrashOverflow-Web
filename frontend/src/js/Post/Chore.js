@@ -22,14 +22,13 @@ import { useForm } from "../../hooks/useForm";
 function Chore(props) {
   //Prop Destructuring Definitions
   const {
-    profilePic,
     image,
     chore_name,
-    timestamp,
     description,
     points,
     memberPool,
     chore_ID,
+    isGroupView,
   } = props;
 
   //Get Group_ID from the URL Param
@@ -37,7 +36,6 @@ function Chore(props) {
 
   //Visibility State
   const [hidden, setHidden] = useState(false);
-  const [showMembers, setShowMembers] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
   const [showPoints, setShowPoints] = useState(true);
@@ -52,9 +50,6 @@ function Chore(props) {
   const expandedVis = useComponentVisible(false);
 
   //Input State
-  const [newName, setNewName] = useState();
-  const [newPointVal, setNewPointVal] = useState(null);
-  const [newDescription, setNewDescription] = useState("");
 
   const initialValues = {
     chore_description: description,

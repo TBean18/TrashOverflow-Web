@@ -1,5 +1,6 @@
 import {
   FormButton,
+  RegisterButton,
   Text,
   TextL,
   Container,
@@ -13,6 +14,7 @@ import {
 } from "./ResetPasswordElements";
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
 import { useForm } from "../../hooks/useForm";
 const axios = require("axios").default;
 
@@ -27,6 +29,7 @@ function Reset() {
   console.log(`token = ${token}`);
 
   const [message, setMessage] = useState("");
+  const isPageWide = useMediaQuery("(min-width: 768px)");
   const history = useHistory();
 
   //Login function called when login button is pressed
@@ -49,9 +52,11 @@ function Reset() {
       //Display Message
       .then((res) => {
         console.log(res);
+        setMessage("Password Successfully Reset");
 
-        // setMessage(res.data.user.name);
-        history.push("/signin");
+        setTimeout(() => {
+          history.push("/signin");
+        }, 5000);
       })
       //Display error if error is caught
       .catch((error) => {
@@ -60,13 +65,17 @@ function Reset() {
       });
   };
 
+  const goReg = () => {
+    history.push("/register");
+  };
+
   return (
     <>
       <Container>
-        <FormWrap onSubmit={doReset}>
+        <FormWrap>
           <Icon to="/">TrashOverflow</Icon>
           <FormContent>
-            <Form onSubmit={doReset}>
+            <Form>
               <FormH1>Reset Password</FormH1>
               <FormLabel>New Password</FormLabel>
               <FormInput
@@ -87,7 +96,12 @@ function Reset() {
               <FormButton type="submit" onClick={doReset}>
                 Reset Password
               </FormButton>
-              <TextL to="/register">Need a new account?</TextL>
+              {!isPageWide && (
+                <RegisterButton type="submit" onClick={goReg}>
+                  Need a New Account?
+                </RegisterButton>
+              )}
+              {isPageWide && <TextL to="/signin">Need a New Account?</TextL>}
               <Text id="registerResult">{message}</Text>
             </Form>
           </FormContent>

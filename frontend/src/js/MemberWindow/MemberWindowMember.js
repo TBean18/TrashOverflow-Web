@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../css/MemberWindowMember.css";
 import { Avatar } from "@material-ui/core";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
@@ -20,7 +20,11 @@ const colorGenerator = (name) => {
   return hash % 360;
 };
 
+// --------------FUNCTIONAL COMPONENT----------------------------------------
+
 function MemberWindowMember({ src, name, assigned }) {
+  const [isAssigned, setIsAssigned] = useState(assigned);
+
   const color = colorGenerator(name);
   const props = {
     backgroundColor: color,
@@ -31,12 +35,26 @@ function MemberWindowMember({ src, name, assigned }) {
   name.split(" ").map((word) => {
     abrev += word.charAt(0).toUpperCase();
   });
+
+  function removeMemberFromChore() {
+    console.log("REMOVED");
+  }
+
+  function addMemberToChore() {
+    console.log("ADDED");
+  }
+
+  function handleClick() {
+    setIsAssigned(!isAssigned);
+    if (isAssigned) removeMemberFromChore();
+    else addMemberToChore();
+  }
   return (
-    <div className="memberWindowMember">
+    <div className="memberWindowMember" onClick={() => handleClick()}>
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
 
       <h4>{name}</h4>
-      {assigned && <DoneOutlinedIcon />}
+      {isAssigned && <DoneOutlinedIcon />}
     </div>
   );
 }

@@ -91,10 +91,9 @@ export const Form = styled.form`
 `;
 
 export const FormH1 = styled.h1`
-  font-family: lemon-jelly;
   margin-bottom: 40px;
   color: #fff;
-  font-size: 34px;
+  font-size: 20px;
   font-weight: 400;
   text-align: center;
   // change color of sign into your account

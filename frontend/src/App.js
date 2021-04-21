@@ -18,7 +18,7 @@ import SamView from "./components/GroupChores/GroupChores";
 
 import useQueryClientCreator from "./hooks/useQueryClientCreator";
 import { GlobalProvider } from "./context/GlobalState";
-import GroupView from "./js/GroupView";
+import GroupsPage from "./pages/GroupsPage";
 import GroupChoresView from "./components/GroupChoresView/GroupChoresView";
 import { QueryClientProvider } from "react-query";
 
@@ -37,7 +37,7 @@ function App() {
               <UserChoresPage />
             </Route>
             <Route path="/groups" exact>
-              <GroupView />
+              <GroupsPage />
             </Route>
             <Route path="/groupchores/:group_ID" exact>
               <GroupChoresView />

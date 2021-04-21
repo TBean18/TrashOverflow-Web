@@ -1,11 +1,11 @@
 import React from "react";
 import "../css/GroupView.css";
-import Header from "./Header";
-import GroupList from "./GroupList";
+import Header from "../js/Header";
+import GroupList from "../js/GroupList";
 import { useLoggedOutRedirect } from "../hooks/useLoggedOutRedirect";
 import { GlobalContext } from "../context/GlobalState";
 
-function GroupView() {
+function GroupsPage() {
   useLoggedOutRedirect(GlobalContext);
 
   return (
@@ -19,4 +19,4 @@ function GroupView() {
   );
 }
 
-export default GroupView;
+export default GroupsPage;

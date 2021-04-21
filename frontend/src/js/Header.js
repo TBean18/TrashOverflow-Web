@@ -13,13 +13,17 @@ function Header(props) {
   //Prop destructuring defs
   const { isGroupView } = props;
 
-  const { user } = useContext(GlobalContext);
+  const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
   const [linkCopied, setLinkCopied] = useState(false);
 
   function copyLink() {
     setLinkCopied(true);
-
+    let link = "http://trashoverflow.tech/join/";
+    if (currentGroup) {
+      link += currentGroup._id;
+    }
+    navigator.clipboard.writeText(link);
     setTimeout(
       function () {
         setLinkCopied(false);

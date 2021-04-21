@@ -85,13 +85,13 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
       if (!g) throw "No Group Found";
 
       // Verify Admin status of the user making the request
-      let user_group_member = g.verifyAdmin(user_ID, (err, result) => {
-        if (err)
-          return res.status(404).json({
-            error: err,
-          });
+      let adminMember = g.verifyAdmin(user_ID, (err, result) => {
+        if (err) return false;
         if (result) return result;
       });
+
+      if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
       // Person to be assigned to the chore first and their index in the array.
       let assigned_person = req.body.chore_assigned_user;
@@ -148,12 +148,13 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
     .then(async (g) => {
       // Verify user is admin
       const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
-        if (err)
-          return res.status(401).json({
-            error: err,
-          });
+        if (err) return false;
         return result;
       });
+      
+      // Member is not an admin.
+      if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
       // Find the chore.
       let choreIndex = -1;
@@ -260,13 +261,13 @@ router.post("/assignUser", jwt.authenticateUser, (req, res) => {
       const adminMember = g.verifyAdmin(
         req.body.admin_user_ID,
         (err, result) => {
-          if (err)
-            return res.status(401).json({
-              error: "Permission Denied",
-            });
+          if (err) return false;
           return result;
         }
       );
+
+      if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
       // Check if user is in the group.
       let personIndex = -1;
@@ -335,13 +336,13 @@ router.post("/removeUser", jwt.authenticateUser, (req, res) => {
       const adminMember = g.verifyAdmin(
         req.body.admin_user_ID,
         (err, result) => {
-          if (err)
-            return res.status(401).json({
-              error: "Permission Denied",
-            });
+          if (err) return false;
           return result;
         }
       );
+
+      if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
       // Check if user is in the group.
       let personIndex = -1;

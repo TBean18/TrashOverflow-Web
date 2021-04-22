@@ -416,6 +416,7 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
       }
 
       g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      g.rotateAssignedUser(choreIndex, false);
       g.save().then(() => res.json(g.group_chores[choreIndex]));
     })
     .catch((err) => {
@@ -466,6 +467,7 @@ router.post("/updatePool", jwt.authenticateUser, (req, res) => {
 
 // Route                POST api/chores
 // Description          Updates the chore status and rotates the user if chore is finished.
+//                      READ THIS: Take this logic and move it to the group.save()
 // Access               Public
 // Parameters
 //      group_ID:     String - ID of the group

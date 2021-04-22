@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeConsumer } from "styled-components";
 import useChoreAddMember from "../../hooks/useChoreAddMember";
 import { GlobalContext } from "../../context/GlobalState";
+import useChoreRemoveMember from "../../hooks/useChoreRemoveMember";
 
 const useStyles = makeStyles((theme) => ({
   CustomColors: (props) => ({
@@ -27,6 +28,7 @@ const colorGenerator = (name) => {
 function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
   const [isAssigned, setIsAssigned] = useState(assigned);
   const assignMember = useChoreAddMember(GlobalContext);
+  const removeMember = useChoreRemoveMember(GlobalContext);
 
   const color = colorGenerator(name);
   const props = {
@@ -41,6 +43,7 @@ function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
 
   function removeMemberFromChore() {
     console.log("REMOVED");
+    removeMember(chore_ID, member_ID);
   }
 
   function addMemberToChore() {

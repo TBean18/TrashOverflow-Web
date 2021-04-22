@@ -4,6 +4,8 @@ import { Avatar } from "@material-ui/core";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeConsumer } from "styled-components";
+import useChoreAddMember from "../../hooks/useChoreAddMember";
+import { GlobalContext } from "../../context/GlobalState";
 
 const useStyles = makeStyles((theme) => ({
   CustomColors: (props) => ({
@@ -22,8 +24,9 @@ const colorGenerator = (name) => {
 
 // --------------FUNCTIONAL COMPONENT----------------------------------------
 
-function MemberWindowMember({ src, name, assigned }) {
+function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
   const [isAssigned, setIsAssigned] = useState(assigned);
+  const assignMember = useChoreAddMember(GlobalContext);
 
   const color = colorGenerator(name);
   const props = {
@@ -42,6 +45,7 @@ function MemberWindowMember({ src, name, assigned }) {
 
   function addMemberToChore() {
     console.log("ADDED");
+    assignMember(chore_ID, member_ID);
   }
 
   function handleClick() {

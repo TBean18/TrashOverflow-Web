@@ -30,6 +30,9 @@ function Chore(props) {
     // DO NOT REMOVE THIS UNUSED VARIABLE
     // ONCE IMPLE,ENTED IT WILL KEEP THE USERS FROM DOING CHORE OPERATION ON THE DASHBOARD
     isGroupView,
+    chore_assigned_user_index,
+    chore_completion_status,
+    chore_schedule,
   } = props;
 
   //Get Group_ID from the URL Param
@@ -43,6 +46,7 @@ function Chore(props) {
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [schedule, setSchedule] = useState(chore_schedule);
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
@@ -50,13 +54,15 @@ function Chore(props) {
   const memberWindowVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
 
-  //Input State
-
+  //Input State for Edits
   const initialValues = {
     chore_description: description,
     chore_name: chore_name,
     chore_user_pool: memberPool,
     chore_point_value: points,
+    chore_assigned_user_index,
+    chore_completion_status,
+    chore_schedule,
   };
 
   const [values, setValues, resetValues] = useForm(initialValues);
@@ -78,6 +84,7 @@ function Chore(props) {
   function expand() {
     //If we are already expanded ternimnate early
     if (expandedVis.isComponentVisible) return;
+    //else, the chore is collapsed, and we should ensure the delete confirmation prompt is hidden
     expandedVis.setIsComponentVisible(true);
     hideDelete();
   }
@@ -257,38 +264,43 @@ function Chore(props) {
             )}
           </div>
         </div>
-        <div className="post__topRight">
-          <div className="post__topRightDate">
-            <p>Due: 04/23/2021</p>
-          </div>
+        {/* -------- Date and Reccurance Information  -------------*/}
+        {schedule && (
+          <div className="post__topRight">
+            <div className="post__topRightDate">
+              <p>Due: 04/23/2021</p>
+            </div>
 
-          {expandedVis.isComponentVisible ? (
-            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
-              <p>Repeats:</p>
-              <div className="post__dropdownButton" onClick={toggleDropdown}>
-                <PostOption
-                  Icon={ArrowDropDownOutlinedIcon}
-                  title="Weekly"
-                  color="grey"
-                />
-              </div>
-              {recurrenceDropdownVis.isComponentVisible &&
-              expandedVis.isComponentVisible ? (
-                <div className="post__dropdownMenu">
-                  <button>Daily</button>
-                  <button>Weekly</button>
-                  <button>Monthly</button>
-                  <button>Annually</button>
+            {expandedVis.isComponentVisible ? (
+              <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
+                <p>Repeats:</p>
+                <div className="post__dropdownButton" onClick={toggleDropdown}>
+                  <PostOption
+                    Icon={ArrowDropDownOutlinedIcon}
+                    title="Weekly"
+                    color="grey"
+                  />
                 </div>
-              ) : null}
-            </div>
-          ) : (
-            <div className="post__topRightPoints">
-              <p>Repeats: Weekly</p>
-            </div>
-          )}
-        </div>
+                {/* Reccurance Dropdown Menu*/}
+                {recurrenceDropdownVis.isComponentVisible &&
+                expandedVis.isComponentVisible ? (
+                  <div className="post__dropdownMenu">
+                    <button>Daily</button>
+                    <button>Weekly</button>
+                    <button>Monthly</button>
+                    <button>Annually</button>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <div className="post__topRightPoints">
+                <p>Repeats: Weekly</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
+      {/*  ----- Chore Expanded Contents ----- */}
       <div
         className={`row ${
           expandedVis.isComponentVisible ? "post__body-expanded" : "post__body"

@@ -46,7 +46,7 @@ function Chore(props) {
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [schedule, setSchedule] = useState(chore_schedule);
+  const [schedule, setSchedule] = useState(chore_schedule || {});
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
@@ -195,6 +195,14 @@ function Chore(props) {
 
     // the user is no longer editing
     setIsEditing(false);
+  };
+
+  const selectDate = (newDate) => {
+    console.log("CHANGE");
+    setSchedule({
+      ...schedule,
+      schedule_due_date: newDate,
+    });
   };
 
   return (
@@ -348,11 +356,16 @@ function Chore(props) {
               chore_ID={chore_ID}
             />
           )}
-
+          {/* Calander Component */}
           <div className="post__bodyRightDate" onClick={toggleCalendar}>
             <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />
           </div>
-          {showCalendar && <MyCalendar onChange={setNewDate} value={newDate} />}
+          {showCalendar && (
+            <MyCalendar
+              onChange={selectDate}
+              value={schedule.schedule_due_date}
+            />
+          )}
 
           <div className="post__bodyRightDone" onClick={handleDone}>
             <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey" />

@@ -4,15 +4,14 @@ import { useAPIErrorChecking } from "./useAPIErrorChecking";
 
 const useChoreAddMember = (GlobalContext) => {
   const errCheck = useAPIErrorChecking();
-  const { storeJWT } = useContext(GlobalContext);
+  const { storeJWT, currentGroup } = useContext(GlobalContext);
 
-  return (group_ID, chore_assigned_user, chore_user_pool, chore_name) => {
+  return (chore_ID, member_ID) => {
     axios
-      .post("/api/chores/add", {
-        group_ID,
-        chore_assigned_user,
-        chore_user_pool,
-        chore_name,
+      .post("/api/chores/assignUser", {
+        group_ID: currentGroup._id,
+        chore_ID,
+        member_ID,
       })
       .then((res) => {
         if (res.data.error) throw res.data.error;

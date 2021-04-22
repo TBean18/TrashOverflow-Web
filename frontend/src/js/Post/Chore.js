@@ -70,7 +70,7 @@ function Chore(props) {
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
   const [assignedMembers, setAssignedMembers] = useState(memberPool);
-  const [newDate, setNewDate] = useState(true);
+  const [newDate, setNewDate] = useState(null);
 
   // Chore API Hooks
   const removeChore = useChoreDeletion();
@@ -352,7 +352,7 @@ function Chore(props) {
           <div className="post__bodyRightDate" onClick={toggleCalendar}>
             <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />
           </div>
-          {showCalendar && <MyCalendar />}
+          {showCalendar && <MyCalendar onChange={setNewDate} value={newDate} />}
 
           <div className="post__bodyRightDone" onClick={handleDone}>
             <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey" />

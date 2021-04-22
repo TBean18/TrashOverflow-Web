@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import '../../css/SidebarRow.css';
 import { makeStyles } from "@material-ui/core/styles";
 import useComponentVisible from "../../hooks/useComponentVisible";
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
-function SidebarRow({ src, name}) {
+function SidebarRow({ src, name, admin }) {
 
   const editMemberVis = useComponentVisible(false);
   const [kickConfirmed, setKickConfirmed] = useState(false);
   const [promotionConfirmed, setPromotionConfirmed] = useState(false);
   const [kick, setKick] = useState(false);
   const [promote, setPromote] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   const useStyles = makeStyles((theme) => ({
     CustomColors: (props) => ({
@@ -51,6 +53,7 @@ function SidebarRow({ src, name}) {
   function kickMember() {
     editMemberVis.setIsComponentVisible(false);
     setKick(true);
+    setHidden(true);
 
     setKickConfirmed(false);
     setPromotionConfirmed(false);
@@ -77,11 +80,22 @@ function SidebarRow({ src, name}) {
     abrev += word.charAt(0).toUpperCase();
   });
   return (
-    <div ref={editMemberVis.ref} className="sidebarRow" onClick={toggleEditMembers}>
+    <div ref={editMemberVis.ref} className={`row ${
+      hidden
+        ? "sidebarRow-hidden"
+        : "sidebarRow"
+    }`} onClick={toggleEditMembers}>
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
       
       <h4>{name}</h4>
-
+      
+      {
+        admin === true ?
+        (
+          <VerifiedUserIcon />
+        )
+        : null
+      }
       {editMemberVis.isComponentVisible ? (
         <div className="sidebarRowEdit">
           

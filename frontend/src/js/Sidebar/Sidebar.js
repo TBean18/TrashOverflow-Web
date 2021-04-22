@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import JoIcon from '../../public/images/JoIcon.png';
 import '../../css/Sidebar.css';
 import SidebarRow from './SidebarRow';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import { GlobalContext } from "../../context/GlobalState";
 
 function Sidebar() {
+  const { currentGroup } = useContext(GlobalContext);
+
+  function displayMembers() {
+    if (!Array.isArray(currentGroup.group_members)) return;
+    return currentGroup.group_members.map((member) => (
+      <SidebarRow 
+        name={member.user_name}
+        admin={member.admin}
+      />
+    ));
+  }
+
   return (
     <div className="sidebar">
-      <SidebarRow src={JoIcon} name="Bo Johnson" />
-      <SidebarRow name="Page Leonard" />
-      <SidebarRow name="Franz Eber" />
-      <SidebarRow name="Moses Malone" />
-      <SidebarRow name="Karl Maphoney" />
-      <SidebarRow name="Victoria Justice" />
-      <SidebarRow name="Draymond Green" />
+      {displayMembers()}
     </div>
   );
 }

@@ -1,3 +1,7 @@
+.sidebarRow-hidden {
+    display: none;
+}
+
 .sidebarRow {
     display: flex;
     align-items: center;
@@ -17,8 +21,9 @@
 }
 
 .sidebarRow > .MuiSvgIcon-root {
-    font-size: xx-large;
+    font-size: large;
     color: var(--light-purple);
+    margin-left: 10px;
 }
 
 .sidebarRowEdit {

@@ -177,13 +177,11 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      const updatedGroup = await group.removeChore(
-        g._id,
-        g.group_chores[choreIndex]._id
-      );
-
-      res.json({
-        chores: updatedGroup.group_chores,
+      g.group_chores.splice(choreIndex, 1);
+      g.save().then(() => {
+        res.json({
+          chores: g.group_chores,
+        });
       });
     })
     .catch((err) => {

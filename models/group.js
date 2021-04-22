@@ -30,13 +30,17 @@ const GroupSchema = new Schema({
 });
 
 //A PRE-METHOD that fires before every user.save() call
-//Checks to ensure that the  passwrod was not changed, if it has, then we need to recompute the hash
+//Checks to ensure that the group_members were not changed, if they have...
 GroupSchema.pre("save", function (next) {
   var group = this;
 
   // only hash the password if it has been modified (or is new)
-  if (!group.isModified("group_members")) return next();
-  if (group.group_members.length === 0) Group.remove({ _id: this._id });
+  if (group.isModified("group_members") && group.group_members.length === 0) {
+    return Group.remove({ _id: this._id }, (err) => {
+      if (err) console.log(err);
+      next();
+    });
+  }
   return next();
 });
 
@@ -210,20 +214,18 @@ GroupSchema.statics.editChore = function (IDs, updates) {
 GroupSchema.methods.rotateAssignedUser = function (chore_index, save) {
   //Set the assigned_user to the next user in the user_pool
   this.group_chores[chore_index].chore_assigned_user_index =
-    (this.group_chores[chore_index].chore_assigned_user_index + 1) % this.group_chores[chore_index].chore_user_pool.length;
-  this.group_chores[chore_index].chore_assigned_user = this.group_chores[chore_index].chore_user_pool[
-    this.group_chores[chore_index].chore_assigned_user_index
-  ];
+    (this.group_chores[chore_index].chore_assigned_user_index + 1) %
+    this.group_chores[chore_index].chore_user_pool.length;
+  this.group_chores[chore_index].chore_assigned_user = this.group_chores[
+    chore_index
+  ].chore_user_pool[this.group_chores[chore_index].chore_assigned_user_index];
   if (save) this.save();
-
 };
-
 
 //Function Used to check the completion for a given chore
 GroupSchema.methods.checkCompletionStatus = function (chore_index, cb) {
-
   const chore = this.group_chores[chore_index];
-  
+
   const currentDate = new Date(chore.chore_schedule.schedule_due_date);
   console.log(currentDate);
   switch (chore.chore_completion_status) {
@@ -259,25 +261,25 @@ GroupSchema.methods.checkCompletionStatus = function (chore_index, cb) {
 };
 
 //Function used to set the new due date based off of the reccurance_type property
-GroupSchema.methods.getNewDueDate = function(chore) {
-
+GroupSchema.methods.getNewDueDate = function (chore) {
   const wasLate = Date.now() > chore.chore_schedule.schedule_due_date;
   // If the chore was late, we do not want to set the next due date to another "LATE" date.
   // Get today's date if it was late.
-  const currentDate = wasLate ? new Date() : new Date(chore.chore_schedule.schedule_due_date);
-  switch(chore.chore_schedule.schedule_recurrence_type.reccurence_name) {
-    case 'DAILY':
+  const currentDate = wasLate
+    ? new Date()
+    : new Date(chore.chore_schedule.schedule_due_date);
+  switch (chore.chore_schedule.schedule_recurrence_type.reccurence_name) {
+    case "DAILY":
       currentDate.setDate(currentDate.getDate() + 1);
       return currentDate;
-    case 'WEEKLY':
+    case "WEEKLY":
       currentDate.setDate(currentDate.getDate() + 7);
       return currentDate;
-    case 'MONTHLY':
+    case "MONTHLY":
       currentDate.setMonth(currentDate.getMonth() + 1);
       return currentDate;
   }
-}
-
+};
 
 GroupSchema.methods.ERROR_ADMIN = function (curMemberID) {
   return `(Admin: ${curMemberID}) is not a member of group (Group: ${this.group_name}) or is not an admin`;

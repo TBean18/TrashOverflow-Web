@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/Post.css";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 // import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -62,24 +62,24 @@ function Chore(props) {
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
   const [assignedMembers, setAssignedMembers] = useState(memberPool);
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState(true);
 
   // Chore API Hooks
   const removeChore = useChoreDeletion();
   const editChore = useChoreEditor();
 
-  function expand() {
-    expandedVis.setIsComponentVisible(true);
+  function hideDelete() {
     setShowDelete(false);
+    console.log("Hid Delete Button");
   }
 
-  // function collapse() {
-  //   setShowMessage(true);
-  //   setShowPoints(true);
-  //   setShowTitle(true);
-  //   recurrenceDropdownVis.setIsComponentVisible(false);
-  //   memberWindowVis.setIsComponentVisible(false);
-  // }
+  function expand() {
+    //If we are already expanded ternimnate early
+    if (expandedVis.isComponentVisible) return;
+    expandedVis.setIsComponentVisible(true);
+    hideDelete();
+  }
+
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
   }
@@ -87,21 +87,21 @@ function Chore(props) {
     setShowCalendar(!showCalendar);
   }
   function hideMessage() {
-    setShowDelete(false);
+    hideDelete();
     setShowMessage(false);
   }
   function revealMessage() {
     setShowMessage(true);
   }
   function hidePoints() {
-    setShowDelete(false);
+    hideDelete();
     setShowPoints(false);
   }
   function revealPoints() {
     setShowPoints(true);
   }
   function hideTitle() {
-    setShowDelete(false);
+    hideDelete();
     setShowTitle(false);
   }
   function revealTitle() {
@@ -115,20 +115,23 @@ function Chore(props) {
     );
   }
 
-  function toggleDelete() {
+  function toggleDelete(e) {
+    e.preventDefault();
     setShowDelete(!showDelete);
+    setNewDate(!newDate);
+    // console.log(showDelete);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
     recurrenceDropdownVis.setIsComponentVisible(false);
   }
-  const handleClickOutside = () => {
-    memberWindowVis.setIsComponentVisible(false);
-    setShowMessage(true);
-    setShowPoints(true);
-    setShowTitle(true);
-    setShowDelete(false);
-  };
+  // const handleClickOutside = () => {
+  //   memberWindowVis.setIsComponentVisible(false);
+  //   setShowMessage(true);
+  //   setShowPoints(true);
+  //   setShowTitle(true);
+  //   setShowDelete(false);
+  // };
   const handleDone = (e) => {
     setHidden(true);
   };
@@ -164,8 +167,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDelete(false);
-
+    hideDelete();
     // the user is no longer editing
     setIsEditing(false);
   };
@@ -177,8 +179,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDelete(false);
-
+    hideDelete();
     // reset back to initial values
     resetValues(initialValues);
     console.log(values);
@@ -359,7 +360,10 @@ function Chore(props) {
                 </div>
               </div>
             ) : (
-              <div className="post__bodyRightDelete" onClick={toggleDelete}>
+              <div
+                className="post__bodyRightDelete"
+                onClick={(e) => toggleDelete(e)}
+              >
                 <PostOption
                   Icon={DeleteOutlineOutlinedIcon}
                   title="Delete"

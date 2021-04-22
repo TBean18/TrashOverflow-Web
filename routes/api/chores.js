@@ -169,7 +169,7 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       // If we didn't find the chore.
       if (choreIndex === -1) {
         return res.status(404).json({
-          error: "Could Not Remove Chore",
+          error: "Could Not Find Chore",
         });
       }
 

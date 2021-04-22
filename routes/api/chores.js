@@ -91,7 +91,7 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
       });
 
       if (!adminMember)
-        return res.status(401).json({error: "Permission Denied"});
+        return res.status(401).json({ error: "Permission Denied" });
 
       // Person to be assigned to the chore first and their index in the array.
       let assigned_person = req.body.chore_assigned_user;
@@ -151,10 +151,10 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
         if (err) return false;
         return result;
       });
-      
+
       // Member is not an admin.
       if (!adminMember)
-        return res.status(401).json({error: "Permission Denied"});
+        return res.status(401).json({ error: "Permission Denied" });
 
       // Find the chore.
       let choreIndex = -1;
@@ -270,7 +270,7 @@ router.post("/assignUser", jwt.authenticateUser, (req, res) => {
       );
 
       if (!adminMember)
-        return res.status(401).json({error: "Permission Denied"});
+        return res.status(401).json({ error: "Permission Denied" });
 
       // Try to find the member object in the group by the given ID
       let member = g.group_members.id(member_ID);
@@ -317,6 +317,10 @@ router.post("/assignUser", jwt.authenticateUser, (req, res) => {
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
 router.post("/removeUser", jwt.authenticateUser, (req, res) => {
+  // req.body.user_ID is set auto by jwt.auth
+  req.body.admin_user_ID = req.body.user_ID;
+  //Destructure defs
+  const { chore_ID, member_ID } = req.body;
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -329,51 +333,37 @@ router.post("/removeUser", jwt.authenticateUser, (req, res) => {
         }
       );
 
+      // Not an admin case
       if (!adminMember)
-        return res.status(401).json({error: "Permission Denied"});
+        return res.status(401).json({ error: "Permission Denied" });
 
-      // Check if user is in the group.
-      let personIndex = -1;
-      for (let i in g.group_members) {
-        if (g.group_members[i]._id == req.body.member_ID) {
-          personIndex = i;
-          break;
-        }
-      }
+      // Try to find the member object in the group by the given ID
+      let member = g.group_members.id(member_ID);
 
-      // If we did not find the user to be removed.
-      if (personIndex === -1) {
+      // If we did not find the user to be added.
+      if (!member) {
         return res.status(404).json({
           error: "Could Not Find User in the Group",
         });
       }
 
-      // Find Chore.
-      let choreIndex = -1;
-      for (let i in g.group_chores) {
-        if (g.group_chores[i]._id == req.body.chore_ID) {
-          choreIndex = i;
-          break;
-        }
-      }
+      let foundChore = g.group_chores.id(chore_ID);
 
       // Did not find chore.
-      if (choreIndex === -1) {
+      if (!foundChore) {
         return res.status(404).json({
           error: "Could Not Find Chore",
         });
       }
 
-      const updatedChore = g.group_chores[choreIndex].removeUser(
-        req.body.member_ID
-      );
+      const updatedChore = foundChore.removeUser(req.body.member_ID);
       if (updatedChore.error) {
         return res.status(404).json({
           error: updatedChore.error,
         });
       }
 
-      g.save(updatedChore).then(() => res.json(updatedChore));
+      g.save().then(() => res.json(updatedChore));
     })
     .catch((err) => {
       console.log(err);

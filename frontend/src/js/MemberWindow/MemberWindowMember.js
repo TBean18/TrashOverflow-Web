@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeConsumer } from "styled-components";
 import useChoreAddMember from "../../hooks/useChoreAddMember";
 import { GlobalContext } from "../../context/GlobalState";
+import useChoreRemoveMember from "../../hooks/useChoreRemoveMember";
 
 const useStyles = makeStyles((theme) => ({
   CustomColors: (props) => ({
@@ -27,6 +28,7 @@ const colorGenerator = (name) => {
 function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
   const [isAssigned, setIsAssigned] = useState(assigned);
   const assignMember = useChoreAddMember(GlobalContext);
+  const removeMember = useChoreRemoveMember(GlobalContext);
 
   const color = colorGenerator(name);
   const props = {
@@ -39,14 +41,21 @@ function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
     abrev += word.charAt(0).toUpperCase();
   });
 
+  // -------------- Add / Remove Member From Chore Functions ----------------------
+  // Currently, the data for the new chore is returned by the endpoints
+  // To make the site more responsive, I should set up reactQuery mutations
+  // This way, update the cashes chores instead of needing a refetch
   function removeMemberFromChore() {
     console.log("REMOVED");
+    removeMember(chore_ID, member_ID);
   }
 
   function addMemberToChore() {
     console.log("ADDED");
     assignMember(chore_ID, member_ID);
   }
+
+  // ------------------------------------------------------------------
 
   function handleClick() {
     setIsAssigned(!isAssigned);

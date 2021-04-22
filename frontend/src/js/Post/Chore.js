@@ -330,6 +330,7 @@ function Chore(props) {
             <MemberWindowFunc
               refForward={memberWindowVis.ref}
               memberPool={memberPool}
+              chore_ID={chore_ID}
             />
           )}
 

@@ -67,7 +67,8 @@ function Forget() {
     <>
       <Container>
         <FormWrap>
-          <Icon to="/">TrashOverflow</Icon>
+          {isPageWide && <Icon to="/">TrashOverflow</Icon>}
+          {!isPageWide && <Icon>TrashOverflow</Icon>}
           <FormContent>
             <Form>
               <FormH1>Forgot Password</FormH1>

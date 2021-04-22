@@ -20,3 +20,125 @@
     font-size: xx-large;
     color: var(--light-purple);
 }
+
+.sidebarRowEdit {
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    color: var(--header-input-text)
+}
+
+.sidebarRowEdit:hover {
+    background-color: var(--sidebarrow-hover);
+    border-radius: 10px;
+}
+
+.sidebarRowEdit > h4 {
+    margin-left: 20px;
+    font-weight: 600;;
+}
+
+.sidebarRowEdit > .MuiSvgIcon-root {
+    font-size: xx-large;
+    color: var(--light-purple);
+}
+
+.sidebarRow__kick {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 80px;
+    height: 22px;
+    border-radius: 5px;
+    margin-left: 100px;
+    background-color: #ef5353;
+  }
+  
+  .sidebarRow__kick > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .sidebarRow__kick:hover {
+    cursor: pointer;
+    background-color: #ce3131;
+  }
+
+  .sidebarRow__confirmKick {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 100px;
+    height: 22px;
+    border-radius: 5px;
+    border-color: #ef5353;
+    border-width: 2px;
+    border-style: solid;
+    margin-left: 80px;
+    background-color: white;
+  }
+  
+  .sidebarRow__confirmKick > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ef5353;
+  }
+  
+  .sidebarRow__confirmKick:hover {
+    cursor: pointer;
+    background-color: var(--main-color);
+  }
+
+  .sidebarRow__promote {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 80px;
+    height: 22px;
+    border-radius: 5px;
+    margin-left: 10px;
+    background-color: #62b7f7;
+  }
+  
+  .sidebarRow__promote > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .sidebarRow__promote:hover {
+    cursor: pointer;
+    background-color: #3b8ac6;
+  }
+
+  .sidebarRow__confirmPromote {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+    width: 100px;
+    height: 22px;
+    border-radius: 5px;
+    margin-left: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #3b8ac6;
+    background-color: white;
+  }
+  
+  .sidebarRow__confirmPromote > p {
+    font-size: 13px;
+    font-weight: bold;
+    color: #3b8ac6;
+  }
+  
+  .sidebarRow__confirmPromote:hover {
+    cursor: pointer;
+    background-color: var(--main-color);
+  }

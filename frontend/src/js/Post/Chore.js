@@ -27,6 +27,8 @@ function Chore(props) {
     points,
     memberPool,
     chore_ID,
+    // DO NOT REMOVE THIS UNUSED VARIABLE
+    // ONCE IMPLE,ENTED IT WILL KEEP THE USERS FROM DOING CHORE OPERATION ON THE DASHBOARD
     isGroupView,
   } = props;
 

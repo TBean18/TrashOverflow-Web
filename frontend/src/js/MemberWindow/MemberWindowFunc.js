@@ -5,7 +5,7 @@ import { GlobalContext } from "../../context/GlobalState";
 
 function MemberWindowFunc(props) {
   const { currentGroup } = useContext(GlobalContext);
-  const { memberPool } = props;
+  const { memberPool, chore_ID } = props;
 
   MemberWindowFunc.handleClickOutside = () => {
     this.props.hideMembers();
@@ -35,6 +35,8 @@ function MemberWindowFunc(props) {
         name={member.user_name}
         assigned={true}
         key={member._id}
+        member_ID={member._id}
+        chore_ID={chore_ID}
       />
     ));
   }
@@ -58,6 +60,8 @@ function MemberWindowFunc(props) {
         name={member.user_name}
         assigned={false}
         key={member._id}
+        member_ID={member._id}
+        chore_ID={chore_ID}
       />
     ));
   }

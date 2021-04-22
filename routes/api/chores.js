@@ -254,6 +254,9 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
 //      group_ID:         String - ID of the group
 //      chore_ID:         String - ID of the chore
 router.post("/assignUser", jwt.authenticateUser, (req, res) => {
+  req.body.admin_user_ID = req.body.user_ID;
+  const { chore_ID, member_ID } = req.body;
+
   group
     .findById(req.body.group_ID)
     .then(async (g) => {
@@ -269,48 +272,33 @@ router.post("/assignUser", jwt.authenticateUser, (req, res) => {
       if (!adminMember)
         return res.status(401).json({error: "Permission Denied"});
 
-      // Check if user is in the group.
-      let personIndex = -1;
-      for (let i in g.group_members) {
-        if (g.group_members[i]._id == req.body.member_ID) {
-          personIndex = i;
-          break;
-        }
-      }
+      // Try to find the member object in the group by the given ID
+      let member = g.group_members.id(member_ID);
 
       // If we did not find the user to be added.
-      if (personIndex === -1) {
+      if (!member) {
         return res.status(404).json({
           error: "Could Not Find User in the Group",
         });
       }
 
-      // Find Chore.
-      let choreIndex = -1;
-      for (let i in g.group_chores) {
-        if (g.group_chores[i]._id == req.body.chore_ID) {
-          choreIndex = i;
-          break;
-        }
-      }
+      let foundChore = g.group_chores.id(chore_ID);
 
       // Did not find chore.
-      if (choreIndex === -1) {
+      if (!foundChore) {
         return res.status(404).json({
           error: "Could Not Find Chore",
         });
       }
 
-      const updatedChore = g.group_chores[choreIndex].assignUser(
-        req.body.member_ID
-      );
+      const updatedChore = foundChore.assignUser(req.body.member_ID);
       if (updatedChore.error) {
         return res.status(404).json({
           error: updatedChore.error,
         });
       }
 
-      g.save(updatedChore).then(() => res.json(updatedChore));
+      g.save().then(() => res.json(updatedChore));
     })
     .catch((err) => {
       console.log(err);
@@ -420,6 +408,7 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
       }
 
       g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      g.rotateAssignedUser(choreIndex, false);
       g.save().then(() => res.json(g.group_chores[choreIndex]));
     })
     .catch((err) => {
@@ -470,6 +459,7 @@ router.post("/updatePool", jwt.authenticateUser, (req, res) => {
 
 // Route                POST api/chores
 // Description          Updates the chore status and rotates the user if chore is finished.
+//                      READ THIS: Take this logic and move it to the group.save()
 // Access               Public
 // Parameters
 //      group_ID:     String - ID of the group

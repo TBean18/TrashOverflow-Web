@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import "./GroupChoresList.css";
 import ChoreCreator from "../../../js/ChoreCreator";
-import Post from "../../../js/Post/Post";
 import useGroupChores from "../../../hooks/useGroupChores";
 import { useParams } from "react-router";
 import { CircularProgress } from "@material-ui/core";

@@ -23,12 +23,12 @@ router.post("/create", jwt.authenticateUser, (req, res) => {
   .then(g => {
     // Make sure user is admin.
     const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
-      if (err)
-        return res.status(401).json({
-          error: "Permission Denied",
-        });
+      if (err) return false;
       return result;
     });
+
+    if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
     // Look for chore.
     let choreIndex = -1;
@@ -89,12 +89,12 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
   .then(async g => {
     // Make sure user is admin.
     const adminMember = g.verifyAdmin(req.body.user_ID, (err, result) => {
-      if (err)
-        return res.status(401).json({
-          error: "Permission Denied",
-        });
+      if (err) return false;
       return result;
     });
+
+    if (!adminMember)
+        return res.status(401).json({error: "Permission Denied"});
 
     // Look for chore.
     let choreIndex = -1;

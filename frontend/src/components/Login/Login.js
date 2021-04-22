@@ -82,7 +82,8 @@ function Login() {
     <>
       <Container>
         <FormWrap>
-          <Icon to="/">TrashOverflow</Icon>
+          {isPageWide && <Icon to="/">TrashOverflow</Icon>}
+          {!isPageWide && <Icon>TrashOverflow</Icon>}
           <FormContent>
             <Form>
               <FormH1>Sign In</FormH1>

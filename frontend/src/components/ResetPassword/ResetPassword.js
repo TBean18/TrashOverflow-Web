@@ -56,7 +56,7 @@ function Reset() {
 
         setTimeout(() => {
           history.push("/signin");
-        }, 5000);
+        }, 2000);
       })
       //Display error if error is caught
       .catch((error) => {

@@ -4,6 +4,9 @@ import useLogout from "./useLogout";
 export const useAPIErrorChecking = () => {
   const logout = useLogout();
   return (err) => {
+    // Nothing to see here LOL
+    if (!err) return;
+
     //Response was received
     if (err.response) {
       //Authentication Error

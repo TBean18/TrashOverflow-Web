@@ -43,7 +43,6 @@ function Chore(props) {
 
   //Visibility State
   const [hidden, setHidden] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
   const [showPoints, setShowPoints] = useState(true);
   const [showTitle, setShowTitle] = useState(true);

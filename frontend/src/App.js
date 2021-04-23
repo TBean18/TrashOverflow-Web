@@ -16,7 +16,7 @@ import ResetPassPage from "./pages/ResetPassPage";
 import UserChoresPage from "./pages/UserChoresPage";
 import SamView from "./components/GroupChores/GroupChores";
 import JoinGroupPage from "./pages/JoinGroup";
-
+import MobileMembers from "./components/MobileMembers.js/MobileMembersView.js"
 import useQueryClientCreator from "./hooks/useQueryClientCreator";
 import { GlobalProvider } from "./context/GlobalState";
 import GroupsPage from "./pages/GroupsPage";
@@ -45,6 +45,9 @@ function App() {
             </Route>
             <Route path="/signin" exact>
               <LoginPage />
+            </Route>
+            <Route path="/mobilemembers" exact>
+              <MobileMembers />
             </Route>
             <Route path="/sammy" exact>
               <SamView />

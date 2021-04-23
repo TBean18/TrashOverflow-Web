@@ -4,3 +4,10 @@
     position: sticky;
     top: 0;
 }
+
+@media screen and (max-width: 380px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+    }
+}

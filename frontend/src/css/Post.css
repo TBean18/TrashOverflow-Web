@@ -69,6 +69,7 @@
   margin: 0 0 5px 0;
   width: 100%;
   outline-width: 0;
+  outline: none;
 }
 
 .post__topTitle > form > button {
@@ -102,6 +103,7 @@
   padding: 5px 5px 5px 5px;
   width: 15%;
   outline-width: 0;
+  outline: none;
 }
 
 .post__points > form > button {
@@ -220,6 +222,7 @@
   word-wrap: break-word;
   outline-width: 0;
   background-color: var(--main-color);
+  outline: none;
 }
 
 .post__bodyDescriptionMessageInput > form {

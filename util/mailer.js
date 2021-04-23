@@ -11,7 +11,7 @@ exports.sendVerficationEmailSendGrid = (recipientEmail, token, cb) => {
     from: "noReply@TrashOverflow.tech", // Change to your verified sender
     subject: "TrashOverflow | Email Verification",
     text: "Please click on the link below to verfiy your email LINK",
-    html: `'<p>Please click on the link below to verfiy your email</p>
+    html: `<p>Please click on the link below to verfiy your email</p>
     <a href="${url}">LINK</a>`,
   };
   sgMail

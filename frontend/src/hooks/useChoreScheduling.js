@@ -16,7 +16,7 @@ export const useChoreScheduling = (group_ID) => {
 
   const postNewSchedule = (newSchedule) => {
     return axios
-      .post("api/schedules/add", newSchedule)
+      .post("/api/schedules/edit", newSchedule)
       .then((res) => res.data)
       .catch((err) => errCheck(err));
   };
@@ -38,7 +38,7 @@ export const useChoreScheduling = (group_ID) => {
   //      schedule_due_date:              Date - new date chore needs to be finished by
   //      schedule_recurrence_type:       recurrenceSchema - new recurrence for chore
 
-  return (newChore) => {
-    mutation.mutate(newChore);
+  return (newSchedule) => {
+    mutation.mutate(newSchedule);
   };
 };

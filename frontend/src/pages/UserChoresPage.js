@@ -18,7 +18,7 @@ function UserChoresPage() {
       <Header selection={1} />
 
       <div className="main__body">
-        <Feed />
+        <Feed showGroup={true}/>
       </div>
     </div>
   );

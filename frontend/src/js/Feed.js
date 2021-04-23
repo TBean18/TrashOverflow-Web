@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { CircularProgress } from "@material-ui/core";
 import Chore from "./Post/Chore";
 
-function Feed() {
+function Feed({ showGroup }) {
   const { data, status } = useUserChores();
 
   function displayChores(chores) {
@@ -16,6 +16,8 @@ function Feed() {
         chore_name={chore.chore_name}
         points={chore.chore_point_value}
         memberPool={chore.chore_user_pool}
+
+        showGroup={ showGroup ? true : false}
       />
     ));
   }

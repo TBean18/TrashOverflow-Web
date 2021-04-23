@@ -10,13 +10,25 @@ function Feed({ showGroup }) {
 
   function displayChores(chores) {
     if (!Array.isArray(chores)) return;
+
+    // No Chores Case
+    if (chores.length == 0)
+      return (
+        <div className="noChoresLeft">
+          <h3>
+            You've got no chores left, but your lazy roommates do probably do.
+          </h3>
+        </div>
+      );
+
+    // Else, return a list of chore components
     return chores.map((chore) => (
       <Chore
         description={chore.chore_description}
         chore_name={chore.chore_name}
         points={chore.chore_point_value}
         memberPool={chore.chore_user_pool}
-        showGroup={ showGroup ? true : false}
+        showGroup={showGroup ? true : false}
         key={chore._id}
         chore_ID={chore._id}
         chore_assigned_user_index={chore.chore_assigned_user_index}
@@ -27,12 +39,9 @@ function Feed({ showGroup }) {
   }
 
   return (
-    // {status === "success" ? displayChores(data.chores) : <CircularProgress />} (Goes right under "feed")
     <div className="feed">
-      <div className="noChoresLeft">
-        <h3>You've got no chores left, but your lazy roommates do probably do.</h3>
-      </div>
-    
+      {status === "success" ? displayChores(data.chores) : <CircularProgress />}
+
       <ReactQueryDevtools></ReactQueryDevtools>
     </div>
   );

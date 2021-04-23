@@ -95,14 +95,19 @@ router.post("/add", jwt.authenticateUser, (req, res) => {
 
       // Person to be assigned to the chore first and their index in the array.
       let assigned_person = req.body.chore_assigned_user;
-      let assigned_index = req.body.chore_user_pool.indexOf(assigned_person);
+      let assigned_index;
 
-      // If the intended assigned person was not in the user pool, put them at the end.
-      if (assigned_index == -1) {
-        req.body.chore_user_pool.push(assigned_person);
-        assigned_index = req.body.chore_user_pool.length - 1;
+      if (assigned_person) {
+        assigned_index = req.body.chore_user_pool.indexOf(assigned_person);
+
+        // If the intended assigned person was not in the user pool, put them at the end.
+        if (assigned_index == -1) {
+          req.body.chore_user_pool.push(assigned_person);
+          assigned_index = req.body.chore_user_pool.length - 1;
+        }
+      } else {
+        assigned_index = -1;
       }
-
       // Create payload with required fields.
       const payload = {
         chore_assigned_user: assigned_person,

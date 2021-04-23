@@ -12,7 +12,7 @@ const ChoreSchema = new Schema({
   },
   chore_assigned_user_index: {
     type: Number,
-    default: 0,
+    default: -1,
   },
   chore_user_pool: {
     type: [Schema.Types.ObjectID],

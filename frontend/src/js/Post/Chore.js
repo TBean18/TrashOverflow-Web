@@ -209,10 +209,6 @@ function Chore(props) {
     });
   };
 
-  useEffect(() => {
-    console.log(calanderVis.isComponentVisible);
-  }, [calanderVis.isComponentVisible]);
-
   return (
     <div
       ref={expandedVis.ref}

@@ -21,6 +21,9 @@ function GroupChoresList() {
         memberPool={chore.chore_user_pool}
         key={chore._id}
         chore_ID={chore._id}
+        chore_assigned_user_index={chore.chore_assigned_user_index}
+        chore_completion_status={chore.chore_completion_status}
+        chore_schedule={chore.chore_schedule}
       />
     ));
   }

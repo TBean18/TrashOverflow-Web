@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
-function SidebarRow({ src, name, admin }) {
+function SidebarRow({ src, name, admin, points }) {
 
   const editMemberVis = useComponentVisible(false);
   const [kickConfirmed, setKickConfirmed] = useState(false);
@@ -87,7 +87,7 @@ function SidebarRow({ src, name, admin }) {
     }`} onClick={toggleEditMembers}>
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
       
-      <h4>{name}</h4>
+      <h4>{name} ({points})</h4>
       
       {
         admin === true ?

@@ -13,6 +13,7 @@ function Sidebar() {
       <SidebarRow 
         name={member.user_name}
         admin={member.admin}
+        points={member.point_balance}
       />
     ));
   }

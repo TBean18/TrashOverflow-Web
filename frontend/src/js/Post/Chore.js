@@ -273,10 +273,10 @@ function Chore(props) {
           </div>
         </div>
         {/* -------- Date and Reccurance Information  -------------*/}
-        {schedule && (
+        {schedule.schedule_due_date && (
           <div className="post__topRight">
             <div className="post__topRightDate">
-              <p>Due: 04/23/2021</p>
+              <p>Due: {schedule.schedule_due_date.toDateString()}</p>
             </div>
 
             {expandedVis.isComponentVisible ? (

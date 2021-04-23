@@ -16,7 +16,7 @@ function Feed({ showGroup }) {
       return (
         <div className="noChoresLeft">
           <h3>
-            You've got no chores left, but your lazy roommates do probably do.
+            You've got no chores left, but your lazy roommates probably do.
           </h3>
         </div>
       );

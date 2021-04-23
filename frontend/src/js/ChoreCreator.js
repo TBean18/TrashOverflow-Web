@@ -12,7 +12,7 @@ function ChoreCreator() {
   const newChore = useChoreCreation(group_ID);
 
   const handleSubmit = (e) => {
-    console.log(group_ID);
+    // console.log(group_ID);
     e.preventDefault();
 
     // --------------------------------------------------------

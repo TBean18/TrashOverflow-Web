@@ -32,7 +32,6 @@ const LandingPage = () => {
       <Hero />
       <InfoSection {...homeObjOne} />
       <InfoSection3 {...homeObjTwo} />
-      <Services />
       <InfoSection2 {...homeObjThree} />
       <Footer />
     </>

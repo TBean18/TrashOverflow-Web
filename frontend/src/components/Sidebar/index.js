@@ -24,9 +24,6 @@ const Sidebar = ({ isOpen, toggle }) => {
           <SidebarLink to="discover" onClick={toggle}>
             Our App
           </SidebarLink>
-          <SidebarLink to="services" onClick={toggle}>
-            Features
-          </SidebarLink>
           <SidebarLink to="signup" onClick={toggle}>
             Sign Up
           </SidebarLink>

@@ -55,6 +55,7 @@ function Chore(props) {
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
   const recurrenceDropdownVis = useComponentVisible(false);
   const memberWindowVis = useComponentVisible(false);
+  const calanderVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
 
   //Input State for Edits
@@ -96,7 +97,8 @@ function Chore(props) {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
   }
   function toggleCalendar() {
-    setShowCalendar(!showCalendar);
+    calanderVis.setIsComponentVisible(!calanderVis.isComponentVisible);
+    console.log("TOGGLE CAL");
   }
   function hideMessage() {
     hideDelete();
@@ -208,6 +210,10 @@ function Chore(props) {
     });
   };
 
+  useEffect(() => {
+    console.log(calanderVis.isComponentVisible);
+  }, [calanderVis.isComponentVisible]);
+
   return (
     <div
       ref={expandedVis.ref}
@@ -222,33 +228,31 @@ function Chore(props) {
       <div className="post__top" onClick={expand}>
         <div className="post__topTitle">
           {showTitle ? (
-              <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-                {chore_name === undefined ? "No Title" : values.chore_name}
-              </h3>
-            ) : 
-            (
-              <form>
-                {/* This is the input for the chore_name */}
-                {/* Notice how we set the value to be values.chore_name */}
-                <input
-                  type="text"
-                  placeholder={chore_name}
-                  onBlur={() => revealTitle()}
-                  onFocus={() => {
-                    setIsEditing(true);
-                    hideTitle();
-                  }}
-                  tabIndex="0"
-                  name="chore_name"
-                  onChange={(e) => setValues(e)}
-                  value={values.chore_name}
-                />
-                <button onClick={handleSubmit} type="submit">
-                  Hidden submit
-                </button>
-              </form>
-            )
-          }
+            <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
+              {chore_name === undefined ? "No Title" : values.chore_name}
+            </h3>
+          ) : (
+            <form>
+              {/* This is the input for the chore_name */}
+              {/* Notice how we set the value to be values.chore_name */}
+              <input
+                type="text"
+                placeholder={chore_name}
+                onBlur={() => revealTitle()}
+                onFocus={() => {
+                  setIsEditing(true);
+                  hideTitle();
+                }}
+                tabIndex="0"
+                name="chore_name"
+                onChange={(e) => setValues(e)}
+                value={values.chore_name}
+              />
+              <button onClick={handleSubmit} type="submit">
+                Hidden submit
+              </button>
+            </form>
+          )}
           <div className="post__points">
             <p>Points:</p>
             {showPoints ? (
@@ -280,12 +284,7 @@ function Chore(props) {
         {/* -------- Date and Reccurance Information  -------------*/}
         {schedule.schedule_due_date && (
           <div className="post__topRight">
-          {showGroup ? (
-              <h4>{currentGroup.group_name}</h4>
-            )
-            :
-            null
-          }
+            {showGroup ? <h4>{currentGroup.group_name}</h4> : null}
 
             <div className="post__topRightDate">
               <p>Due: {schedule.schedule_due_date.toDateString()}</p>
@@ -372,10 +371,11 @@ function Chore(props) {
           <div className="post__bodyRightDate" onClick={toggleCalendar}>
             <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />
           </div>
-          {showCalendar && (
+          {calanderVis.isComponentVisible && (
             <MyCalendar
               onChange={selectDate}
               value={schedule.schedule_due_date}
+              refForward={calanderVis.ref}
             />
           )}
 

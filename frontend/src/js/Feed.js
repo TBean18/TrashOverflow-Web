@@ -23,9 +23,12 @@ function Feed({ showGroup }) {
   }
 
   return (
+    // {status === "success" ? displayChores(data.chores) : <CircularProgress />} (Goes right under "feed")
     <div className="feed">
-      {status === "success" ? displayChores(data.chores) : <CircularProgress />}
-
+      <div className="noChoresLeft">
+        <h3>You've got no chores left, but your lazy roommates do probably do.</h3>
+      </div>
+    
       <ReactQueryDevtools></ReactQueryDevtools>
     </div>
   );

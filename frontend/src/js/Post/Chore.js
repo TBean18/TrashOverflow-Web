@@ -48,7 +48,9 @@ function Chore(props) {
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [schedule, setSchedule] = useState(chore_schedule || {});
+  const [schedule, setSchedule] = useState(
+    chore_schedule || { recurrence: "Never" }
+  );
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
@@ -209,6 +211,17 @@ function Chore(props) {
     });
   };
 
+  // This is the function that will handle the saving of an edited chore
+  const selectRecurrance = (e) => {
+    e.preventDefault();
+    // set the reccurance to be the contents of the button that was pressed
+    // console.log(e.target.innerText);
+    setSchedule({
+      ...schedule,
+      recurrence: e.target.innerText,
+    });
+  };
+
   return (
     <div
       ref={expandedVis.ref}
@@ -276,43 +289,48 @@ function Chore(props) {
             )}
           </div>
         </div>
-        {/* -------- Date and Reccurance Information  -------------*/}
-        {schedule.schedule_due_date && (
-          <div className="post__topRight">
-            {showGroup ? <h4>{currentGroup.group_name}</h4> : null}
+        {/* -------- Group and Date/Reccurance Information  -------------*/}
 
+        <div className="post__topRight">
+          {/* Group Name. only shown on feed page */}
+          {showGroup ? <h4>{currentGroup.group_name}</h4> : null}
+
+          {/* Due Date */}
+          {schedule.schedule_due_date && (
             <div className="post__topRightDate">
               <p>Due: {schedule.schedule_due_date.toDateString()}</p>
             </div>
+          )}
 
-            {expandedVis.isComponentVisible ? (
-              <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
-                <p>Repeats:</p>
-                <div className="post__dropdownButton" onClick={toggleDropdown}>
-                  <PostOption
-                    Icon={ArrowDropDownOutlinedIcon}
-                    title="Weekly"
-                    color="grey"
-                  />
+          {/* Reccurance */}
+          {expandedVis.isComponentVisible ? (
+            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
+              <p>Repeats:</p>
+              <div className="post__dropdownButton" onClick={toggleDropdown}>
+                <PostOption
+                  Icon={ArrowDropDownOutlinedIcon}
+                  title={schedule.recurrence}
+                  color="grey"
+                />
+              </div>
+              {/* Reccurance Dropdown Menu*/}
+              {recurrenceDropdownVis.isComponentVisible &&
+              expandedVis.isComponentVisible ? (
+                <div className="post__dropdownMenu">
+                  <button onClick={selectRecurrance}>Daily</button>
+                  <button onClick={selectRecurrance}>Weekly</button>
+                  <button onClick={selectRecurrance}>Monthly</button>
+                  <button onClick={selectRecurrance}>Never</button>
                 </div>
-                {/* Reccurance Dropdown Menu*/}
-                {recurrenceDropdownVis.isComponentVisible &&
-                expandedVis.isComponentVisible ? (
-                  <div className="post__dropdownMenu">
-                    <button>Daily</button>
-                    <button>Weekly</button>
-                    <button>Monthly</button>
-                    <button>Annually</button>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <div className="post__topRightPoints">
-                <p>Repeats: Weekly</p>
-              </div>
-            )}
-          </div>
-        )}
+              ) : null}
+            </div>
+          ) : (
+            // Collapsed View
+            <div className="post__topRightPoints">
+              <p>Repeats: {schedule.recurrence}</p>
+            </div>
+          )}
+        </div>
       </div>
       {/*  ----- Chore Expanded Contents ----- */}
       <div

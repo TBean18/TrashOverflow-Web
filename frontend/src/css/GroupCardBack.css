@@ -142,6 +142,7 @@
     font-size: 15px;
     background-color: transparent;
     outline-width: 0;
+    outline: none;
     color: var(--header-input-text);
 }
 .groupCardBack__bottom {

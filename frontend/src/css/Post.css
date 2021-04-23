@@ -11,7 +11,10 @@
 
   transition: transform 100ms ease-in;
   cursor: pointer;
+
 }
+
+
 
 .post-hidden {
   display: none;
@@ -66,6 +69,7 @@
   margin: 0 0 5px 0;
   width: 100%;
   outline-width: 0;
+  outline: none;
 }
 
 .post__topTitle > form > button {
@@ -99,6 +103,7 @@
   padding: 5px 5px 5px 5px;
   width: 15%;
   outline-width: 0;
+  outline: none;
 }
 
 .post__points > form > button {
@@ -217,6 +222,7 @@
   word-wrap: break-word;
   outline-width: 0;
   background-color: var(--main-color);
+  outline: none;
 }
 
 .post__bodyDescriptionMessageInput > form {
@@ -335,4 +341,69 @@
   color: var(--header-icon-color);
   cursor: pointer;
   padding: 15px;
+}
+
+@media screen and (max-width: 380px) {
+  .post {
+    width: 300px;
+  }
+  
+  .post-expanded {
+    width: 300px;
+    transform: scale(1.1);
+  }
+
+  .post__topTitle > form > input {
+    width: 125px;
+    margin-right: 10px;
+  }
+
+  .post__bodyDescription {
+    width: 130px;
+    font-size: 13px;
+  }
+
+  .post__bodyDescriptionMessageInput > form > textarea {
+    width: 130px;
+    font-size: 13px;
+  }
+
+  .post__topRight {
+    margin-left: 0px;
+    margin-right: 10px;
+  }
+  .post__dropdown {
+    font-size: 12px;
+  }
+
+  .post__topRightDate {
+    font-size: 12px;
+  }
+  .post__bodyRightDeleteConfirm {
+    margin-bottom: 8px;
+    width: 88px;
+  }
+  
+  .post__bodyRightDeleteConfirm > p {
+    font-size: 10px;
+  }
+  
+  .post__bodyRightDeleteCancel {
+    margin-bottom: 8px;
+    width: 88px;
+
+  }
+  
+  .post__bodyRightDeleteCancel > p {
+    font-size: 10px;
+  }
+  
+  .post__bodyRightSaveButton {
+    margin-bottom: 8px;
+    width: 88px;
+  }
+  
+  .post__bodyRightSaveButton > p {
+    font-size: 10px;
+  }
 }

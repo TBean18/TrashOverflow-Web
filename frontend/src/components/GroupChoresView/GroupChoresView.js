@@ -6,6 +6,7 @@ import { useLoggedOutRedirect } from "../../hooks/useLoggedOutRedirect";
 import { GlobalContext } from "../../context/GlobalState";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Sidebar from "../../js/Sidebar/Sidebar";
+import SidebarRow from "../../js/Sidebar/SidebarRow";
 
 function GroupChoresView() {
   useLoggedOutRedirect(GlobalContext);
@@ -13,7 +14,14 @@ function GroupChoresView() {
     <div className="groupChoresView">
       <Header selection={1} isGroupView={true} />
 
-      <Sidebar />
+      {
+        window.screen.width > 380 ?
+        (
+          <Sidebar />
+        )
+        :
+        null
+      }
       <div className="groupChoresView__body">
         <GroupChoresList />
       </div>

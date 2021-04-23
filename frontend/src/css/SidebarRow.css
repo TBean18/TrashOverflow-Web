@@ -147,3 +147,41 @@
     cursor: pointer;
     background-color: var(--main-color);
   }
+
+  @media screen and (max-width: 380px) {
+    .sidebarRow__kick {
+      width: 60px;
+      height: 22px;
+      margin-left: 15px;
+    }
+    
+    .sidebarRow__kick > p {
+      font-size: 12px;
+    }
+  
+    .sidebarRow__confirmKick {
+      width: 80px;
+      height: 22px;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+    
+    .sidebarRow__confirmKick > p {
+      font-size: 12px;
+    }
+  
+    .sidebarRow__promote {
+      width: 70px;
+      height: 22px;
+    }
+
+    .sidebarRow__confirmPromote {
+      width: 80px;
+      height: 22px;
+      margin-left: 10px;
+    }
+    
+    .sidebarRow__confirmPromote > p {
+      font-size: 12px;
+    }
+  }

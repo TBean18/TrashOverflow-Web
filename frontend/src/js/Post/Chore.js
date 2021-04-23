@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../../css/Post.css";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 // import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -17,6 +17,7 @@ import { useChoreDeletion } from "../../hooks/useChoreDeletion";
 import { useChoreEditor } from "../../hooks/useChoreEditor";
 import { useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
+import { GlobalContext } from "../../context/GlobalState";
 
 function Chore(props) {
   //Prop Destructuring Definitions
@@ -27,6 +28,7 @@ function Chore(props) {
     points,
     memberPool,
     chore_ID,
+    showGroup,
     // DO NOT REMOVE THIS UNUSED VARIABLE
     // ONCE IMPLE,ENTED IT WILL KEEP THE USERS FROM DOING CHORE OPERATION ON THE DASHBOARD
     isGroupView,
@@ -37,6 +39,7 @@ function Chore(props) {
 
   //Get Group_ID from the URL Param
   const { group_ID } = useParams();
+  const { currentGroup } = useContext(GlobalContext);
 
   //Visibility State
   const [hidden, setHidden] = useState(false);
@@ -219,31 +222,33 @@ function Chore(props) {
       <div className="post__top" onClick={expand}>
         <div className="post__topTitle">
           {showTitle ? (
-            <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-              {chore_name === undefined ? "No Title" : values.chore_name}
-            </h3>
-          ) : (
-            <form>
-              {/* This is the input for the chore_name */}
-              {/* Notice how we set the value to be values.chore_name */}
-              <input
-                type="text"
-                placeholder={chore_name}
-                onBlur={() => revealTitle()}
-                onFocus={() => {
-                  setIsEditing(true);
-                  hideTitle();
-                }}
-                tabIndex="0"
-                name="chore_name"
-                onChange={(e) => setValues(e)}
-                value={values.chore_name}
-              />
-              <button onClick={handleSubmit} type="submit">
-                Hidden submit
-              </button>
-            </form>
-          )}
+              <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
+                {chore_name === undefined ? "No Title" : values.chore_name}
+              </h3>
+            ) : 
+            (
+              <form>
+                {/* This is the input for the chore_name */}
+                {/* Notice how we set the value to be values.chore_name */}
+                <input
+                  type="text"
+                  placeholder={chore_name}
+                  onBlur={() => revealTitle()}
+                  onFocus={() => {
+                    setIsEditing(true);
+                    hideTitle();
+                  }}
+                  tabIndex="0"
+                  name="chore_name"
+                  onChange={(e) => setValues(e)}
+                  value={values.chore_name}
+                />
+                <button onClick={handleSubmit} type="submit">
+                  Hidden submit
+                </button>
+              </form>
+            )
+          }
           <div className="post__points">
             <p>Points:</p>
             {showPoints ? (
@@ -275,6 +280,13 @@ function Chore(props) {
         {/* -------- Date and Reccurance Information  -------------*/}
         {schedule.schedule_due_date && (
           <div className="post__topRight">
+          {showGroup ? (
+              <h4>{currentGroup.group_name}</h4>
+            )
+            :
+            null
+          }
+
             <div className="post__topRightDate">
               <p>Due: {schedule.schedule_due_date.toDateString()}</p>
             </div>

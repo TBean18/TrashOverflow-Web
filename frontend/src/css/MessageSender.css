@@ -41,6 +41,7 @@
 .messageSender__input {
     flex: 1;
     outline-width: 0;
+    outline: none;
 }
 
 .messageSender__bottom {

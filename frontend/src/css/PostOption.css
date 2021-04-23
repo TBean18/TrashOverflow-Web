@@ -19,3 +19,14 @@
     cursor: pointer;
     background-color: var(--header-input-color-hover);
 } 
+
+@media screen and (max-width: 380px) {
+    .postOption {
+      width: 80px;
+    }
+    
+    .postOption > p {
+        font-size: 10px;
+        margin-left: 5px;
+    }
+}

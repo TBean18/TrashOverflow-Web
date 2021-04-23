@@ -11,3 +11,8 @@
     margin-right: 15%;
     margin-left: 15%;
 }
+
+.noChoresLeft > h3 {
+    font-style: italic;
+    color: var(--header-icon-color);
+}

@@ -166,6 +166,7 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
       chore_point_value: choreList[i].chore_point_value,
       chore_completion_status: choreList[i].chore_completion_status,
       _id: choreList[i]._id,
+      chore_schedule: choreList[i].chore_schedule,
     };
 
     ret.push(obj);
@@ -268,7 +269,7 @@ GroupSchema.methods.getNewDueDate = function (chore) {
   const currentDate = wasLate
     ? new Date()
     : new Date(chore.chore_schedule.schedule_due_date);
-  switch (chore.chore_schedule.schedule_recurrence_type.reccurence_name) {
+  switch (chore.chore_schedule.schedule_recurrence_type) {
     case "DAILY":
       currentDate.setDate(currentDate.getDate() + 1);
       return currentDate;

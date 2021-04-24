@@ -104,23 +104,21 @@ export const SideButtonWrap = styled.div`
 `;
 
 export const SidebarRoute = styled(LinkR)`
-  border-radius: 50px;
-  // trim color
-  background: #feb054;
-  white-space: nowrap;
-  // padding is 16 pixels by 64 pixels
-  padding: 16px 64px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
   text-decoration: none;
+  list-style: none;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
 
+  // hover action
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    // trim color
+    color: #feb054;
+    transition: 0.2s ease-in-out;
   }
 `;

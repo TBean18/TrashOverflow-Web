@@ -75,7 +75,6 @@ function Chore(props) {
 
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
-  const [assignedMembers, setAssignedMembers] = useState(memberPool);
   const [newDate, setNewDate] = useState(null);
 
   // Chore API Hooks

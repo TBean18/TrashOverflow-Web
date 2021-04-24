@@ -97,33 +97,33 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
         return res.status(401).json({ error: "Permission Denied" });
 
       // Look for chore.
-      let choreIndex = -1;
-      for (let i in g.group_chores) {
-        if (g.group_chores[i]._id == req.body.chore_ID) {
-          choreIndex = i;
-          break;
-        }
-      }
+      let foundChore = g.group_chores.id(req.body.chore_ID);
+
       // If we could not find the chore.
-      if (choreIndex === -1) {
+      if (!foundChore) {
         return res.status(404).json({
           error: "Could Not Find Chore",
         });
       }
 
-      if (!g.group_chores[choreIndex].chore_schedule) {
-        return res.status(404).json({
-          error: "Please Create a Chore Schedule",
-        });
+      //Check for previous chore_schedule
+      if (!foundChore.chore_schedule) {
+        const payload = { ...foundChore.chore_schedule };
+        if (req.body.hasOwnProperty("schedule_due_date"))
+          payload.schedule_due_date = req.body.schedule_due_date;
+        if (req.body.hasOwnProperty("schedule_recurrence_type"))
+          payload.schedule_recurrence_type = req.body.schedule_recurrence_type;
+        foundChore.chore_schedule = payload;
+        return g.save().then(() => res.json({ chores: g.group_chores }));
+      } else {
+        if (req.body.hasOwnProperty("schedule_due_date"))
+          foundChore.chore_schedule.schedule_due_date =
+            req.body.schedule_due_date;
+        if (req.body.hasOwnProperty("schedule_recurrence_type"))
+          foundChore.chore_schedule.schedule_recurrence_type =
+            req.body.schedule_recurrence_type;
+        return g.save().then(() => res.json({ chores: g.group_chores }));
       }
-
-      const payload = g.group_chores[choreIndex].chore_schedule;
-      if (req.body.hasOwnProperty("schedule_due_date"))
-        payload.schedule_due_date = req.body.schedule_due_date;
-      if (req.body.hasOwnProperty("schedule_recurrence_type"))
-        payload.schedule_recurrence_type = req.body.schedule_recurrence_type;
-
-      g.save(payload).then(() => res.json(g.group_chores[choreIndex]));
     })
     .catch((err) => {
       console.log(err);

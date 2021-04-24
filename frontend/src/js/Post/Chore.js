@@ -18,6 +18,7 @@ import { useChoreEditor } from "../../hooks/useChoreEditor";
 import { useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import { GlobalContext } from "../../context/GlobalState";
+import { useChoreScheduling } from "../../hooks/useChoreScheduling";
 
 function Chore(props) {
   //Prop Destructuring Definitions
@@ -80,6 +81,7 @@ function Chore(props) {
   // Chore API Hooks
   const removeChore = useChoreDeletion();
   const editChore = useChoreEditor();
+  const scheduleChore = useChoreScheduling(group_ID);
 
   function hideDelete() {
     setShowDelete(false);
@@ -203,7 +205,16 @@ function Chore(props) {
     setIsEditing(false);
   };
 
+  // Function called everytime a user clicks on a date on the calander component
   const selectDate = (newDate) => {
+    //We need to send an API req to save the date server side
+    scheduleChore({
+      group_ID,
+      chore_ID,
+      schedule_due_date: newDate,
+      schedule_recurrence_type: schedule.recurrence,
+    });
+
     console.log("CHANGE");
     setSchedule({
       ...schedule,
@@ -218,10 +229,14 @@ function Chore(props) {
     // console.log(e.target.innerText);
     setSchedule({
       ...schedule,
-      recurrence: e.target.innerText,
+      schedule_recurrence_type: e.target.innerText,
     });
   };
 
+  // Obejct representation of the due_date return by the database
+  const dateObj = schedule.schedule_due_date
+    ? new Date(schedule.schedule_due_date)
+    : null;
   return (
     <div
       ref={expandedVis.ref}
@@ -298,7 +313,7 @@ function Chore(props) {
           {/* Due Date */}
           {schedule.schedule_due_date && (
             <div className="post__topRightDate">
-              <p>Due: {schedule.schedule_due_date.toDateString()}</p>
+              <p>Due: {dateObj.toDateString()}</p>
             </div>
           )}
 
@@ -309,7 +324,7 @@ function Chore(props) {
               <div className="post__dropdownButton" onClick={toggleDropdown}>
                 <PostOption
                   Icon={ArrowDropDownOutlinedIcon}
-                  title={schedule.recurrence}
+                  title={schedule.schedule_recurrence_type}
                   color="grey"
                 />
               </div>
@@ -327,7 +342,7 @@ function Chore(props) {
           ) : (
             // Collapsed View
             <div className="post__topRightPoints">
-              <p>Repeats: {schedule.recurrence}</p>
+              <p>Repeats: {schedule.schedule_recurrence_type}</p>
             </div>
           )}
         </div>
@@ -387,7 +402,7 @@ function Chore(props) {
           {calanderVis.isComponentVisible && (
             <MyCalendar
               onChange={selectDate}
-              value={schedule.schedule_due_date}
+              value={dateObj}
               refForward={calanderVis.ref}
             />
           )}

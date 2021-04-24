@@ -227,6 +227,12 @@ function Chore(props) {
     e.preventDefault();
     // set the reccurance to be the contents of the button that was pressed
     // console.log(e.target.innerText);
+    scheduleChore({
+      group_ID,
+      chore_ID,
+      schedule_recurrence_type: e.target.innerText,
+    });
+
     setSchedule({
       ...schedule,
       schedule_recurrence_type: e.target.innerText,

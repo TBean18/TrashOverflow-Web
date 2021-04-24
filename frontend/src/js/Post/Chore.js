@@ -157,7 +157,6 @@ function Chore(props) {
     e.preventDefault();
     // If we are in the groupChoresView We wouldn't want to hide the chore after its completion
     if (!isGroupView) {
-      console.log("we be out here");
       setHidden(true);
     }
     completeChore({

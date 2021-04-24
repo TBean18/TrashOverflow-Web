@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import Sidebar from "../../js/Sidebar/Sidebar";
 import SidebarRow from "../../js/Sidebar/SidebarRow";
 import MobileSidebar from "../../js/MobileSidebar/MobileSidebar.js";
+import { useMediaQuery } from "@material-ui/core";
 
 function GroupChoresView() {
   useLoggedOutRedirect(GlobalContext);
@@ -18,11 +19,13 @@ function GroupChoresView() {
     setIsOpen(!isOpen);
   };
 
+  const windowScreenSize = useMediaQuery("(min-width: 380px)");
+
   return (
     <div className="groupChoresView">
       <Header selection={1} isGroupView={true} menuOnClick={setIsOpen} />
       <MobileSidebar isOpen={isOpen} toggle={toggle} />
-      {window.screen.width > 380 ? <Sidebar /> : null}
+      {windowScreenSize ? <Sidebar /> : null}
       <div className="groupChoresView__body">
         <GroupChoresList />
       </div>

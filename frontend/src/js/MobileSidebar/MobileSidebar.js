@@ -10,7 +10,10 @@ import {
   SidebarRoute,
 } from "./MobileSidebarElements";
 
+import useLogout from "../../hooks/useLogout";
+
 const Sidebar = ({ isOpen, toggle }) => {
+  const logout = useLogout();
   return (
     <SidebarContainer isOpen={isOpen} onClick={toggle}>
       <Icon onClick={toggle}>
@@ -27,12 +30,14 @@ const Sidebar = ({ isOpen, toggle }) => {
           <SidebarLink to="services" onClick={toggle}>
             Features
           </SidebarLink>
-          <SidebarLink to="signup" onClick={toggle}>
-            Sign Up
+          <SidebarLink to="mobile" onClick={toggle}>
+            <SidebarRoute to="/mobilemembers">View Members</SidebarRoute>
           </SidebarLink>
         </SidebarMenu>
         <SideButtonWrap>
-          <SidebarRoute to="/signin">Sign In</SidebarRoute>
+          <div className="logOut" onClick={logout}>
+            Log Out
+          </div>
         </SideButtonWrap>
       </SidebarWrapper>
     </SidebarContainer>

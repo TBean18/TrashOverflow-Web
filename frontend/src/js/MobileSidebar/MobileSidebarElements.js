@@ -79,6 +79,28 @@ export const SidebarLink = styled(LinkS)`
 export const SideButtonWrap = styled.div`
   display: flex;
   justify-content: center;
+
+  .logOut {
+    border-radius: 50px;
+    // trim color
+    background: #feb054;
+    white-space: nowrap;
+    // padding is 16 pixels by 64 pixels
+    padding: 16px 64px;
+    color: #010606;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+
+    &:hover {
+      transition: all 0.2s ease-in-out;
+      background: #fff;
+      color: #010606;
+    }
+  }
 `;
 
 export const SidebarRoute = styled(LinkR)`

@@ -1,12 +1,10 @@
 import axios from "axios";
 import { useContext } from "react";
-import { useHistory } from "react-router-dom";
 import { useAPIErrorChecking } from "./useAPIErrorChecking";
 
 const useGroupKick = (GlobalContext) => {
   const errCheck = useAPIErrorChecking();
   const { storeJWT } = useContext(GlobalContext);
-  const history = useHistory();
 
   return (group_ID, member_ID) => {
     axios

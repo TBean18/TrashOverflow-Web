@@ -4,9 +4,9 @@ import "react-calendar/dist/Calendar.css";
 import "../css/MyCalendar.css";
 
 function MyCalendar(props) {
-  const { onChange, value } = props;
+  const { onChange, value, refForward } = props;
   return (
-    <div className="myCalendar">
+    <div className="myCalendar" ref={refForward}>
       <Calendar onChange={onChange} value={value} />
     </div>
   );

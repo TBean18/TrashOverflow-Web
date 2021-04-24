@@ -219,8 +219,8 @@ router.post("/join", jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post("/removeUser", jwt.authenticateUser, async (req, res) => {
-  const { admin_user_ID, member_user_ID, group_ID } = req.body;
-
+  const { user_ID, member_user_ID, group_ID } = req.body;
+  const admin_user_ID = user_ID;
   // find group
   var foundGroup;
   try {
@@ -363,8 +363,8 @@ router.post("/leave", jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post("/promote", jwt.authenticateUser, async (req, res) => {
-  const { admin_user_ID, member_user_ID, group_ID } = req.body;
-
+  const { user_ID, member_user_ID, group_ID } = req.body;
+  const admin_user_ID = user_ID;
   // find group
   var foundGroup;
   try {

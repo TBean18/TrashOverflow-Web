@@ -10,6 +10,7 @@ export const useChoreCompletion = (group_ID) => {
   // Parameters
   //      chore_ID:     String - ID of the chore to be deleted
   //      group_ID:     String - ID of the group
+  // Passesd as x-auth header ----------------------------
   //      user_ID:      String - ID of the user trying to delete the chores
   //      token:        String - Token to verify the user
   const completeChore = (chore) => {

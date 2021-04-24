@@ -16,7 +16,8 @@ export const SidebarContainer = styled.aside`
   left: 0;
   transition: 0.3s ease-in-out;
   // if it's open, we want 100% opacity
-  opacity: ${({ isOpen }) => (isOpen ? "100%" : "0")};
+  opacity: ${({ isOpen }) => (isOpen ? "90%" : "0")};
+  // backdrop-filter: ${({ isOpen }) => (isOpen ? "blur(4px)" : "blur(0)")};
   top: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
 `;
 

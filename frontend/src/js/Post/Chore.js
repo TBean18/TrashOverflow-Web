@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import "../../css/Post.css";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 // import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import { GlobalContext } from "../../context/GlobalState";
 import { useChoreScheduling } from "../../hooks/useChoreScheduling";
+import { useChoreCompletion } from "../../hooks/useChoreCompletion";
 
 function Chore(props) {
   //Prop Destructuring Definitions
@@ -81,6 +82,7 @@ function Chore(props) {
   const removeChore = useChoreDeletion();
   const editChore = useChoreEditor();
   const scheduleChore = useChoreScheduling(group_ID);
+  const completeChore = useChoreCompletion(group_ID);
 
   function hideDelete() {
     setShowDelete(false);
@@ -148,9 +150,22 @@ function Chore(props) {
   //   setShowTitle(true);
   //   setShowDelete(false);
   // };
+
+  // Function for when the user completes a chore
+  // Currently linked to the Done Button
   const handleDone = (e) => {
-    setHidden(true);
+    e.preventDefault();
+    // If we are in the groupChoresView We wouldn't want to hide the chore after its completion
+    if (!isGroupView) {
+      console.log("we be out here");
+      setHidden(true);
+    }
+    completeChore({
+      group_ID,
+      chore_ID,
+    });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -411,7 +426,7 @@ function Chore(props) {
               refForward={calanderVis.ref}
             />
           )}
-
+          {/* Chore Complete (Done) Component */}
           <div className="post__bodyRightDone" onClick={handleDone}>
             <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey" />
           </div>

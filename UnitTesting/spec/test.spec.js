@@ -1058,7 +1058,7 @@ describe("Chore Related Endpoints", () => {
             expect(theChore.chore_description).not.toBe("A Fake Chore Description");
             expect(theChore.chore_point_value).not.toBe(100);
         });
-
+/*
         it("Should Allow an Admin to Assign a User to a Chore", async () => {
 
             const response = await fetch(`${base_url}/chores/assignUser`, {
@@ -1107,6 +1107,7 @@ describe("Chore Related Endpoints", () => {
             expect(res.chore_user_pool).not.toContain(group.group_members[1]._id);
             expect(res.chore_assigned_user_index).toBeGreaterThan(-1);
         });
+*/
     });
 
 });

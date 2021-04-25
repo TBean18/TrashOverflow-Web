@@ -2,10 +2,10 @@
 
 ## Requirements
 
-- [ ] Email Verification
+- [x] Email Verification
   - [x] Testing
   - [x] SendGrid
-- [ ] Forgot Password Email
+- [x] Forgot Password Email
   - [x] Testing
   - [x] SendGrid
   - [x] Forgot Password Page
@@ -21,8 +21,8 @@
   - [x] Generate a Link that will add the user to a group
   - [x] Creator is permanate Admin
 - [x] Register / Log in
-- [ ] Creation of Households
-  - [ ] Selection to create or join a new group
+- [x] Creation of Households
+  - [x] Selection to create or join a new group
   - [x] FrontEnd Button
   - [x] Backend Code
 - [x] Leaving a Household
@@ -33,18 +33,20 @@
   - [x] Group Member
   - [x] Group Admins
   - [x] Score Leaderboard
-- [ ] Creation of Chores
-  - [ ] Pool of Users
-  - [ ] A user responsible for the chore during the given iteration
+- [x] Creation of Chores
+  - [x] Pool of Users
+  - [x] A user responsible for the chore during the given iteration
 - [ ] Scheduleing of Chores
   - [ ] Add / Remove User to Chores
   - [ ] Set How Often the Chore Reccurs
     - [x] If it even Reccurs
     - [x] Reccurance Should be set with a drop down menu
+  - [ ] If completed a non recurrning chore, delete it
 - [ ] Member List
   - [ ] Promote
   - [ ] Kick
   - [ ] ? Sort By Score ?
+  - [ ] Update after Chore Completion
 - [ ] What do we do with Finished chores that still have time until the due date
 - [x] Finish and Test Chores API
 - [x] Create the Unit Testing
@@ -100,6 +102,25 @@
 - [ ] Group Color Theme
 - [ ] Add More than 1 person to a given chore
   - Very Small Use Case
+
+# Presentation Notes
+
+- Introductions
+  - Everyone will introduce themselves and their role
+- Tech Used (Sam)
+- Things that didn't go too well
+  - Functional Vs. Class Components
+- Things that went well
+- SwagggerHub
+  - Register / Emails
+- Unit Testing
+- Demo
+  - Landing Page / Register
+    - Phil
+  - Admin Functions / Add Jo's User by link
+    - Taylor
+  - User's prespective
+    - Jo
 
 # Notes for 3-31 Check-up Meeting
 

@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { useAPIErrorChecking } from "./useAPIErrorChecking";
+import { useGroupRefresh } from "./useGroupRefresh";
 
-export const useChoreCompletion = (group_ID) => {
+export const useChoreCompletion = (group_ID, GlobalContext) => {
   const errCheck = useAPIErrorChecking();
   const queryClient = useQueryClient();
+  const groupRefresh = useGroupRefresh(GlobalContext);
 
   //This function calls the add endpoint
   // Parameters
@@ -23,6 +25,8 @@ export const useChoreCompletion = (group_ID) => {
   const mutation = useMutation(completeChore, {
     onSuccess: () => {
       queryClient.invalidateQueries([group_ID, "chores"]);
+      groupRefresh();
+      // queryClient.invalidateQueries(["user", "groups"]);
     },
   });
 

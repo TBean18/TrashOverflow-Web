@@ -109,19 +109,28 @@ UserSchema.methods.leaveGroup = function (curGroupID, cb) {
 // This function removed a group place holder from the user object corsponding to the user_ID param
 // RETURNS a the updated user with populated group data promise that should we awaited due to the included .exec()
 UserSchema.statics.leaveGroup = function (user_ID, group_ID) {
-  return this.findOneAndUpdate(
-    { _id: user_ID },
-    { $pull: { groups: { group_ID: group_ID } } },
-    { new: true }
-  )
-    .populate({
-      path: "groups",
-      populate: {
-        path: "group_ID",
-        model: "group",
-      },
+  return this.findById(user_ID)
+    .then((cur) => {
+      cur.groups = cur.groups.filter(
+        (group) => !group.group_ID.equals(group_ID)
+      );
+      cur.save();
+      return cur;
     })
-    .exec();
+    .catch((err) => console.log(err));
+  // return this.findOneAndUpdate(
+  //   { _id: user_ID },
+  //   { $pull: { groups: { group_ID: group_ID } } },
+  //   { new: true }
+  // )
+  //   .populate({
+  //     path: "groups",
+  //     populate: {
+  //       path: "group_ID",
+  //       model: "group",
+  //     },
+  //   })
+  //   .exec();
 };
 
 // Returns an array of the Users group.group_ID objects

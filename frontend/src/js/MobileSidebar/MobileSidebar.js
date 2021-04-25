@@ -13,27 +13,10 @@ import { GlobalContext } from "../../context/GlobalState";
 import useLogout from "../../hooks/useLogout";
 import useGroupLeave from "../../hooks/useGroupLeave";
 
-const Sidebar = ({ isOpen, toggle, removeBlur }) => {
+const Sidebar = ({ isOpen, toggle, removeBlur, linkCopied, copyLink }) => {
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
-  const [linkCopied, setLinkCopied] = useState(false);
   const { user, currentGroup } = useContext(GlobalContext);
-
-  function copyLink() {
-    setLinkCopied(true);
-    // let link = "http://trashoverflow.tech/join/";
-    let link = "localhost:3000/join/";
-    if (currentGroup) {
-      link += currentGroup._id;
-    }
-    navigator.clipboard.writeText(link);
-    setTimeout(
-      function () {
-        setLinkCopied(false);
-      }.bind(this),
-      2000
-    );
-  }
 
   //Function used to leave the currently slected group
   function doLeaveGroup() {
@@ -54,11 +37,25 @@ const Sidebar = ({ isOpen, toggle, removeBlur }) => {
       </Icon>
       <SidebarWrapper>
         <SidebarMenu>
-          <SideButtonWrap>
-            <div className="mobileSidebarText" onClick={copyLink}>
-              Get Invite Link
-            </div>
-          </SideButtonWrap>
+          {
+            linkCopied ?
+            (
+              <SideButtonWrap>
+                <div className="mobileSidebarText" onClick={copyLink}>
+                  Link Copied!
+                </div>
+              </SideButtonWrap>
+            )
+            :
+            (
+              <SideButtonWrap>
+                <div className="mobileSidebarText" onClick={copyLink}>
+                  Get Invite Link
+                </div>
+              </SideButtonWrap>
+            )
+          }
+          
           <SidebarRoute className="mobileSidebarText" to="/mobilemembers">View Members</SidebarRoute>          
           <SideButtonWrap>
             <div className="mobileSidebarText" onClick={doLeaveGroup}>

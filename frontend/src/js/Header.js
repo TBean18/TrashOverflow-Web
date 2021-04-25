@@ -17,28 +17,13 @@ import { Sidebar } from "../components/Sidebar";
 
 function Header(props) {
   //Prop destructuring defs
-  const { isGroupView, menuOnClick, blurBackground } = props;
+  const { isGroupView, menuOnClick, blurBackground, copyLink, linkCopied } = props;
 
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
-  const [linkCopied, setLinkCopied] = useState(false);
+  
   const windowScreenSize = useMediaQuery("(min-width: 380px)");
-  function copyLink() {
-    setLinkCopied(true);
-    // let link = "http://trashoverflow.tech/join/";
-    let link = "localhost:3000/join/";
-    if (currentGroup) {
-      link += currentGroup._id;
-    }
-    navigator.clipboard.writeText(link);
-    setTimeout(
-      function () {
-        setLinkCopied(false);
-      }.bind(this),
-      2000
-    );
-  }
 
   //Function used to leave the currently slected group
   function doLeaveGroup() {

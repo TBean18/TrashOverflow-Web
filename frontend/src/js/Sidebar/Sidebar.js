@@ -21,18 +21,6 @@ function Sidebar() {
   return (
     <div className="sidebar">
       {displayMembers()}
-      <SidebarRow name="Amazon's bananas" />
-      <SidebarRow name="So Tired" />
-      <SidebarRow name="Leinecker's History" />
-      <SidebarRow name="Jason Terry'sBack" />
-      <SidebarRow name="Many Users" />
-      <SidebarRow name="React's Cool" />
-      <SidebarRow name="But Difficult" />
-      <SidebarRow name="Hate Webdev" />
-      <SidebarRow name="Never Again" />
-      <SidebarRow name="Except SeniorDesign" />
-      <SidebarRow name="Just Maybe" />
-      <SidebarRow name="That's Enough" />
     </div>
   );
 }

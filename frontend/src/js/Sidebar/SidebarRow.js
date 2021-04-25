@@ -1,11 +1,15 @@
-import { Avatar } from '@material-ui/core';
-import React, { useState } from 'react';
-import '../../css/SidebarRow.css';
+import { Avatar } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import "../../css/SidebarRow.css";
 import { makeStyles } from "@material-ui/core/styles";
 import useComponentVisible from "../../hooks/useComponentVisible";
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import useGroupPromote from "../../hooks/useGroupPromote";
+import { GlobalContext } from "../../context/GlobalState";
+import useGroupKick from "../../hooks/useGroupKick";
 
-function SidebarRow({ src, name, admin, points }) {
+function SidebarRow({ src, name, admin, points, member_ID }) {
+  const { currentGroup } = useContext(GlobalContext);
 
   const editMemberVis = useComponentVisible(false);
   const [kickConfirmed, setKickConfirmed] = useState(false);
@@ -13,6 +17,10 @@ function SidebarRow({ src, name, admin, points }) {
   const [kick, setKick] = useState(false);
   const [promote, setPromote] = useState(false);
   const [hidden, setHidden] = useState(false);
+
+  //API Hooks
+  const promoteMans = useGroupPromote(GlobalContext);
+  const kickMans = useGroupKick(GlobalContext);
 
   const useStyles = makeStyles((theme) => ({
     CustomColors: (props) => ({
@@ -33,9 +41,7 @@ function SidebarRow({ src, name, admin, points }) {
     e.preventDefault();
 
     if (editMemberVis.isComponentVisible) return;
-    editMemberVis.setIsComponentVisible(
-      !editMemberVis.isComponentVisible
-    );
+    editMemberVis.setIsComponentVisible(!editMemberVis.isComponentVisible);
     setKickConfirmed(false);
     setPromotionConfirmed(false);
   }
@@ -50,20 +56,28 @@ function SidebarRow({ src, name, admin, points }) {
     setKickConfirmed(false);
   }
 
+  // Function called when the admin kicks a member
   function kickMember() {
     editMemberVis.setIsComponentVisible(false);
     setKick(true);
     setHidden(true);
+
+    //API Stuff
+    kickMans(currentGroup._id, member_ID);
 
     setKickConfirmed(false);
     setPromotionConfirmed(false);
     setPromote(false);
   }
 
+  // Function called when the admin promotes another member to admin
   function promoteMember() {
     editMemberVis.setIsComponentVisible(false);
     setPromote(true);
 
+    //API Stuff
+    promoteMans(currentGroup._id, member_ID);
+    console.log(member_ID);
     setKickConfirmed(false);
     setPromotionConfirmed(false);
     setKick(false);
@@ -80,67 +94,40 @@ function SidebarRow({ src, name, admin, points }) {
     abrev += word.charAt(0).toUpperCase();
   });
   return (
-    <div ref={editMemberVis.ref} className={`row ${
-      hidden
-        ? "sidebarRow-hidden"
-        : "sidebarRow"
-    }`} onClick={toggleEditMembers}>
+    <div
+      ref={editMemberVis.ref}
+      className={`row ${hidden ? "sidebarRow-hidden" : "sidebarRow"}`}
+      onClick={toggleEditMembers}
+    >
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
-      
-      <h4>{name} ({points})</h4>
-      
-      {
-        admin === true ?
-        (
-          <VerifiedUserIcon />
-        )
-        : null
-      }
+
+      <h4>
+        {name} ({points})
+      </h4>
+
+      {admin === true ? <VerifiedUserIcon /> : null}
       {editMemberVis.isComponentVisible ? (
         <div className="sidebarRowEdit">
-          
-          {
-            kickConfirmed ?
-            (
-              <div 
-                className="sidebarRow__confirmKick"
-                onClick={kickMember}
-              >
-                <p>Are You Sure?</p>
-              </div>
-            )
-            : (
-              <div
-                className="sidebarRow__kick"
-                onClick={confirmKick}
-              >
-                <p>Kick</p>
-              </div>
-            )
-          }
-          {
-            promotionConfirmed ?
-            (
-              <div 
-                className="sidebarRow__confirmPromote"
-                onClick={promoteMember}
-              >
-                <p>Are You Sure?</p>
-              </div>
-            )
-            : (
-              <div
-                className="sidebarRow__promote"
-                onClick={confirmPromotion}
-              >
-                <p>Promote</p>
-              </div>
-            )
-          }
-          
+          {kickConfirmed ? (
+            <div className="sidebarRow__confirmKick" onClick={kickMember}>
+              <p>Are You Sure?</p>
+            </div>
+          ) : (
+            <div className="sidebarRow__kick" onClick={confirmKick}>
+              <p>Kick</p>
+            </div>
+          )}
+          {promotionConfirmed ? (
+            <div className="sidebarRow__confirmPromote" onClick={promoteMember}>
+              <p>Are You Sure?</p>
+            </div>
+          ) : (
+            <div className="sidebarRow__promote" onClick={confirmPromotion}>
+              <p>Promote</p>
+            </div>
+          )}
         </div>
-        ) : null}
-      
+      ) : null}
     </div>
   );
 }

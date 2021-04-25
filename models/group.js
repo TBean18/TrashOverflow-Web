@@ -86,7 +86,7 @@ GroupSchema.methods.addGroupMember = function (newMember, doSave, cb) {
 // RETURNS an error message | '' is no error
 GroupSchema.methods.removeGroupMember = function (curMemberID, cb) {
   // remove user from all chores
-  for (i = 0; i < this.group_chores.length; i++) {
+  for (let i = 0; i < this.group_chores.length; i++) {
     this.group_chores[i].removeUser(curMemberID);
   }
   // remove member
@@ -228,8 +228,6 @@ GroupSchema.methods.rotateAssignedUser = function (chore_index, save) {
   if (save) this.save();
 };
 
-
-
 //Function Used to check the completion for a given chore
 GroupSchema.methods.checkCompletionStatus = function (chore_index, cb) {
   const chore = this.group_chores[chore_index];
@@ -277,15 +275,17 @@ GroupSchema.methods.getNewDueDate = function (chore) {
     ? new Date()
     : new Date(chore.chore_schedule.schedule_due_date);
   switch (chore.chore_schedule.schedule_recurrence_type) {
-    case "DAILY":
+    case "Daily":
       currentDate.setDate(currentDate.getDate() + 1);
       return currentDate;
-    case "WEEKLY":
+    case "Weekly":
       currentDate.setDate(currentDate.getDate() + 7);
       return currentDate;
-    case "MONTHLY":
+    case "Monthly":
       currentDate.setMonth(currentDate.getMonth() + 1);
       return currentDate;
+    case "Never":
+      return null;
   }
 };
 

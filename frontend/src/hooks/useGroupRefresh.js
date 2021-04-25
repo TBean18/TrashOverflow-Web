@@ -1,21 +1,33 @@
-import {useState, useContext} from 'react';
-import {GlobalContext} from '../context/GlobalState'
-const axios = require('axios').default;
+import { useContext } from "react";
+import { useQueryClient, useMutation } from "react-query";
+import { useAPIErrorChecking } from "./useAPIErrorChecking";
+const axios = require("axios").default;
 
+export const useGroupRefresh = (GlobalContext) => {
+  const { selectGroup, currentGroup } = useContext(GlobalContext);
+  const errCheck = useAPIErrorChecking();
+  const queryClient = useQueryClient();
 
-export const useGroupRefresh = (context) => {
-    const {storeGroups, storeJWT} = useContext(GlobalContext);
+  const refreshGroups = () =>
+    axios
+      .post("/api/groups/", {})
+      .then((res) => res.data)
+      .catch((err) => errCheck(err));
 
-    axios.post('/api/groups/', {
-    })
-    .then(res => {
-        if(res.data.error !== '') throw res.data.error;
-        console.log(res);
-        storeGroups(res.data.groups);
-        if(res.data.hasOwnProperty('token'))
-            storeJWT(res.data.token);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-}
+  const mutation = useMutation(refreshGroups, {
+    onSuccess: (data) => {
+      queryClient.setQueryData(["user", "groups"], (current) => {
+        current.groups = data.groups;
+        return current;
+      });
+      //Update the global state
+      data.groups.forEach((group) => {
+        if (group._id === currentGroup._id) selectGroup(group);
+      });
+    },
+  });
+
+  return () => {
+    mutation.mutate();
+  };
+};

@@ -85,6 +85,11 @@ GroupSchema.methods.addGroupMember = function (newMember, doSave, cb) {
 //Remove a group member from the group_members []
 // RETURNS an error message | '' is no error
 GroupSchema.methods.removeGroupMember = function (curMemberID, cb) {
+  // remove user from all chores
+  for (i = 0; i < this.group_chores.length; i++) {
+    this.group_chores[i].removeUser(curMemberID);
+  }
+  // remove member
   this.group_members.pull(curMemberID);
   this.save(cb)
     .then((group) => {
@@ -222,6 +227,8 @@ GroupSchema.methods.rotateAssignedUser = function (chore_index, save) {
   ].chore_user_pool[this.group_chores[chore_index].chore_assigned_user_index];
   if (save) this.save();
 };
+
+
 
 //Function Used to check the completion for a given chore
 GroupSchema.methods.checkCompletionStatus = function (chore_index, cb) {

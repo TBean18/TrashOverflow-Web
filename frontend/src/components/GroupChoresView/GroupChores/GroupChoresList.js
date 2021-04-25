@@ -24,6 +24,7 @@ function GroupChoresList() {
         chore_assigned_user_index={chore.chore_assigned_user_index}
         chore_completion_status={chore.chore_completion_status}
         chore_schedule={chore.chore_schedule}
+        isGroupView={true}
       />
     ));
   }

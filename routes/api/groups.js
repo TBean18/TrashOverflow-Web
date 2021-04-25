@@ -74,7 +74,7 @@ router.post("/new", jwt.authenticateUser, async (req, res) => {
       res.json(item);
     })
     .catch((err) => {
-      console.log(err);
+      console.log(`groups/new -  ${err}`);
       res.status(401).json({
         error: "Permission Denied",
       });
@@ -336,9 +336,7 @@ router.post("/leave", jwt.authenticateUser, async (req, res) => {
     });
 
   // compose response
-  let groupArray = updatedUser.getGroup_IDArray();
   res.json({
-    groups: groupArray,
     error: "",
   });
   // .then(foundUser => {

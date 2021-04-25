@@ -42,7 +42,10 @@ function Chore(props) {
   //Get Group_ID from the URL Param
   const { group_ID } = useParams();
   const { currentGroup } = useContext(GlobalContext);
-
+  
+  // If a user isn't an admin, don't let them edit
+  const isAdmin = (currentGroup.isAdmin != 0);
+  
   //Visibility State
   const [hidden, setHidden] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
@@ -269,7 +272,7 @@ function Chore(props) {
     >
       <div className="post__top" onClick={expand}>
         <div className="post__topTitle">
-          {showTitle ? (
+          {showTitle || !isAdmin ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
               {chore_name === undefined ? "No Title" : values.chore_name}
             </h3>
@@ -297,7 +300,7 @@ function Chore(props) {
           )}
           <div className="post__points">
             <p>Points:</p>
-            {showPoints ? (
+            {showPoints || !isAdmin  ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined ? "None" : values.chore_point_value}
               </p>
@@ -327,7 +330,7 @@ function Chore(props) {
 
         <div className="post__topRight">
           {/* Group Name. only shown on feed page */}
-          {showGroup ? <h4>{currentGroup.group_name}</h4> : null}
+          {showGroup || !isAdmin  ? <h4>{currentGroup.group_name}</h4> : null}
 
           {/* Due Date */}
           {schedule.schedule_due_date && (
@@ -376,7 +379,7 @@ function Chore(props) {
         <div className="post__bodyDescription">
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
-            {showMessage ? (
+            {showMessage || !isAdmin  ? (
               <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">

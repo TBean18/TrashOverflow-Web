@@ -408,13 +408,31 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
 
       //Update Chore Info
       foundChore.chore_completion_status = "COMPLETED";
-      g.rotateAssignedUser(choreIndex, false);
+      const schedule = foundChore.chore_schedule;
+      if (!schedule) {
+        //This chore hsa no due date / recurrance type
+        // Thus, delete it
+        g.group_chores.pull(foundChore);
+      }
+      // the chore has a schedule
+      else {
+        //Compute new due date
+        const newDueDate = g.getNewDueDate(foundChore);
+        //store it
+        if (newDueDate) {
+          schedule.schedule_due_date = newDueDate;
+        } else {
+          // the recurrance was stopped so delete
+          g.group_chores.pull(foundChore);
+        }
+      }
 
       //Give the points to the assigned user
       const completedUser = foundChore.chore_assigned_user;
       if (completedUser) {
         const completedMember = g.group_members.id(completedUser);
         completedMember.point_balance += foundChore.chore_point_value;
+        g.rotateAssignedUser(choreIndex, false);
       }
       //Save and res
       g.save().then(() => res.json(g.group_chores[choreIndex]));

@@ -361,9 +361,10 @@ router.post("/leave", jwt.authenticateUser, async (req, res) => {
 // Parameters
 //      admin_user_ID:    String - ID of current user
 //      member_user_ID:   String - ID of user to be demoted
+//      member_ID:        String - Member_ID of the user to be promoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post("/promote", jwt.authenticateUser, async (req, res) => {
-  const { user_ID, member_user_ID, group_ID } = req.body;
+  const { user_ID, member_user_ID, group_ID, member_ID } = req.body;
   const admin_user_ID = user_ID;
   // find group
   var foundGroup;
@@ -391,15 +392,17 @@ router.post("/promote", jwt.authenticateUser, async (req, res) => {
       error: foundGroup.ERROR_ADMIN(admin_user_ID),
     });
 
-  let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
-  if (!foundGroupMember)
+  const foundMember = foundGroup.group_members.id(member_ID);
+
+  // let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
+  if (!foundMember)
     return res.status(404).json({
-      error: foundGroup.ERROR_MEMBER(member_user_ID),
+      error: foundGroup.ERROR_MEMBER(member_ID),
     });
 
   // update group data and compose response
   let promoteMemberStatus = await foundGroup.promoteGroupMember(
-    member_user_ID,
+    foundMember.user_ID,
     true
   );
   if (!promoteMemberStatus)
@@ -407,7 +410,7 @@ router.post("/promote", jwt.authenticateUser, async (req, res) => {
       error: "Could Not Promote User",
     });
   res.json({
-    member: foundGroupMember,
+    member: foundMember,
     error: "",
   });
 });

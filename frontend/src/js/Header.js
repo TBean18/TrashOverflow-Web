@@ -22,7 +22,7 @@ function Header(props) {
   function copyLink() {
     setLinkCopied(true);
     // let link = "http://trashoverflow.tech/join/";
-    let link = "localhost:3000/join/";
+    let link = "trashOverflow.tech/join/";
     if (currentGroup) {
       link += currentGroup._id;
     }

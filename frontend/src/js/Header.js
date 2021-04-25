@@ -10,13 +10,20 @@ import PostOption from "./Post/PostOption";
 import { GlobalContext } from "../context/GlobalState";
 import useLogout from "../hooks/useLogout";
 import useGroupLeave from "../hooks/useGroupLeave";
+import { useMediaQuery } from "@material-ui/core";
+import { FaBars } from "react-icons/fa";
+import { MobileIcon } from "./HeaderElements";
+import { Sidebar } from "../components/Sidebar";
+
 function Header(props) {
   //Prop destructuring defs
-  const { isGroupView } = props;
+  const { isGroupView, menuOnClick, blurBackground, copyLink, linkCopied } = props;
 
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
+  
+  const windowScreenSize = useMediaQuery("(min-width: 380px)");
   const [linkCopied, setLinkCopied] = useState(false);
 
   function copyLink() {
@@ -71,6 +78,7 @@ function Header(props) {
       <div className="header__right">
         {/* Group Invite Link Button */}
         {isGroupView &&
+          windowScreenSize &&
           (linkCopied ? (
             <div className="header__rightCopiedLink">
               <p>Invite Link Copied</p>
@@ -81,20 +89,25 @@ function Header(props) {
             </div>
           ))}
         {/* leave Group Button */}
-        {isGroupView && (
+        {isGroupView && windowScreenSize && (
           <div className="header__rightGetLink" onClick={doLeaveGroup}>
             <p>Leave Group</p>
           </div>
         )}
 
-        {/* Logout Button */}
-        <PostOption
-          className="header__logout"
-          Icon={ExitToAppIcon}
-          title="Logout"
-          color="grey"
-          onClick={logout}
-        />
+        {windowScreenSize ? (
+          <PostOption
+            className="header__logout"
+            Icon={ExitToAppIcon}
+            title="Logout"
+            color="grey"
+            onClick={logout}
+          />
+        ) : (
+          <MobileIcon onClick={blurBackground}>
+            <FaBars onClick={menuOnClick} />
+          </MobileIcon>
+        )}
       </div>
     </div>
   );

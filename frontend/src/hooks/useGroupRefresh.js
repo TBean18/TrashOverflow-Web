@@ -17,12 +17,19 @@ export const useGroupRefresh = (GlobalContext) => {
   const mutation = useMutation(refreshGroups, {
     onSuccess: (data) => {
       queryClient.setQueryData(["user", "groups"], (current) => {
-        current.groups = data.groups;
+        try {
+          current.groups = data.groups;
+        } catch (err) {
+          console.log(err);
+        }
         return current;
       });
       //Update the global state
       data.groups.forEach((group) => {
-        if (group._id === currentGroup._id) selectGroup(group);
+        if (group._id === currentGroup._id) {
+          selectGroup(group);
+          console.log("Group Refreshed");
+        }
       });
     },
   });

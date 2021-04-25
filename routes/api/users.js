@@ -133,7 +133,7 @@ router.post("/login", (req, res) => {
       if (item == null) throw "No User Found";
 
       // Check if they have verified their email
-      if (!item.email_verified) throw `Email: ${item.email} Not Verified`;
+      if (!item.email_verified) throw `Email Not Verified`;
 
       //Compare the input password with the stored hash
       item.comparePassword(req.body.password_hash, (err, isMatch) => {

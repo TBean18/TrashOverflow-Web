@@ -69,6 +69,7 @@ router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
 // Description          Adds a chore to the group.
 // Access               Public I think
 // Required Parameters
+//      user_ID                 The id of the admin trying to add the chore
 //      group_ID                The _id for the group adding the chore
 //      chore_assigned_user:    GroupMember - The _id Group member currently assigned to the chore.
 //      chore_user_pool:        [GroupMember] - Group members _ids that will rotate on this chore.
@@ -173,7 +174,7 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       // If we didn't find the chore.
       if (choreIndex === -1) {
         return res.status(404).json({
-          error: "Could Not Remove Chore",
+          error: "Could Not Find Chore",
         });
       }
 
@@ -181,12 +182,11 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      const chores = await group.removeChore(
-        g._id,
-        g.group_chores[choreIndex]._id
-      );
-      res.json({
-        chores: chores,
+      g.group_chores.splice(choreIndex, 1);
+      g.save().then(() => {
+        res.json({
+          chores: g.group_chores,
+        });
       });
     })
     .catch((err) => {

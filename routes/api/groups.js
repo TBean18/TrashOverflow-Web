@@ -253,7 +253,7 @@ router.post("/removeUser", jwt.authenticateUser, async (req, res) => {
       error: foundGroup.ERROR_MEMBER(member_ID),
     });
 
-  const member_user_ID = foundGroupMember._id;
+  const member_user_ID = foundGroupMember.user_ID;
 
   // Added not in front of retval because on success it returns "", on failure it returns the error
   // remove group member and check if successful

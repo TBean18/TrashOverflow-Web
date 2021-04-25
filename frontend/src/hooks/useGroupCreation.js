@@ -1,22 +1,28 @@
 import { useState, useContext } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { useAPIErrorChecking } from "./useAPIErrorChecking";
 const axios = require("axios").default;
 
 export const useGroupCreation = (GlobalContext) => {
   const { storeJWT } = useContext(GlobalContext);
   const errCheck = useAPIErrorChecking();
-  return (groupName, groupDescription) =>
-    axios
-      .post("/api/groups/new", {
-        group_name: groupName,
-        group_description: groupDescription,
-      })
-      .then((res) => {
-        if (res.data.error !== "") throw res.data.error;
-        console.log(res);
+  const queryClient = useQueryClient();
 
-        //If the responce contains a refreshed token then save it
-        if (res.data.hasOwnProperty("token")) storeJWT(res.data.token);
-      })
+  const makeGroup = (newGroup) =>
+    axios
+      .post("/api/groups/new", newGroup)
+      .then((res) => res.data)
       .catch((err) => errCheck(err));
+
+  const mutation = useMutation(makeGroup, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["user", "groups"]);
+    },
+  });
+
+  return (groupName, groupDescription) =>
+    mutation.mutate({
+      group_name: groupName,
+      group_description: groupDescription,
+    });
 };

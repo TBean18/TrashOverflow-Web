@@ -84,8 +84,8 @@ function Chore(props) {
   // Chore API Hooks
   const removeChore = useChoreDeletion();
   const editChore = useChoreEditor();
-  const scheduleChore = useChoreScheduling(group_ID);
-  const completeChore = useChoreCompletion(group_ID);
+  const scheduleChore = useChoreScheduling(group_ID, GlobalContext);
+  const completeChore = useChoreCompletion(group_ID, GlobalContext);
 
   function hideDelete() {
     setShowDelete(false);

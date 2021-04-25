@@ -406,14 +406,16 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
 
       const foundChore = g.group_chores[choreIndex];
 
-      const completedUser = foundChore.chore_assigned_user;
-      const completedMember = g.group_members.id(completedUser);
       //Update Chore Info
       foundChore.chore_completion_status = "COMPLETED";
       g.rotateAssignedUser(choreIndex, false);
 
       //Give the points to the assigned user
-      completedMember.point_balance += foundChore.chore_point_value;
+      const completedUser = foundChore.chore_assigned_user;
+      if (completedUser) {
+        const completedMember = g.group_members.id(completedUser);
+        completedMember.point_balance += foundChore.chore_point_value;
+      }
       //Save and res
       g.save().then(() => res.json(g.group_chores[choreIndex]));
     })

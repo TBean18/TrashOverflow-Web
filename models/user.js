@@ -138,7 +138,12 @@ UserSchema.statics.leaveGroup = function (user_ID, group_ID) {
 UserSchema.methods.getGroup_IDArray = function (cb) {
   let groups = [];
   this.groups.map((g) => {
-    g.group_ID.isAdmin = g.verifyAdmin(this._id, cb);
+    g.group_ID.isAdmin = g.group_ID.verifyAdmin(this._id, (err, res) => {
+      if (err) {
+        console.log(err);
+        return false;
+      } else return true;
+    });
     groups.push(g.group_ID);
   });
   return groups;

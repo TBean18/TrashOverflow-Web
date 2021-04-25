@@ -219,7 +219,7 @@ router.post("/join", jwt.authenticateUser, async (req, res) => {
 //      member_user_ID:   String - ID of user to be demoted
 //      group_ID:         String - ID of group where demotion will take place
 router.post("/removeUser", jwt.authenticateUser, async (req, res) => {
-  const { user_ID, member_user_ID, group_ID } = req.body;
+  const { user_ID, group_ID, member_ID } = req.body;
   const admin_user_ID = user_ID;
   // find group
   var foundGroup;
@@ -247,15 +247,17 @@ router.post("/removeUser", jwt.authenticateUser, async (req, res) => {
       error: foundGroup.ERROR_ADMIN(admin_user_ID),
     });
 
-  let foundGroupMember = foundGroup.findMemberByUser_ID(member_user_ID);
+  let foundGroupMember = foundGroup.group_members.id(member_ID);
   if (!foundGroupMember)
     return res.status(404).json({
-      error: foundGroup.ERROR_MEMBER(member_user_ID),
+      error: foundGroup.ERROR_MEMBER(member_ID),
     });
+
+  const member_user_ID = foundGroupMember._id;
 
   // Added not in front of retval because on success it returns "", on failure it returns the error
   // remove group member and check if successful
-  let removedMemberStatus = !foundGroup.removeGroupMember(member_user_ID);
+  let removedMemberStatus = !foundGroup.removeGroupMember(member_ID);
   // TODO: turn error string into dedicated error method
   if (!removedMemberStatus)
     return res.status(404).json({

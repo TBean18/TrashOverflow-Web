@@ -229,7 +229,7 @@ router.get("/verify/:token", (req, res) => {
         console.log(
           `${item.name} has verfied their Email Address (User_ID:${item._id})`
         );
-        return res.redirect("http://localhost:3000/signin");
+        return res.redirect("http://trashOverflow.tech/signin");
       });
     });
   } catch (err) {

@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
-import { useMutation, queryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useAPIErrorChecking } from "./useAPIErrorChecking";
 
 export const useChoreCreation = (group_ID) => {
   const errCheck = useAPIErrorChecking();
+  const queryClient = useQueryClient();
 
   //This function calls the add endpoint
   // Parameters:
@@ -22,7 +22,8 @@ export const useChoreCreation = (group_ID) => {
   const mutation = useMutation(postNewChore, {
     onSuccess: (newChore) => {
       queryClient.setQueryData([group_ID, "chores"], (current) => {
-        current.chores.push(newChore);
+        current.chores = newChore.chores;
+        return current;
       });
     },
   });

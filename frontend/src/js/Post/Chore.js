@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../../css/Post.css";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 // import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -10,7 +10,6 @@ import TodayOutlinedIcon from "@material-ui/icons/TodayOutlined";
 import PostOption from "./PostOption";
 // import MemberWindow from "../MemberWindow/MemberWindow";
 import MyCalendar from "../MyCalendar";
-import onClickOutside from "react-onclickoutside";
 // import SaveAltIcon from "@material-ui/icons/SaveAlt";
 import MemberWindowFunc from "../MemberWindow/MemberWindowFunc";
 import useComponentVisible from "../../hooks/useComponentVisible";
@@ -18,6 +17,8 @@ import { useChoreDeletion } from "../../hooks/useChoreDeletion";
 import { useChoreEditor } from "../../hooks/useChoreEditor";
 import { useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
+import { GlobalContext } from "../../context/GlobalState";
+import { useChoreScheduling } from "../../hooks/useChoreScheduling";
 
 function Chore(props) {
   //Prop Destructuring Definitions
@@ -28,34 +29,46 @@ function Chore(props) {
     points,
     memberPool,
     chore_ID,
+    showGroup,
+    // DO NOT REMOVE THIS UNUSED VARIABLE
+    // ONCE IMPLE,ENTED IT WILL KEEP THE USERS FROM DOING CHORE OPERATION ON THE DASHBOARD
     isGroupView,
+    chore_assigned_user_index,
+    chore_completion_status,
+    chore_schedule,
   } = props;
 
   //Get Group_ID from the URL Param
   const { group_ID } = useParams();
+  const { currentGroup } = useContext(GlobalContext);
 
   //Visibility State
   const [hidden, setHidden] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
   const [showPoints, setShowPoints] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [schedule, setSchedule] = useState(
+    chore_schedule || { recurrence: "Never" }
+  );
 
   // Custom hook used to collapse on offClick
   // useComponentVisible returns => {ref, isComponentVisible, setIsComponentVisible}
   const recurrenceDropdownVis = useComponentVisible(false);
   const memberWindowVis = useComponentVisible(false);
+  const calanderVis = useComponentVisible(false);
   const expandedVis = useComponentVisible(false);
 
-  //Input State
-
+  //Input State for Edits
   const initialValues = {
     chore_description: description,
     chore_name: chore_name,
     chore_user_pool: memberPool,
     chore_point_value: points,
+    chore_assigned_user_index,
+    chore_completion_status,
+    chore_schedule,
   };
 
   const [values, setValues, resetValues] = useForm(initialValues);
@@ -63,46 +76,49 @@ function Chore(props) {
   // For the assigned members we must start with the intial members array
   // We will handle adding and deleting from this array in the groupMember window Component
   const [assignedMembers, setAssignedMembers] = useState(memberPool);
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState(null);
 
   // Chore API Hooks
   const removeChore = useChoreDeletion();
   const editChore = useChoreEditor();
+  const scheduleChore = useChoreScheduling(group_ID);
 
-  function expand() {
-    expandedVis.setIsComponentVisible(true);
+  function hideDelete() {
     setShowDelete(false);
+    console.log("Hid Delete Button");
   }
 
-  // function collapse() {
-  //   setShowMessage(true);
-  //   setShowPoints(true);
-  //   setShowTitle(true);
-  //   recurrenceDropdownVis.setIsComponentVisible(false);
-  //   memberWindowVis.setIsComponentVisible(false);
-  // }
+  function expand() {
+    //If we are already expanded ternimnate early
+    if (expandedVis.isComponentVisible) return;
+    //else, the chore is collapsed, and we should ensure the delete confirmation prompt is hidden
+    expandedVis.setIsComponentVisible(true);
+    hideDelete();
+  }
+
   function toggleMembers() {
     memberWindowVis.setIsComponentVisible(!memberWindowVis.isComponentVisible);
   }
   function toggleCalendar() {
-    setShowCalendar(!showCalendar);
+    calanderVis.setIsComponentVisible(!calanderVis.isComponentVisible);
+    console.log("TOGGLE CAL");
   }
   function hideMessage() {
-    setShowDelete(false);
+    hideDelete();
     setShowMessage(false);
   }
   function revealMessage() {
     setShowMessage(true);
   }
   function hidePoints() {
-    setShowDelete(false);
+    hideDelete();
     setShowPoints(false);
   }
   function revealPoints() {
     setShowPoints(true);
   }
   function hideTitle() {
-    setShowDelete(false);
+    hideDelete();
     setShowTitle(false);
   }
   function revealTitle() {
@@ -116,20 +132,23 @@ function Chore(props) {
     );
   }
 
-  function toggleDelete() {
+  function toggleDelete(e) {
+    e.preventDefault();
     setShowDelete(!showDelete);
+    setNewDate(!newDate);
+    // console.log(showDelete);
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
     recurrenceDropdownVis.setIsComponentVisible(false);
   }
-  const handleClickOutside = () => {
-    memberWindowVis.setIsComponentVisible(false);
-    setShowMessage(true);
-    setShowPoints(true);
-    setShowTitle(true);
-    setShowDelete(false);
-  };
+  // const handleClickOutside = () => {
+  //   memberWindowVis.setIsComponentVisible(false);
+  //   setShowMessage(true);
+  //   setShowPoints(true);
+  //   setShowTitle(true);
+  //   setShowDelete(false);
+  // };
   const handleDone = (e) => {
     setHidden(true);
   };
@@ -165,8 +184,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDelete(false);
-
+    hideDelete();
     // the user is no longer editing
     setIsEditing(false);
   };
@@ -178,8 +196,7 @@ function Chore(props) {
     setShowMessage(true);
     setShowPoints(true);
     setShowTitle(true);
-    setShowDelete(false);
-
+    hideDelete();
     // reset back to initial values
     resetValues(initialValues);
     console.log(values);
@@ -188,6 +205,44 @@ function Chore(props) {
     setIsEditing(false);
   };
 
+  // Function called everytime a user clicks on a date on the calander component
+  const selectDate = (newDate) => {
+    //We need to send an API req to save the date server side
+    scheduleChore({
+      group_ID,
+      chore_ID,
+      schedule_due_date: newDate,
+      schedule_recurrence_type: schedule.recurrence,
+    });
+
+    console.log("CHANGE");
+    setSchedule({
+      ...schedule,
+      schedule_due_date: newDate,
+    });
+  };
+
+  // This is the function that will handle the saving of an edited chore
+  const selectRecurrance = (e) => {
+    e.preventDefault();
+    // set the reccurance to be the contents of the button that was pressed
+    // console.log(e.target.innerText);
+    scheduleChore({
+      group_ID,
+      chore_ID,
+      schedule_recurrence_type: e.target.innerText,
+    });
+
+    setSchedule({
+      ...schedule,
+      schedule_recurrence_type: e.target.innerText,
+    });
+  };
+
+  // Obejct representation of the due_date return by the database
+  const dateObj = schedule.schedule_due_date
+    ? new Date(schedule.schedule_due_date)
+    : null;
   return (
     <div
       ref={expandedVis.ref}
@@ -255,38 +310,50 @@ function Chore(props) {
             )}
           </div>
         </div>
-        <div className="post__topRight">
-          <div className="post__topRightDate">
-            <p>Due: 04/23/2021</p>
-          </div>
+        {/* -------- Group and Date/Reccurance Information  -------------*/}
 
+        <div className="post__topRight">
+          {/* Group Name. only shown on feed page */}
+          {showGroup ? <h4>{currentGroup.group_name}</h4> : null}
+
+          {/* Due Date */}
+          {schedule.schedule_due_date && (
+            <div className="post__topRightDate">
+              <p>Due: {dateObj.toDateString()}</p>
+            </div>
+          )}
+
+          {/* Reccurance */}
           {expandedVis.isComponentVisible ? (
             <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
               <p>Repeats:</p>
               <div className="post__dropdownButton" onClick={toggleDropdown}>
                 <PostOption
                   Icon={ArrowDropDownOutlinedIcon}
-                  title="Weekly"
+                  title={schedule.schedule_recurrence_type}
                   color="grey"
                 />
               </div>
+              {/* Reccurance Dropdown Menu*/}
               {recurrenceDropdownVis.isComponentVisible &&
               expandedVis.isComponentVisible ? (
                 <div className="post__dropdownMenu">
-                  <button>Daily</button>
-                  <button>Weekly</button>
-                  <button>Monthly</button>
-                  <button>Annually</button>
+                  <button onClick={selectRecurrance}>Daily</button>
+                  <button onClick={selectRecurrance}>Weekly</button>
+                  <button onClick={selectRecurrance}>Monthly</button>
+                  <button onClick={selectRecurrance}>Never</button>
                 </div>
               ) : null}
             </div>
           ) : (
+            // Collapsed View
             <div className="post__topRightPoints">
-              <p>Repeats: Weekly</p>
+              <p>Repeats: {schedule.schedule_recurrence_type}</p>
             </div>
           )}
         </div>
       </div>
+      {/*  ----- Chore Expanded Contents ----- */}
       <div
         className={`row ${
           expandedVis.isComponentVisible ? "post__body-expanded" : "post__body"
@@ -331,13 +398,20 @@ function Chore(props) {
             <MemberWindowFunc
               refForward={memberWindowVis.ref}
               memberPool={memberPool}
+              chore_ID={chore_ID}
             />
           )}
-
+          {/* Calander Component */}
           <div className="post__bodyRightDate" onClick={toggleCalendar}>
             <PostOption Icon={TodayOutlinedIcon} title="Date" color="grey" />
           </div>
-          {showCalendar && <MyCalendar />}
+          {calanderVis.isComponentVisible && (
+            <MyCalendar
+              onChange={selectDate}
+              value={dateObj}
+              refForward={calanderVis.ref}
+            />
+          )}
 
           <div className="post__bodyRightDone" onClick={handleDone}>
             <PostOption Icon={DoneAllOutlinedIcon} title="Done" color="grey" />
@@ -359,7 +433,10 @@ function Chore(props) {
                 </div>
               </div>
             ) : (
-              <div className="post__bodyRightDelete" onClick={toggleDelete}>
+              <div
+                className="post__bodyRightDelete"
+                onClick={(e) => toggleDelete(e)}
+              >
                 <PostOption
                   Icon={DeleteOutlineOutlinedIcon}
                   title="Delete"

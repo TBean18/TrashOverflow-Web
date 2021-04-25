@@ -3,8 +3,8 @@ import "../css/Main.css";
 
 import Feed from "../js/Feed";
 import Header from "../js/Header";
-import Sidebar from "../js/Sidebar/Sidebar";
-import Widgets from "../js/Widgets";
+// import Sidebar from "../js/Sidebar/Sidebar";
+// import Widgets from "../js/Widgets";
 
 import { useLoggedOutRedirect } from "../hooks/useLoggedOutRedirect";
 import { GlobalContext } from "../context/GlobalState";
@@ -18,7 +18,7 @@ function UserChoresPage() {
       <Header selection={1} />
 
       <div className="main__body">
-        <Feed />
+        <Feed showGroup={true}/>
       </div>
     </div>
   );

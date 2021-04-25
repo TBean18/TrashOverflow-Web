@@ -12,7 +12,7 @@ const ChoreSchema = new Schema({
   },
   chore_assigned_user_index: {
     type: Number,
-    default: 0,
+    default: -1,
   },
   chore_user_pool: {
     type: [Schema.Types.ObjectID],
@@ -41,7 +41,9 @@ const ChoreSchema = new Schema({
 });
 
 ChoreSchema.methods.rotateAssignedUser = function (save, cb) {
-  console.log("WARNING: chore.rotateAssignedUser use is deprecated, please use group.rotateAssignedUser instead");
+  console.log(
+    "WARNING: chore.rotateAssignedUser use is deprecated, please use group.rotateAssignedUser instead"
+  );
   //Set the assigned_user to the next user in the user_pool
   this.chore_assigned_user_index =
     (this.chore_assigned_user_index + 1) % this.chore_user_pool.length;
@@ -53,8 +55,9 @@ ChoreSchema.methods.rotateAssignedUser = function (save, cb) {
 
 //Function Used to check the completion for a given chore
 ChoreSchema.methods.checkCompletionStatus = function (cb) {
-
-  console.log("WARNING: chore.checkCompletionStatus use is deprecated, please use group.checkCompletionStatus instead");
+  console.log(
+    "WARNING: chore.checkCompletionStatus use is deprecated, please use group.checkCompletionStatus instead"
+  );
 
   const currentDate = new Date(this.chore_schedule.schedule_due_date);
   switch (this.chore_completion_status) {
@@ -116,6 +119,12 @@ ChoreSchema.methods.assignUser = function (member_ID) {
     // Group member we are adding.
     member_ID
   );
+  // Unassigned Chore Case
+  if (this.chore_assigned_user_index === -1) {
+    this.chore_assigned_user_index = 0;
+    this.chore_assigned_user = this.chore_user_pool[0];
+    return this;
+  }
 
   // Fix the assigned user back to what it was.
   this.chore_assigned_user_index =
@@ -126,8 +135,10 @@ ChoreSchema.methods.assignUser = function (member_ID) {
 };
 
 // Removes a user from a chore and returns the updated chore for saving.
+// Also, checks if the removedUser is the curretly assigned member
+// Also returns errors on the cannot find user in group members case
 ChoreSchema.methods.removeUser = function (member_ID) {
-  // Make the the user is assigned to the chore.
+  // Make sure the user is assigned to the chore.
   let personIndex = -1;
   for (let i in this.chore_user_pool) {
     if (this.chore_user_pool[i] == member_ID) {
@@ -142,9 +153,10 @@ ChoreSchema.methods.removeUser = function (member_ID) {
       error: "The User You Were Trying to Remove Is Not Assigned to This Chore",
     };
   }
+
   // If they are the person who is supposed to do the job, rotate.
   if (personIndex == this.chore_assigned_user_index) {
-    this.rotateAssignedUser(true, (err) => {
+    this.rotateAssignedUser(false, (err) => {
       return { error: err };
     });
   }
@@ -154,9 +166,10 @@ ChoreSchema.methods.removeUser = function (member_ID) {
 
   // If the person we are removing has a lower index than the person assigned,
   // it messes up the queue, so fix it.
-  if (personIndex <= this.chore_assigned_user_index)
+  if (personIndex <= this.chore_assigned_user_index) {
     this.chore_assigned_user_index -= 1;
-
+    this.chore_assigned_user = null;
+  }
   // Return the updated chore.
   return this;
 };

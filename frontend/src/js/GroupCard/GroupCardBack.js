@@ -128,8 +128,6 @@ function GroupCardBack({ curGroup, handleClick }) {
               <h4>Members</h4>
               <div className="groupCardBack__bottomMembers" onClick={handleClick}>
                 <>{displayMembers(curGroup)}</>
-                <GroupCardMember name="Jason Terry" points={31} />
-                <GroupCardMember name="Jason Terry" points={31} />
               </div>
             </div>
           )

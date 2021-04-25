@@ -4,6 +4,7 @@ import useLogout from "./useLogout";
 export const useAPIErrorChecking = () => {
   const logout = useLogout();
   return (err) => {
+    // console.log(err);
     // Nothing to see here LOL
     if (!err) return;
 

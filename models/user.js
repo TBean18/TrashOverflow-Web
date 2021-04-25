@@ -137,13 +137,16 @@ UserSchema.statics.leaveGroup = function (user_ID, group_ID) {
 // Mainly for use when we use the .populate() command
 UserSchema.methods.getGroup_IDArray = function (cb) {
   let groups = [];
-  this.groups.map((g) => {
-    g.group_ID.isAdmin = g.group_ID.verifyAdmin(this._id, (err, res) => {
-      if (err) {
-        console.log(err);
-        return false;
-      } else return true;
-    });
+  this.groups.forEach((g) => {
+    g.group_ID.isAdmin = g.group_ID.verifyAdmin(
+      this._id.toString(),
+      (err, res) => {
+        if (err) {
+          console.log(`UserSchema getGRoup_IDArray - ${err}`);
+          return false;
+        } else return true;
+      }
+    );
     groups.push(g.group_ID);
   });
   return groups;

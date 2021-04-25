@@ -16,7 +16,8 @@ export const SidebarContainer = styled.aside`
   left: 0;
   transition: 0.3s ease-in-out;
   // if it's open, we want 100% opacity
-  opacity: ${({ isOpen }) => (isOpen ? "100%" : "0")};
+  opacity: ${({ isOpen }) => (isOpen ? "90%" : "0")};
+  // backdrop-filter: ${({ isOpen }) => (isOpen ? "blur(4px)" : "blur(0)")};
   top: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
 `;
 
@@ -78,26 +79,46 @@ export const SidebarLink = styled(LinkS)`
 export const SideButtonWrap = styled.div`
   display: flex;
   justify-content: center;
+
+  .logOut {
+    border-radius: 50px;
+    // trim color
+    background: #feb054;
+    white-space: nowrap;
+    // padding is 16 pixels by 64 pixels
+    padding: 16px 64px;
+    color: #010606;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+
+    &:hover {
+      transition: all 0.2s ease-in-out;
+      background: #fff;
+      color: #010606;
+    }
+  }
 `;
 
 export const SidebarRoute = styled(LinkR)`
-  border-radius: 50px;
-  // trim color
-  background: #feb054;
-  white-space: nowrap;
-  // padding is 16 pixels by 64 pixels
-  padding: 16px 64px;
-  color: #010606;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
   text-decoration: none;
+  list-style: none;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
 
+  // hover action
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background: #fff;
-    color: #010606;
+    // trim color
+    color: #feb054;
+    transition: 0.2s ease-in-out;
   }
 `;

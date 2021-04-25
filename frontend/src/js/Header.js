@@ -28,7 +28,7 @@ function Header(props) {
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
-
+  
   const windowScreenSize = useMediaQuery("(min-width: 380px)");
 
   //Function used to leave the currently slected group

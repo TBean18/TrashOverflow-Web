@@ -69,6 +69,7 @@ router.get("/:group_ID", jwt.authenticateUser, (req, res) => {
 // Description          Adds a chore to the group.
 // Access               Public I think
 // Required Parameters
+//      user_ID                 The id of the admin trying to add the chore
 //      group_ID                The _id for the group adding the chore
 //      chore_assigned_user:    GroupMember - The _id Group member currently assigned to the chore.
 //      chore_user_pool:        [GroupMember] - Group members _ids that will rotate on this chore.
@@ -173,7 +174,7 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       // If we didn't find the chore.
       if (choreIndex === -1) {
         return res.status(404).json({
-          error: "Could Not Remove Chore",
+          error: "Could Not Find Chore",
         });
       }
 
@@ -181,12 +182,11 @@ router.post("/delete", jwt.authenticateUser, (req, res) => {
       for (let member of g.group_chores[choreIndex].chore_user_pool)
         chore.removeMemberFromChore(g.group_chores[choreIndex]._id, member._id);
 
-      const chores = await group.removeChore(
-        g._id,
-        g.group_chores[choreIndex]._id
-      );
-      res.json({
-        chores: chores,
+      g.group_chores.splice(choreIndex, 1);
+      g.save().then(() => {
+        res.json({
+          chores: g.group_chores,
+        });
       });
     })
     .catch((err) => {
@@ -385,6 +385,8 @@ router.post("/removeUser", jwt.authenticateUser, (req, res) => {
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore
 router.post("/complete", jwt.authenticateUser, (req, res) => {
+  const { group_ID, chore_ID } = req.body;
+
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -395,15 +397,24 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
           break;
         }
       }
-
+      // no chore case
       if (choreIndex === -1) {
         return res.status(404).json({
           error: "Could Not Find Chore",
         });
       }
 
-      g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      const foundChore = g.group_chores[choreIndex];
+
+      const completedUser = foundChore.chore_assigned_user;
+      const completedMember = g.group_members.id(completedUser);
+      //Update Chore Info
+      foundChore.chore_completion_status = "COMPLETED";
       g.rotateAssignedUser(choreIndex, false);
+
+      //Give the points to the assigned user
+      completedMember.point_balance += foundChore.chore_point_value;
+      //Save and res
       g.save().then(() => res.json(g.group_chores[choreIndex]));
     })
     .catch((err) => {

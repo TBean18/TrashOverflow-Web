@@ -567,7 +567,30 @@ describe("Group Related Endpoints", () => {
             // expect(res.user._id).toBe(id);
         });
 
-        it("Should Allow the User to be Promoted", async () => {
+        it("Should Not Allow a Non-Admin to Promote Themselves", async () => {
+
+            const response = await fetch(`${base_url}/groups/promote`, {
+                method: "post",
+                body: JSON.stringify({
+                    admin_user_ID: user._id,
+                    member_user_ID: user._id,
+                    group_ID: groupInfo._id,
+                    token: user.token
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(404);
+            expect(res.member).not.toBeDefined();
+            expect(res.error).not.toBeFalsy();
+        });
+
+        it("Should Allow an Admin to Promote a User", async () => {
 
             // Promoting "Forgetful User" in "My Awesome Test"'s group
             const response = await fetch(`${base_url}/groups/promote`, {
@@ -587,9 +610,11 @@ describe("Group Related Endpoints", () => {
             const status = await response.status;
 
             expect(status).toBe(200);
+            expect(res.member).toBeDefined();
+            expect(res.error).toBeFalsy();
         });
 
-        it("Should Allow the User to be Demoted", async () => {
+        it("Should Allow an Admin to Demote a User", async () => {
 
             // Demoting "Forgetful User" in "My Awesome Test"'s group
             const response = await fetch(`${base_url}/groups/demote`, {
@@ -779,12 +804,13 @@ describe("Chore Related Endpoints", () => {
             const res = await response.json();
             const status = await response.status;
 
-            chore._id = res.chores[ res.chores.length - 1 ]._id;
+            const c = res.chores[res.chores.length-1];
+            chore._id = c._id;
 
             expect(status).toBe(200);
-            expect(res.chores[ res.chores.length - 1 ].chore_name).toBe(payload.chore_name);
-            expect(res.chores[ res.chores.length - 1 ].chore_completion_status).toBe("TODO");
-            // TODO: add more expects
+            expect(c.chore_name).toBe(payload.chore_name);
+            expect(c.chore_completion_status).toBe("TODO");
+            expect(chore._id).toBeDefined();
         });
 
         it("Should Allow an Admin to Delete a Chore", async () => {
@@ -802,10 +828,12 @@ describe("Chore Related Endpoints", () => {
                 }
             });
 
-            const res = response.json();
-            const status = response.status;
+            const res = await response.json();
+            const status = await response.status;
 
             expect(status).toBe(200);
+            for (let c of res.chores)
+                expect(c._id).not.toBe(chore._id);
         });
     });
 
@@ -990,6 +1018,47 @@ describe("Chore Related Endpoints", () => {
             expect(res.error).toBe("Permission Denied");
         });
 
+        it("Should Not Have Changed the Chore After the Non-Admin User Tried to Change It", async () => {
+
+            const response = await fetch(`${base_url}/groups`, {
+                method: "post",
+                body: JSON.stringify({
+                    token: user.token,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const res = await response.json();
+            const status = await response.status;
+
+            expect(status).toBe(200);
+
+            let theGroup = null
+            for (let g of res.groups) {
+                if (g._id == group._id) {
+                    theGroup = g;
+                    break;
+                }
+            }
+
+            expect(theGroup).not.toBeNull();
+
+            let theChore = null;
+            for (let c of theGroup.group_chores) {
+                if (c._id == chore._id) {
+                    theChore = c;
+                    break;
+                }
+            }
+
+            expect(theChore).not.toBeNull();
+            expect(theChore.chore_name).not.toBe("A Fake Chore Name");
+            expect(theChore.chore_description).not.toBe("A Fake Chore Description");
+            expect(theChore.chore_point_value).not.toBe(100);
+        });
+/*
         it("Should Allow an Admin to Assign a User to a Chore", async () => {
 
             const response = await fetch(`${base_url}/chores/assignUser`, {
@@ -1038,6 +1107,7 @@ describe("Chore Related Endpoints", () => {
             expect(res.chore_user_pool).not.toContain(group.group_members[1]._id);
             expect(res.chore_assigned_user_index).toBeGreaterThan(-1);
         });
+*/
     });
 
 });

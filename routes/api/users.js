@@ -133,7 +133,7 @@ router.post("/login", (req, res) => {
       if (item == null) throw "No User Found";
 
       // Check if they have verified their email
-      if (!item.email_verified) throw `Email: ${item.email} Not Verified`;
+      if (!item.email_verified) throw `Email Not Verified`;
 
       //Compare the input password with the stored hash
       item.comparePassword(req.body.password_hash, (err, isMatch) => {
@@ -229,7 +229,7 @@ router.get("/verify/:token", (req, res) => {
         console.log(
           `${item.name} has verfied their Email Address (User_ID:${item._id})`
         );
-        return res.redirect("http://localhost:3000/signin");
+        return res.redirect("http://trashOverflow.tech/signin");
       });
     });
   } catch (err) {

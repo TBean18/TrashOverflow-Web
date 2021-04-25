@@ -2,7 +2,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { useAPIErrorChecking } from "./useAPIErrorChecking";
 
-export const useChoreDeletion = (group_ID) => {
+export const useChoreCompletion = (group_ID) => {
   const errCheck = useAPIErrorChecking();
   const queryClient = useQueryClient();
 
@@ -10,16 +10,17 @@ export const useChoreDeletion = (group_ID) => {
   // Parameters
   //      chore_ID:     String - ID of the chore to be deleted
   //      group_ID:     String - ID of the group
+  // Passesd as x-auth header ----------------------------
   //      user_ID:      String - ID of the user trying to delete the chores
   //      token:        String - Token to verify the user
-  const deleteChore = (chore) => {
+  const completeChore = (chore) => {
     return axios
-      .post("/api/chores/delete", chore)
+      .post("/api/chores/complete", chore)
       .then((res) => res.data)
       .catch((err) => errCheck(err));
   };
 
-  const mutation = useMutation(deleteChore, {
+  const mutation = useMutation(completeChore, {
     onSuccess: () => {
       queryClient.invalidateQueries([group_ID, "chores"]);
     },

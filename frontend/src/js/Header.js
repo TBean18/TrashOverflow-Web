@@ -24,6 +24,23 @@ function Header(props) {
   const leaveGroup = useGroupLeave(GlobalContext);
   
   const windowScreenSize = useMediaQuery("(min-width: 380px)");
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  function copyLink() {
+    setLinkCopied(true);
+    // let link = "http://trashoverflow.tech/join/";
+    let link = "trashOverflow.tech/join/";
+    if (currentGroup) {
+      link += currentGroup._id;
+    }
+    navigator.clipboard.writeText(link);
+    setTimeout(
+      function () {
+        setLinkCopied(false);
+      }.bind(this),
+      2000
+    );
+  }
 
   //Function used to leave the currently slected group
   function doLeaveGroup() {

@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 const GroupMember = require("./groupMember");
 
 function validateReccurenceType(t) {
-  const legalVals = new Set(["DAILY", "WEEKLY", "MONTHLY"]);
-  return legalVals.has(t.reccurence_name);
+  const legalVals = new Set(["Daily", "Weekly", "Monthly", "Never"]);
+  return legalVals.has(t);
 }
 const recurrenceValidator = [
   validateReccurenceType,
@@ -23,9 +23,9 @@ const ScheduleSchema = new Schema({
     // default: 'iterate'
   },
   schedule_recurrence_type: {
-    type: reccurenceSchema,
+    type: String,
     validator: recurrenceValidator,
-    default: null,
+    default: "Never",
   },
   date_created: {
     type: Date,

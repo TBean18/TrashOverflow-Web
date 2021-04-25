@@ -5,6 +5,7 @@
     width: 100%;
 
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 .groupChoresView__body {

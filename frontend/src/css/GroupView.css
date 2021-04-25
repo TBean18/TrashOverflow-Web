@@ -3,7 +3,9 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    overflow-y: scroll;
+    
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .groupView__body {

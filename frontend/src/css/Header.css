@@ -169,7 +169,7 @@
   background-color: #118428;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 450px) {
   .header__info > .MuiAvatar-root {
     display: none;
   }

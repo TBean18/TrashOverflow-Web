@@ -33,7 +33,7 @@ function GroupChoresView() {
     document.getElementById('background-1').style.filter = 'blur(0px)';
     document.getElementById('background-2').style.filter = 'blur(0px)';
   }
-  const windowScreenSize = useMediaQuery("(min-width: 380px)");
+  const windowScreenSize = useMediaQuery("(min-width: 450px)");
 
   function copyLink() {
     setLinkCopied(true);

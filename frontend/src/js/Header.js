@@ -29,7 +29,7 @@ function Header(props) {
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
   
-  const windowScreenSize = useMediaQuery("(min-width: 380px)");
+  const windowScreenSize = useMediaQuery("(min-width: 450px)");
 
   //Function used to leave the currently slected group
   function doLeaveGroup() {
@@ -92,7 +92,7 @@ function Header(props) {
             color="grey"
             onClick={logout}
           />
-        ) : (
+          ) : (
           <MobileIcon onClick={blurBackground}>
             <FaBars onClick={menuOnClick} />
           </MobileIcon>

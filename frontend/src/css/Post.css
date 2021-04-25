@@ -344,7 +344,7 @@
   padding: 15px;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 450px) {
   .post {
     width: 300px;
   }

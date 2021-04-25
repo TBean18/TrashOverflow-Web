@@ -17,7 +17,7 @@ import { Sidebar } from "../components/Sidebar";
 
 function Header(props) {
   //Prop destructuring defs
-  const { isGroupView, menuOnClick } = props;
+  const { isGroupView, menuOnClick, blurBackground } = props;
 
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
@@ -102,7 +102,7 @@ function Header(props) {
             onClick={logout}
           />
         ) : (
-          <MobileIcon>
+          <MobileIcon onClick={blurBackground}>
             <FaBars onClick={menuOnClick} />
           </MobileIcon>
         )}

@@ -13,7 +13,7 @@ import { GlobalContext } from "../../context/GlobalState";
 import useLogout from "../../hooks/useLogout";
 import useGroupLeave from "../../hooks/useGroupLeave";
 
-const Sidebar = ({ isOpen, toggle }) => {
+const Sidebar = ({ isOpen, toggle, removeBlur }) => {
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
   const [linkCopied, setLinkCopied] = useState(false);
@@ -42,10 +42,15 @@ const Sidebar = ({ isOpen, toggle }) => {
     leaveGroup(currentGroup._id);
   }
 
+  function handleOnClick() {
+    toggle();
+    removeBlur();
+  }
+
   return (
-    <SidebarContainer isOpen={isOpen} onClick={toggle}>
-      <Icon onClick={toggle}>
-        <CloseIcon />
+    <SidebarContainer isOpen={isOpen} onClick={handleOnClick}>
+      <Icon onClick={handleOnClick}>
+        <CloseIcon  />
       </Icon>
       <SidebarWrapper>
         <SidebarMenu>

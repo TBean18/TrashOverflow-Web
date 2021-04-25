@@ -9,7 +9,7 @@ export const SidebarContainer = styled.aside`
   z-index: 999;
   width: 100%;
   height: 100%;
-  background: black;
+  background: rgba(0,0,0,0.3)
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +17,7 @@ export const SidebarContainer = styled.aside`
   left: 0;
   transition: 0.3s ease-in-out;
   // if it's open, we want 100% opacity
-  opacity: ${({ isOpen }) => (isOpen ? "90%" : "0")};
+  
   // backdrop-filter: ${({ isOpen }) => (isOpen ? "blur(4px)" : "blur(0)")};
   top: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
 `;
@@ -43,7 +43,7 @@ export const SidebarWrapper = styled.div`
 export const SidebarMenu = styled.ul`
   box-sizing: border-box;
   margin: 0;
-  margin-top: 50px;
+  margin-top: 120px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -112,11 +112,12 @@ export const SideButtonWrap = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    font-weight: bold;
     text-decoration: none;
     list-style: none;
     transition: 0.2s ease-in-out;
     text-decoration: none;
-    color: #fff;
+    color: black;
     cursor: pointer;
 
     // hover action
@@ -138,7 +139,8 @@ export const SidebarRoute = styled(LinkR)`
   list-style: none;
   transition: 0.2s ease-in-out;
   text-decoration: none;
-  color: #fff;
+  font-weight: bold;
+  color: black;
   cursor: pointer;
 
   // hover action

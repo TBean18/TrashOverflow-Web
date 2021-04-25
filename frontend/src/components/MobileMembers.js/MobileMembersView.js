@@ -11,6 +11,18 @@ import { GlobalContext } from "../../context/GlobalState";
 import Sidebar from "../../js/Sidebar/Sidebar.js";
 import MobileSidebar from "../../js/MobileSidebar/MobileSidebar.js";
 
+const blurBackground = () => {
+
+  document.getElementById('background-1').style.filter = 'blur(7px)';
+  document.getElementById('background-2').style.filter = 'blur(7px)';
+}
+
+const removeBlur = () => {
+
+  document.getElementById('background-1').style.filter = 'blur(0px)';
+  document.getElementById('background-2').style.filter = 'blur(0px)';
+}
+
 function MobileMembers() {
   useLoggedOutRedirect(GlobalContext);
 
@@ -24,10 +36,14 @@ function MobileMembers() {
     // BEM naming convention
 
     <div className="mobileMembersView">
-      <Header selection={1} menuOnClick={setIsOpen} />
-      <MobileSidebar isOpen={isOpen} toggle={toggle} />
-      <Sidebar />
-      <div className="main__body"></div>
+      <div id="background-1">
+        <Header id="background-1" selection={1} blurBackground={blurBackground} menuOnClick={setIsOpen} />
+      </div>
+      <MobileSidebar isOpen={isOpen} toggle={toggle} removeBlur={removeBlur}/>
+      <div id="background-2">
+        <Sidebar />
+      </div>
+      
     </div>
   );
 }

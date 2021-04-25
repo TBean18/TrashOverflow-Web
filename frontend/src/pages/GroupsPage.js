@@ -11,6 +11,18 @@ function GroupsPage() {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const blurBackground = () => {
+
+      document.getElementById('background-1').style.filter = 'blur(7px)';
+      document.getElementById('background-2').style.filter = 'blur(7px)';
+  }
+
+  const removeBlur = () => {
+
+      document.getElementById('background-1').style.filter = 'blur(0px)';
+      document.getElementById('background-2').style.filter = 'blur(0px)';
+  }
+
   // toggles state from true to false, or vice versa
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -18,9 +30,12 @@ function GroupsPage() {
 
   return (
     <div className="groupView">
-      <Header selection={2} menuOnClick={setIsOpen} />
-      <MobileSidebar isOpen={isOpen} toggle={toggle} />
-      <div className="groupView__body">
+      <div id="background-1">
+        <Header id="background-1" selection={2} blurBackground={blurBackground} menuOnClick={setIsOpen} />
+      </div>
+
+      <MobileSidebar isOpen={isOpen} toggle={toggle} removeBlur={removeBlur} />
+      <div id="background-2" className="groupView__body">
         <GroupList />
       </div>
     </div>

@@ -19,14 +19,28 @@ function GroupChoresView() {
     setIsOpen(!isOpen);
   };
 
+  const blurBackground = () => {
+
+    document.getElementById('background-1').style.filter = 'blur(7px)';
+    document.getElementById('background-2').style.filter = 'blur(7px)';
+  }
+
+  const removeBlur = () => {
+
+    document.getElementById('background-1').style.filter = 'blur(0px)';
+    document.getElementById('background-2').style.filter = 'blur(0px)';
+  }
   const windowScreenSize = useMediaQuery("(min-width: 380px)");
 
   return (
     <div className="groupChoresView">
-      <Header selection={1} isGroupView={true} menuOnClick={setIsOpen} />
-      <MobileSidebar isOpen={isOpen} toggle={toggle} />
+      <div id="background-1">
+        <Header id="background-1" selection={1} blurBackground={blurBackground} menuOnClick={setIsOpen} />
+      </div>
+
+      <MobileSidebar isOpen={isOpen} toggle={toggle} removeBlur={removeBlur}/>
       {windowScreenSize ? <Sidebar /> : null}
-      <div className="groupChoresView__body">
+      <div id="background-2" className="groupChoresView__body">
         <GroupChoresList />
       </div>
       <ReactQueryDevtools />

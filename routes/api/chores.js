@@ -385,6 +385,8 @@ router.post("/removeUser", jwt.authenticateUser, (req, res) => {
 //      group_ID:     String - ID of the group
 //      chore_ID:     String - ID of the chore
 router.post("/complete", jwt.authenticateUser, (req, res) => {
+  const { group_ID, chore_ID } = req.body;
+
   group
     .findById(req.body.group_ID)
     .then((g) => {
@@ -395,15 +397,24 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
           break;
         }
       }
-
+      // no chore case
       if (choreIndex === -1) {
         return res.status(404).json({
           error: "Could Not Find Chore",
         });
       }
 
-      g.group_chores[choreIndex].chore_completion_status = "COMPLETED";
+      const foundChore = g.group_chores[choreIndex];
+
+      const completedUser = foundChore.chore_assigned_user;
+      const completedMember = g.group_members.id(completedUser);
+      //Update Chore Info
+      foundChore.chore_completion_status = "COMPLETED";
       g.rotateAssignedUser(choreIndex, false);
+
+      //Give the points to the assigned user
+      completedMember.point_balance += foundChore.chore_point_value;
+      //Save and res
       g.save().then(() => res.json(g.group_chores[choreIndex]));
     })
     .catch((err) => {

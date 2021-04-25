@@ -39,8 +39,8 @@
 - [ ] Scheduleing of Chores
   - [ ] Add / Remove User to Chores
   - [ ] Set How Often the Chore Reccurs
-    - [ ] If it even Reccurs
-    - [ ] Reccurance Should be set with a drop down menu
+    - [x] If it even Reccurs
+    - [x] Reccurance Should be set with a drop down menu
 - [ ] Member List
   - [ ] Promote
   - [ ] Kick

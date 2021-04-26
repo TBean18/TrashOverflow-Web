@@ -306,7 +306,11 @@ function Chore(props) {
             <p>Points:</p>
             {showPoints || !isAdmin  ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
-                {points === undefined ? "None" : values.chore_point_value}
+                {points === undefined
+                  ? "None"
+                  : isEditing
+                  ? values.chore_point_value
+                  : points}
               </p>
             ) : (
               <form>

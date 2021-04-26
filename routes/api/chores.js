@@ -223,6 +223,7 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
           error: "Permission Denied",
         });
 
+      // UpdatedChore is the group object
       const updatedChore = await group.editChore(
         {
           group_ID: g._id,
@@ -239,8 +240,8 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
           error: "Could Not Find Chore",
         });
       }
-
-      res.json(updatedChore);
+      // Changed it so that we only return the updated chore
+      res.json(updatedChore.group_chores.id(req.body.chore_ID));
     })
     .catch((err) => {
       console.log(err);

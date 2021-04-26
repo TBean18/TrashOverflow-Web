@@ -43,7 +43,7 @@ const InfoSection3 = ({
                 <Subtitle darkText={darkText}>{description}</Subtitle>
                 <ButtonWrap>
                   <ButtonWithRoute
-                    to="//github.com/conradsmi/TrashOverflow-Mobile"
+                    to="//github.com/TBean18/TrashOverflow-Web"
                     target="_blank"
                     smooth={true}
                     duration={500}

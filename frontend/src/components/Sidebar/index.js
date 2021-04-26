@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen, toggle }) => {
             About
           </SidebarLink>
           <SidebarLink to="discover" onClick={toggle}>
-            Our App
+            Our Repo
           </SidebarLink>
           <SidebarLink to="signup" onClick={toggle}>
             Sign Up

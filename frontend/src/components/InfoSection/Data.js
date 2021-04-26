@@ -9,7 +9,7 @@ export const homeObjOne = {
     "We've all had roommates who didn't do their fair-share. Our app rotates group members through chores so work is shared equally.",
   buttonLabel: "Get Started",
   imgStart: false,
-  img: require("../../public/images/svg-3.svg").default,
+  img: require("../../public/images/svg-2.svg").default,
   alt: "Laptop",
   dark: true,
   primary: true,
@@ -24,13 +24,13 @@ export const homeObjTwo = {
   // Controls color of headline. False is black.
   lightText: false,
   lightTextDesc: false,
-  topLine: "Chores at a Glance",
-  headline: "Check out our App",
+  topLine: "github",
+  headline: "Check Out Our Repository",
   description:
-    "View your chores on the go. Our mobile app lets you see your upcoming chores from your phone.",
+    "A lot of hard work went into making this site. Please check out our repository and see for yourself!",
   buttonLabel: "View the Repo",
   imgStart: true,
-  img: require("../../public/images/svg-2.svg").default,
+  img: require("../../public/images/svg-3.svg").default,
   alt: "Laptop",
   // Controls font color within button. False is white
   dark: false,

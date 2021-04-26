@@ -67,3 +67,9 @@
   margin-left: 10px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 450px) {
+  .messageSender {
+    width: 300px;
+  }
+}

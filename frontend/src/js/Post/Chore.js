@@ -274,7 +274,11 @@ function Chore(props) {
         <div className="post__topTitle">
           {showTitle || !isAdmin ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
-              {chore_name === undefined ? "No Title" : values.chore_name}
+              {chore_name === undefined
+                ? "No Title"
+                : isEditing
+                ? values.chore_name
+                : chore_name}
             </h3>
           ) : (
             <form>

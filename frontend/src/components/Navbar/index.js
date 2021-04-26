@@ -66,7 +66,7 @@ const Navbar = ({ toggle }) => {
                   exact="true"
                   offset={-80}
                 >
-                  Our App
+                  Our Repo
                 </NavLinks>
               </NavItem>
               <NavItem>

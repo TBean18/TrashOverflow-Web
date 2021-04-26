@@ -83,7 +83,7 @@ function Chore(props) {
 
   // Chore API Hooks
   const removeChore = useChoreDeletion();
-  const editChore = useChoreEditor();
+  const editChore = useChoreEditor(group_ID);
   const scheduleChore = useChoreScheduling(group_ID, GlobalContext);
   const completeChore = useChoreCompletion(group_ID, GlobalContext);
 

@@ -85,22 +85,19 @@ router.post("/new", jwt.authenticateUser, async (req, res) => {
 // Description  Edit a group
 // Access       Public
 // Parameters
-//      _id:                String - ID of group to be modified
+//      group_ID:                String - ID of group to be modified
 //      group_name:         String - Modified name of group
 //      group_description:  String - Modified description of group
 router.post("/editGroup", jwt.authenticateUser, (req, res) => {
+  const { group_ID, group_name, group_description } = req.body;
+
   group
-    .findByIdAndUpdate(
-      req.body._id,
-      {
-        group_name: req.body.group_name,
-        group_description: req.body.group_description,
-      },
-      {
-        new: true,
-      }
-    )
-    .then((items) => res.json(items))
+    .findById(group_ID)
+    .then((g) => {
+      g.group_name = group_name;
+      g.group_description = group_description;
+      g.save().then((g) => res.json({ g }));
+    })
     .catch((err) => {
       console.log(err);
       res.status(401).json({

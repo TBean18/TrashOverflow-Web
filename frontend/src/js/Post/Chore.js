@@ -276,7 +276,8 @@ function Chore(props) {
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
               {chore_name === undefined
                 ? "No Title"
-                : isEditing
+                : // If the user has started editing, then display the edited changes, else show the RQ props vals
+                isEditing
                 ? values.chore_name
                 : chore_name}
             </h3>
@@ -304,7 +305,7 @@ function Chore(props) {
           )}
           <div className="post__points">
             <p>Points:</p>
-            {showPoints || !isAdmin  ? (
+            {showPoints || !isAdmin ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined
                   ? "None"
@@ -338,7 +339,7 @@ function Chore(props) {
 
         <div className="post__topRight">
           {/* Group Name. only shown on feed page */}
-          {showGroup || !isAdmin  ? <h4>{currentGroup.group_name}</h4> : null}
+          {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
           {/* Due Date */}
           {schedule.schedule_due_date && (

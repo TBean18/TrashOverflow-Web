@@ -42,10 +42,10 @@ function Chore(props) {
   //Get Group_ID from the URL Param
   const { group_ID } = useParams();
   const { currentGroup } = useContext(GlobalContext);
-  
+
   // If a user isn't an admin, don't let them edit
-  const isAdmin = (currentGroup.isAdmin != 0);
-  
+  const isAdmin = currentGroup.isAdmin;
+
   //Visibility State
   const [hidden, setHidden] = useState(false);
   const [showMessage, setShowMessage] = useState(true);

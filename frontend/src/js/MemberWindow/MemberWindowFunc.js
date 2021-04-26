@@ -73,9 +73,6 @@ function MemberWindowFunc(props) {
           <h4>Members</h4>
         </div>
         <div className="memberWindow__body">
-          <div className="memberWindow__bodyInput">
-            <input placeholder="Search Members" type="text" />
-          </div>
           <div className="memberWindow__member">
             {displayAssignedMembers()}
             {displayRemainingMembers()}

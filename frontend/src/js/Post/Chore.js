@@ -272,7 +272,7 @@ function Chore(props) {
     >
       <div className="post__top" onClick={expand}>
         <div className="post__topTitle">
-          {showTitle || !isAdmin ? (
+          {showTitle || !isAdmin || !isGroupView ? (
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
               {chore_name === undefined
                 ? "No Title"
@@ -304,7 +304,7 @@ function Chore(props) {
           )}
           <div className="post__points">
             <p>Points:</p>
-            {showPoints || !isAdmin  ? (
+            {showPoints || !isAdmin || !isGroupView ? (
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined
                   ? "None"
@@ -338,7 +338,7 @@ function Chore(props) {
 
         <div className="post__topRight">
           {/* Group Name. only shown on feed page */}
-          {showGroup || !isAdmin  ? <h4>{currentGroup.group_name}</h4> : null}
+          {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
           {/* Due Date */}
           {schedule.schedule_due_date && (
@@ -387,7 +387,7 @@ function Chore(props) {
         <div className="post__bodyDescription">
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
-            {showMessage || !isAdmin  ? (
+            {showMessage || !isAdmin || !isGroupView ? (
               <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">

@@ -406,7 +406,7 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
       }
 
       const foundChore = g.group_chores[choreIndex];
-
+      let newDueDate = null;
       //Update Chore Info
       foundChore.chore_completion_status = "COMPLETED";
       const schedule = foundChore.chore_schedule;
@@ -418,7 +418,7 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
       // the chore has a schedule
       else {
         //Compute new due date
-        const newDueDate = g.getNewDueDate(foundChore);
+        newDueDate = g.getNewDueDate(foundChore);
         //store it
         if (newDueDate) {
           schedule.schedule_due_date = newDueDate;
@@ -431,9 +431,12 @@ router.post("/complete", jwt.authenticateUser, (req, res) => {
       //Give the points to the assigned user
       const completedUser = foundChore.chore_assigned_user;
       if (completedUser) {
+        // Allocate Points
         const completedMember = g.group_members.id(completedUser);
         completedMember.point_balance += foundChore.chore_point_value;
-        g.rotateAssignedUser(choreIndex, false);
+        if (newDueDate)
+          //Assign the next user
+          g.rotateAssignedUser(choreIndex, false);
       }
       //Save and res
       g.save().then(() => res.json(g.group_chores[choreIndex]));

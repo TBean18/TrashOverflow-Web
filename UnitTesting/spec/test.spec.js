@@ -124,14 +124,14 @@ describe("User API Tests", () => {
     describe("All Information Is Correct Existing User", () => {
 
         const payload = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
         }
 
-        const hashed_password = "$2b$10$9T6knQPlQ.drS5ruaV2b.e8UnPPAdMk1OjZkdKe0B2VVbYj38nila";
-        const id = "606b4f3e1d737c0953e54746";
+        const hashed_password = "$2b$10$El67.Erwj0ILbnug9FBpvOugrd5CSvD99HZhvOjWjYoiD4AxvadS6";
+        const id = "60874a70163f740cf7f6e19b";
 
         it("Should Allow The User To Login", async () => {
 
@@ -160,11 +160,11 @@ describe("User API Tests", () => {
     describe("Password Does Not Match Existing User", () => {
 
         const payload = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             // actual password is... "password"
             password_hash: "incorrect_password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
         };
 
         it ("Should Not Allow The User To Login", async () => {
@@ -191,10 +191,10 @@ describe("User API Tests", () => {
     describe("A User Editing Their Information", () => {
         // Starting and ending info.
         const payload = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
         };
 
         it(`Should Allow The User to Login, 
@@ -348,23 +348,23 @@ describe("Group Related Endpoints", () => {
 
     describe("New Group", () => {
 
-        const payload = {
+        const group = {
             group_name: "A-Team",
             group_description: "Our Awesome Group"
         };
     
-        const user = {
-            name: "My Awesome Test",
+        const admin = {
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
         }
 
         it("Should Make a User Login Before Doing Group Stuff", async () => {
 
             const response = await fetch(`${base_url}/user/login`, {
                 method: "post",
-                body: JSON.stringify(user),
+                body: JSON.stringify(admin),
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -373,12 +373,12 @@ describe("Group Related Endpoints", () => {
             const res = await response.json();
             const status = await response.status;
 
-            payload.user_ID = res.user._id;
-            payload.token = res.token;
+            admin._id = res.user._id;
+            admin.token = res.token;
 
             expect(status).toBe(200);
-            expect(payload.user_ID).toBeDefined();
-            expect(payload.token).toBeDefined();
+            expect(admin._id).toBeDefined();
+            expect(admin.token).toBeDefined();
             // expect(res.user.name).toBe(payload.name);
             // expect(res.user.phone_number).toBe(payload.phone_number);
             // expect(res.user.email).toBe(payload.email);
@@ -395,7 +395,12 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    user_ID: admin._id,
+                    group_name: group.group_name,
+                    group_description: group.group_description,
+                    token: admin.token
+                })
             });
 
             const res = await response.json();
@@ -403,12 +408,12 @@ describe("Group Related Endpoints", () => {
 
             expect(status).toBe(200);
             expect(res.group_member_count).toBe(1);
-            expect(res.group_description).toBe(payload.group_description);
+            expect(res.group_description).toBe(group.group_description);
             expect(res._id).toBeDefined();
 
-            payload._id = res._id;
+            group._id = res._id;
 
-            expect(res.group_name).toBe(payload.group_name);
+            expect(res.group_name).toBe(group.group_name);
             expect(res.group_members).toBeDefined();
             expect(res.group_members[0].admin).toBe(true);
         });
@@ -418,9 +423,9 @@ describe("Group Related Endpoints", () => {
             const differentPayload = {
                 group_name: "B-Team",
                 group_description: "Not as good as the A-team",
-                _id: payload._id,
-                token: payload.token
-            }
+                group_ID: group._id,
+                token: admin.token
+            };
             
             // Changing the information of the group
             const response = await fetch(`${base_url}/groups/editGroup`, {
@@ -435,15 +440,15 @@ describe("Group Related Endpoints", () => {
             const status = await response.status;
 
             expect(status).toBe(200);
-            expect(res.group_name).toBe(differentPayload.group_name);
-            expect(res.group_description).toBe(differentPayload.group_description);
-            expect(res.group_name).not.toBe(payload.group_name);
-            expect(res.group_description).not.toBe(payload.group_description);
+            expect(res.g.group_name).toBe(differentPayload.group_name);
+            expect(res.g.group_description).toBe(differentPayload.group_description);
+            expect(res.g.group_name).not.toBe(group.group_name);
+            expect(res.g.group_description).not.toBe(group.group_description);
 
             // Change payload info for delete testcase.
             if (status == 200) {
-                payload.group_name = differentPayload.group_name;
-                payload.group_description = differentPayload.group_description;
+                group.group_name = differentPayload.group_name;
+                group.group_description = differentPayload.group_description;
             }
         });
 
@@ -454,14 +459,18 @@ describe("Group Related Endpoints", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    _id: group._id,
+                    user_ID: admin._id,
+                    token: admin.token
+                })
             });
 
             const res = await response.json();
             const status = await response.status;
 
             expect(status).toBe(200);
-            expect(res.name).toBe(payload.group_name);
+            expect(res.name).toBe(group.group_name);
             expect(res.delete_success).toBe(true);
         });
     });
@@ -472,20 +481,21 @@ describe("Group Related Endpoints", () => {
         const groupInfo = {
             group_name: "Unit Test Group",
             group_description: "An Awesome Unit Testing Group",
-            _id: "607093ef014cd60d7380fbfe"
+            _id: "60874dfd389c090dc6e0b385"
         };
 
         const admin = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
-        };
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com",
+        }
 
         const user = {
-            name: "Forgetful User",
+            name: "Alexa Keene",
             password_hash: "password",
-            email: "short-term-memory@email.com"
+            phone_number: "4891561890",
+            email: "ierfwiykbiuxlloroh@twzhhq.online",
         };
 
         it("Should Make a User Login Before Doing Group Stuff", async () => {
@@ -539,6 +549,8 @@ describe("Group Related Endpoints", () => {
             expect(res.group[ res.group.length - 1 ].user_ID).toBe(user._id);
             expect(res.group[ res.group.length - 1 ].admin).toBe(false);
             expect(res.group[ res.group.length - 1 ].user_name).toBe(user.name);
+
+            user.member_ID = res.group[ res.group.length - 1 ]._id;
         });
 
         it("Should Make Admin Login Before Doing Group Stuff", async () => {
@@ -575,6 +587,7 @@ describe("Group Related Endpoints", () => {
                     admin_user_ID: user._id,
                     member_user_ID: user._id,
                     group_ID: groupInfo._id,
+                    member_ID: user.member_ID,
                     token: user.token
                 }),
                 headers: {
@@ -601,6 +614,7 @@ describe("Group Related Endpoints", () => {
                 body: JSON.stringify({
                     admin_user_ID: admin._id,
                     member_user_ID: user._id,
+                    member_ID: user.member_ID,
                     group_ID: groupInfo._id,
                     token: admin.token
                 })
@@ -626,6 +640,7 @@ describe("Group Related Endpoints", () => {
                     admin_user_ID: admin._id,
                     member_user_ID: user._id,
                     group_ID: groupInfo._id,
+                    member_ID: user.member_ID,
                     token: admin.token
                 })
             });
@@ -723,18 +738,18 @@ describe("Chore Related Endpoints", () => {
     describe("New Chores", () => {
 
         const group = {
-            group_name: "Group A",
-            group_description: "A",
-            _id: "60709a48e325890fdf912bfe",
+            group_name: "Group C",
+            group_description: "C",
+            _id: "60874f3f4206e40e3725d580",
             // user_name not needed for each member in these tests, but put in readability/context.
             group_members: [
                 {
-                    _id: "60709a48e325890fdf912c00",
-                    user_name: "Forgetful User"
+                    _id: "60874f3f4206e40e3725d582",
+                    user_name: "Alexa Keene"
                 },
                 {
-                    _id: "60710483dbf6e524460f1df3",
-                    user_name: "My Awesome Test"
+                    _id: "608753e20cbd910f19f43b72",
+                    user_name: "Adrian Cooper"
                 }
             ]
         };
@@ -742,20 +757,21 @@ describe("Chore Related Endpoints", () => {
         const chore = {
             chore_assigned_user: group.group_members[0]._id,
             chore_user_pool: [group.group_members[0]._id, group.group_members[1]._id],
-            chore_name: "Yard Work"
+            chore_name: "Sleep"
         }
 
         const user = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
-        };
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
+        }
 
         const admin = {
-            name: "Forgetful User",
+            name: "Alexa Keene",
             password_hash: "password",
-            email: "short-term-memory@email.com"
+            phone_number: "4891561890",
+            email: "ierfwiykbiuxlloroh@twzhhq.online"
         };
 
         it("Should Make a User Login Before Dealing With Chores", async () => {
@@ -840,49 +856,50 @@ describe("Chore Related Endpoints", () => {
     describe("Existing Chores", () => {
 
         const group = {
-            group_name: "Group C",
-            group_description: "C",
-            _id: "60709a5be325890fdf912c06",
+            group_name: "Group A",
+            group_description: "A",
+            _id: "60874f284206e40e3725d578",
             // user_name not needed for each member in these tests, but put in for readability/context.
             group_members: [
                 {
-                    _id: "60709a5be325890fdf912c08",
-                    user_ID: "606b963c02208d20de99c790",
-                    user_name: "Forgetful User"
+                    _id: "60874f294206e40e3725d57a",
+                    user_ID: "60874e6e6d07790e08e192c4",
+                    user_name: "Alexa Keene"
                 },
                 {
-                    _id: "60776c633c08599e052e4247",
-                    user_ID: "606b4f3e1d737c0953e54746",
-                    user_name: "My Awesome Test"
+                    _id: "60874ff84206e40e3725d584",
+                    user_ID: "60874a70163f740cf7f6e19b",
+                    user_name: "Adrian Cooper"
                 }
             ]
         };
 
         const chore = {
-            chore_assigned_user_index: 0,
+            chore_assigned_user_index: 1,
             chore_user_pool: [
-                "60710483dbf6e524460f1df3",
-                "60709a48e325890fdf912c00"
+                "60874f294206e40e3725d57a",
+                "60874ff84206e40e3725d584"
             ],
-            chore_description: "An Amazing Task",
+            chore_description: "Mow the Lawn",
             chore_completion_status: "TODO",
-            _id: "60776cb03c08599e052e424a",
-            chore_assigned_user: "60710483dbf6e524460f1df3",
-            chore_name: "Make Dinner",
+            _id: "608751aa4206e40e3725d587",
+            chore_assigned_user: "60874ff84206e40e3725d584",
+            chore_name: "Yard Work",
             chore_point_value: 0
         };
 
         const user = {
-            name: "My Awesome Test",
+            name: "Adrian Cooper",
             password_hash: "password",
-            phone_number: "1564654564",
-            email: "verifyagain@email.com"
-        };
+            phone_number: "5481561566",
+            email: "emrpkudoiauhkydsts@wqcefp.com"
+        }
 
         const admin = {
-            name: "Forgetful User",
+            name: "Alexa Keene",
             password_hash: "password",
-            email: "short-term-memory@email.com"
+            phone_number: "4891561890",
+            email: "ierfwiykbiuxlloroh@twzhhq.online"
         };
         
         it("Should Make an Admin Login Before Doing Chore Stuff", async () => {
@@ -934,9 +951,9 @@ describe("Chore Related Endpoints", () => {
             const status = await response.status;
 
             expect(status).toBe(200);
-            expect(res.group_chores[0].chore_name).not.toBe(chore.chore_name);
-            expect(res.group_chores[0].chore_description).not.toBe(chore.chore_description);
-            expect(res.group_chores[0].chore_point_value).not.toBe(chore.chore_point_value);
+            expect(res.chore_name).not.toBe(chore.chore_name);
+            expect(res.chore_description).not.toBe(chore.chore_description);
+            expect(res.chore_point_value).not.toBe(chore.chore_point_value);
 
         });
 
@@ -962,9 +979,9 @@ describe("Chore Related Endpoints", () => {
             const status = await response.status;
 
             expect(status).toBe(200);
-            expect(res.group_chores[0].chore_name).toBe(chore.chore_name);
-            expect(res.group_chores[0].chore_description).toBe(chore.chore_description);
-            expect(res.group_chores[0].chore_point_value).toBe(chore.chore_point_value);
+            expect(res.chore_name).toBe(chore.chore_name);
+            expect(res.chore_description).toBe(chore.chore_description);
+            expect(res.chore_point_value).toBe(chore.chore_point_value);
         });
 
         it("Should Not Allow a Non-Admin to Edit a Chore", async () => {

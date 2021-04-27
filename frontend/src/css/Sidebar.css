@@ -1,13 +1,14 @@
 .sidebar {
-    padding: 25px 0px 25px 0px;
-    width: 20%;
-    position: sticky;
-    top: 0;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 50px;
+  height: 100%;
 }
 
 @media screen and (max-width: 380px) {
-    .sidebar {
-        width: 100%;
-        position: relative;
-    }
+  .sidebar {
+    width: 100%;
+    position: relative;
+  }
 }

@@ -254,11 +254,7 @@ function Chore(props) {
       schedule_recurrence_type: e.target.innerText,
     });
   };
-
   // Obejct representation of the due_date return by the database
-  const dateObj = schedule.schedule_due_date
-    ? new Date(schedule.schedule_due_date)
-    : null;
   return (
     <div
       ref={expandedVis.ref}
@@ -342,9 +338,11 @@ function Chore(props) {
           {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
           {/* Due Date */}
-          {schedule.schedule_due_date && (
+          {chore_schedule && chore_schedule.schedule_due_date && (
             <div className="post__topRightDate">
-              <p>Due: {dateObj.toDateString()}</p>
+              <p>
+                Due: {new Date(chore_schedule.schedule_due_date).toDateString()}
+              </p>
             </div>
           )}
 
@@ -388,7 +386,7 @@ function Chore(props) {
         <div className="post__bodyDescription">
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
-            {showMessage || !isAdmin  ? (
+            {showMessage || !isAdmin ? (
               <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
@@ -433,7 +431,9 @@ function Chore(props) {
           {calanderVis.isComponentVisible && (
             <MyCalendar
               onChange={selectDate}
-              value={dateObj}
+              value={
+                chore_schedule && new Date(chore_schedule.schedule_due_date)
+              }
               refForward={calanderVis.ref}
             />
           )}

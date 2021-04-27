@@ -122,7 +122,7 @@ router.post("/edit", jwt.authenticateUser, (req, res) => {
         if (req.body.hasOwnProperty("schedule_recurrence_type"))
           foundChore.chore_schedule.schedule_recurrence_type =
             req.body.schedule_recurrence_type;
-        return g.save().then(() => res.json({ chores: g.group_chores }));
+        return g.save().then(() => res.json({ chore: foundChore }));
       }
     })
     .catch((err) => {

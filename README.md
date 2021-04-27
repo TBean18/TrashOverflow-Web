@@ -16,7 +16,7 @@
 - [x] Security
   - [x] Java Web Token
 - [x] Invitation to HouseHold System
-  - [ ] Add / Remove Admins
+  - [x] Add / Remove Admins
   - [x] Invite Link Button
   - [x] Generate a Link that will add the user to a group
   - [x] Creator is permanate Admin
@@ -36,20 +36,23 @@
 - [x] Creation of Chores
   - [x] Pool of Users
   - [x] A user responsible for the chore during the given iteration
-- [ ] Scheduleing of Chores
-  - [ ] Add / Remove User to Chores
-  - [ ] Set How Often the Chore Reccurs
-    - [x] If it even Reccurs
-    - [x] Reccurance Should be set with a drop down menu
-  - [ ] If completed a non recurrning chore, delete it
-- [ ] Member List
-  - [ ] Promote
-  - [ ] Kick
+- [x] Scheduleing of Chores
+  - [x] Add / Remove User to Chores
+- [x] Set How Often the Chore Reccurs
+  - [x] If it even Reccurs
+  - [x] Reccurance Should be set with a drop down menu
+  - [x] If completed a non recurrning chore, delete it
+- [x] Member List
+  - [x] Promote
+  - [x] Kick
   - [ ] ? Sort By Score ?
-  - [ ] Update after Chore Completion
+  - [x] Update after Chore Completion
 - [ ] What do we do with Finished chores that still have time until the due date
 - [x] Finish and Test Chores API
 - [x] Create the Unit Testing
+- [ ] Invalidate queries on chore member add / remove
+  - [ ] Better to just invalidate the chores on every chore query including scheduling too since I think it might not be returning user info
+- [ ] assigned user has a differnt icon
 
 ## API Endpoints (API Team Please Change)
 

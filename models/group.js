@@ -172,6 +172,7 @@ GroupSchema.methods.populateChoreList = function (choreList, cb) {
       chore_completion_status: choreList[i].chore_completion_status,
       _id: choreList[i]._id,
       chore_schedule: choreList[i].chore_schedule,
+      chore_assigned_user_index: choreList[i].chore_assigned_user_index,
     };
 
     ret.push(obj);

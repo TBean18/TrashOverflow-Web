@@ -1,4 +1,5 @@
 .feed {
+  position: absolute;
   top: 80px;
   flex: 1;
   padding: 30px 150px;
@@ -14,4 +15,10 @@
 .noChoresLeft > h3 {
   font-style: italic;
   color: var(--header-icon-color);
+}
+
+@media screen and (max-width: 380px) {
+  .feed {
+      right: -100px;
+  }
 }

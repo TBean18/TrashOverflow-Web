@@ -26,14 +26,16 @@ export const useChoreScheduling = (group_ID) => {
       // console.log(newSchedule);
       queryClient.setQueryData([group_ID, "chores"], (current) => {
         current.chores = current.chores.map((chore) => {
-          if (chore._id == newSchedule.chore_ID) {
-            if (!chore.schedule) {
-              chore.schedule = {};
+          if (chore._id === newSchedule.chore_ID) {
+            if (!chore.chore_schedule) {
+              chore.chore_schedule = {};
             }
 
             if (newSchedule.schedule_due_date) {
               // console.log("updated schedule");
-              chore.schedule.schedule_due_date = newSchedule.schedule_due_date;
+              chore.chore_schedule.schedule_due_date =
+                newSchedule.schedule_due_date;
+              console.log(chore.chore_schedule.schedule_due_date);
             }
           }
           return chore;
@@ -43,8 +45,15 @@ export const useChoreScheduling = (group_ID) => {
       });
     },
     onSuccess: (newChore) => {
+      console.log(newChore);
       queryClient.setQueryData([group_ID, "chores"], (current) => {
-        current.chores = newChore.chores;
+        current.chores = current.chores.map((chore) => {
+          if (chore._id === newChore.chore._id) {
+            chore.chore_schedule = newChore.chore.chore_schedule;
+          }
+          return chore;
+        });
+        // console.log(current);
         return current;
       });
     },

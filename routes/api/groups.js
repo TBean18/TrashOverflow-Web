@@ -321,7 +321,11 @@ router.post("/leave", jwt.authenticateUser, async (req, res) => {
     // ...check to see if group is left w/ 0 admins
     if (admins.length < 1) {
       //promote the next group member
-      foundGroup.promoteGroupMember(foundGroup.group_members[0]._id);
+      try {
+        foundGroup.promoteGroupMember(foundGroup.group_members[0].user_ID);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 

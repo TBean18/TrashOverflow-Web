@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../css/MemberWindowMember.css";
 import { Avatar } from "@material-ui/core";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
+import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeConsumer } from "styled-components";
 import useChoreAddMember from "../../hooks/useChoreAddMember";
@@ -25,7 +26,14 @@ const colorGenerator = (name) => {
 
 // --------------FUNCTIONAL COMPONENT----------------------------------------
 
-function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
+function MemberWindowMember({
+  src,
+  name,
+  assigned,
+  chore_ID,
+  member_ID,
+  curAssigned,
+}) {
   const [isAssigned, setIsAssigned] = useState(assigned);
   const assignMember = useChoreAddMember(GlobalContext);
   const removeMember = useChoreRemoveMember(GlobalContext);
@@ -67,7 +75,11 @@ function MemberWindowMember({ src, name, assigned, chore_ID, member_ID }) {
       <Avatar className={classes.CustomColors}>{abrev}</Avatar>
 
       <h4>{name}</h4>
-      {isAssigned && <DoneOutlinedIcon />}
+      {isAssigned && curAssigned ? (
+        <CheckCircleOutline />
+      ) : isAssigned ? (
+        <DoneOutlinedIcon />
+      ) : null}
     </div>
   );
 }

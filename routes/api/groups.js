@@ -334,6 +334,7 @@ router.post("/leave", jwt.authenticateUser, async (req, res) => {
 
   // compose response
   res.json({
+    groups: updatedUser.groups,
     error: "",
   });
   // .then(foundUser => {

@@ -50,6 +50,8 @@
 - [ ] What do we do with Finished chores that still have time until the due date
 - [x] Finish and Test Chores API
 - [x] Create the Unit Testing
+- [ ] Invalidate queries on chore member add / remove
+- [ ] assigned user has a differnt icon
 
 ## API Endpoints (API Team Please Change)
 

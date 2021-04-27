@@ -336,7 +336,7 @@ function Chore(props) {
         {chore_schedule ? (
           <div className="post__topRight">
             {/* Group Name. only shown on feed page */}
-            {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
+            {showGroup ? <h4>{showGroup}</h4> : null}
 
             {/* Due Date */}
             {chore_schedule && chore_schedule.schedule_due_date && (
@@ -377,8 +377,8 @@ function Chore(props) {
               </div>
             )}
           </div>
-        ) : showGroup || !isAdmin ? (
-          <h4>{currentGroup.group_name}</h4>
+        ) : showGroup ? (
+          <h4>{showGroup}</h4>
         ) : null}
       </div>
       {/*  ----- Chore Expanded Contents ----- */}

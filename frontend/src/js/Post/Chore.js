@@ -302,7 +302,6 @@ function Chore(props) {
           <div className="post__points">
             <p>Points:</p>
             {showPoints || !isAdmin || !isGroupView ? (
-
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined
                   ? "None"
@@ -333,7 +332,6 @@ function Chore(props) {
           </div>
         </div>
         {/* -------- Group and Date/Reccurance Information  -------------*/}
-
 
         {chore_schedule ? (
           <div className="post__topRight">
@@ -394,7 +392,6 @@ function Chore(props) {
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
             {showMessage || !isAdmin || !isGroupView ? (
-
               <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
@@ -430,6 +427,7 @@ function Chore(props) {
               refForward={memberWindowVis.ref}
               memberPool={memberPool}
               chore_ID={chore_ID}
+              chore_assigned_user_index={chore_assigned_user_index}
             />
           )}
           {/* Calander Component */}

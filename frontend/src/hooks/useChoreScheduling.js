@@ -22,6 +22,26 @@ export const useChoreScheduling = (group_ID) => {
   };
 
   const mutation = useMutation(postNewSchedule, {
+    onMutate: (newSchedule) => {
+      // console.log(newSchedule);
+      queryClient.setQueryData([group_ID, "chores"], (current) => {
+        current.chores = current.chores.map((chore) => {
+          if (chore._id == newSchedule.chore_ID) {
+            if (!chore.schedule) {
+              chore.schedule = {};
+            }
+
+            if (newSchedule.schedule_due_date) {
+              // console.log("updated schedule");
+              chore.schedule.schedule_due_date = newSchedule.schedule_due_date;
+            }
+          }
+          return chore;
+        });
+        // console.log(current);
+        return current;
+      });
+    },
     onSuccess: (newChore) => {
       queryClient.setQueryData([group_ID, "chores"], (current) => {
         current.chores = newChore.chores;

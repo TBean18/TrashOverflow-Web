@@ -83,7 +83,7 @@ function Chore(props) {
 
   // Chore API Hooks
   const removeChore = useChoreDeletion();
-  const editChore = useChoreEditor();
+  const editChore = useChoreEditor(group_ID);
   const scheduleChore = useChoreScheduling(group_ID, GlobalContext);
   const completeChore = useChoreCompletion(group_ID, GlobalContext);
 
@@ -254,11 +254,7 @@ function Chore(props) {
       schedule_recurrence_type: e.target.innerText,
     });
   };
-
   // Obejct representation of the due_date return by the database
-  const dateObj = schedule.schedule_due_date
-    ? new Date(schedule.schedule_due_date)
-    : null;
   return (
     <div
       ref={expandedVis.ref}
@@ -276,7 +272,8 @@ function Chore(props) {
             <h3 onClick={expandedVis.isComponentVisible ? hideTitle : null}>
               {chore_name === undefined
                 ? "No Title"
-                : isEditing
+                : // If the user has started editing, then display the edited changes, else show the RQ props vals
+                isEditing
                 ? values.chore_name
                 : chore_name}
             </h3>
@@ -305,6 +302,7 @@ function Chore(props) {
           <div className="post__points">
             <p>Points:</p>
             {showPoints || !isAdmin || !isGroupView ? (
+
               <p onClick={expandedVis.isComponentVisible ? hidePoints : null}>
                 {points === undefined
                   ? "None"
@@ -336,46 +334,54 @@ function Chore(props) {
         </div>
         {/* -------- Group and Date/Reccurance Information  -------------*/}
 
-        <div className="post__topRight">
-          {/* Group Name. only shown on feed page */}
-          {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
-          {/* Due Date */}
-          {schedule.schedule_due_date && (
-            <div className="post__topRightDate">
-              <p>Due: {dateObj.toDateString()}</p>
-            </div>
-          )}
+        {chore_schedule ? (
+          <div className="post__topRight">
+            {/* Group Name. only shown on feed page */}
+            {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
-          {/* Reccurance */}
-          {expandedVis.isComponentVisible ? (
-            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
-              <p>Repeats:</p>
-              <div className="post__dropdownButton" onClick={toggleDropdown}>
-                <PostOption
-                  Icon={ArrowDropDownOutlinedIcon}
-                  title={schedule.schedule_recurrence_type}
-                  color="grey"
-                />
+            {/* Due Date */}
+            {chore_schedule && chore_schedule.schedule_due_date && (
+              <div className="post__topRightDate">
+                <p>
+                  Due:{" "}
+                  {new Date(chore_schedule.schedule_due_date).toDateString()}
+                </p>
               </div>
-              {/* Reccurance Dropdown Menu*/}
-              {recurrenceDropdownVis.isComponentVisible &&
-              expandedVis.isComponentVisible ? (
-                <div className="post__dropdownMenu">
-                  <button onClick={selectRecurrance}>Daily</button>
-                  <button onClick={selectRecurrance}>Weekly</button>
-                  <button onClick={selectRecurrance}>Monthly</button>
-                  <button onClick={selectRecurrance}>Never</button>
+            )}
+
+            {/* Reccurance */}
+            {expandedVis.isComponentVisible ? (
+              <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
+                <p>Repeats:</p>
+                <div className="post__dropdownButton" onClick={toggleDropdown}>
+                  <PostOption
+                    Icon={ArrowDropDownOutlinedIcon}
+                    title={schedule.schedule_recurrence_type}
+                    color="grey"
+                  />
                 </div>
-              ) : null}
-            </div>
-          ) : (
-            // Collapsed View
-            <div className="post__topRightPoints">
-              <p>Repeats: {schedule.schedule_recurrence_type}</p>
-            </div>
-          )}
-        </div>
+                {/* Reccurance Dropdown Menu*/}
+                {recurrenceDropdownVis.isComponentVisible &&
+                expandedVis.isComponentVisible ? (
+                  <div className="post__dropdownMenu">
+                    <button onClick={selectRecurrance}>Daily</button>
+                    <button onClick={selectRecurrance}>Weekly</button>
+                    <button onClick={selectRecurrance}>Monthly</button>
+                    <button onClick={selectRecurrance}>Never</button>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              // Collapsed View
+              <div className="post__topRightPoints">
+                <p>Repeats: {schedule.schedule_recurrence_type}</p>
+              </div>
+            )}
+          </div>
+        ) : showGroup || !isAdmin ? (
+          <h4>{currentGroup.group_name}</h4>
+        ) : null}
       </div>
       {/*  ----- Chore Expanded Contents ----- */}
       <div
@@ -388,6 +394,7 @@ function Chore(props) {
           <h4>Description</h4>
           <div className="post__bodyDescriptionMessage">
             {showMessage || !isAdmin || !isGroupView ? (
+
               <p onClick={hideMessage}>{values.chore_description}</p>
             ) : (
               <div className="post__bodyDescriptionMessageInput">
@@ -432,7 +439,9 @@ function Chore(props) {
           {calanderVis.isComponentVisible && (
             <MyCalendar
               onChange={selectDate}
-              value={dateObj}
+              value={
+                chore_schedule && new Date(chore_schedule.schedule_due_date)
+              }
               refForward={calanderVis.ref}
             />
           )}

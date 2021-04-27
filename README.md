@@ -51,6 +51,7 @@
 - [x] Finish and Test Chores API
 - [x] Create the Unit Testing
 - [ ] Invalidate queries on chore member add / remove
+  - [ ] Better to just invalidate the chores on every chore query including scheduling too since I think it might not be returning user info
 - [ ] assigned user has a differnt icon
 
 ## API Endpoints (API Team Please Change)

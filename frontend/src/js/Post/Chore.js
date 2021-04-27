@@ -333,48 +333,53 @@ function Chore(props) {
         </div>
         {/* -------- Group and Date/Reccurance Information  -------------*/}
 
-        <div className="post__topRight">
-          {/* Group Name. only shown on feed page */}
-          {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
+        {chore_schedule ? (
+          <div className="post__topRight">
+            {/* Group Name. only shown on feed page */}
+            {showGroup || !isAdmin ? <h4>{currentGroup.group_name}</h4> : null}
 
-          {/* Due Date */}
-          {chore_schedule && chore_schedule.schedule_due_date && (
-            <div className="post__topRightDate">
-              <p>
-                Due: {new Date(chore_schedule.schedule_due_date).toDateString()}
-              </p>
-            </div>
-          )}
-
-          {/* Reccurance */}
-          {expandedVis.isComponentVisible ? (
-            <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
-              <p>Repeats:</p>
-              <div className="post__dropdownButton" onClick={toggleDropdown}>
-                <PostOption
-                  Icon={ArrowDropDownOutlinedIcon}
-                  title={schedule.schedule_recurrence_type}
-                  color="grey"
-                />
+            {/* Due Date */}
+            {chore_schedule && chore_schedule.schedule_due_date && (
+              <div className="post__topRightDate">
+                <p>
+                  Due:{" "}
+                  {new Date(chore_schedule.schedule_due_date).toDateString()}
+                </p>
               </div>
-              {/* Reccurance Dropdown Menu*/}
-              {recurrenceDropdownVis.isComponentVisible &&
-              expandedVis.isComponentVisible ? (
-                <div className="post__dropdownMenu">
-                  <button onClick={selectRecurrance}>Daily</button>
-                  <button onClick={selectRecurrance}>Weekly</button>
-                  <button onClick={selectRecurrance}>Monthly</button>
-                  <button onClick={selectRecurrance}>Never</button>
+            )}
+
+            {/* Reccurance */}
+            {expandedVis.isComponentVisible ? (
+              <div ref={recurrenceDropdownVis.ref} className="post__dropdown">
+                <p>Repeats:</p>
+                <div className="post__dropdownButton" onClick={toggleDropdown}>
+                  <PostOption
+                    Icon={ArrowDropDownOutlinedIcon}
+                    title={schedule.schedule_recurrence_type}
+                    color="grey"
+                  />
                 </div>
-              ) : null}
-            </div>
-          ) : (
-            // Collapsed View
-            <div className="post__topRightPoints">
-              <p>Repeats: {schedule.schedule_recurrence_type}</p>
-            </div>
-          )}
-        </div>
+                {/* Reccurance Dropdown Menu*/}
+                {recurrenceDropdownVis.isComponentVisible &&
+                expandedVis.isComponentVisible ? (
+                  <div className="post__dropdownMenu">
+                    <button onClick={selectRecurrance}>Daily</button>
+                    <button onClick={selectRecurrance}>Weekly</button>
+                    <button onClick={selectRecurrance}>Monthly</button>
+                    <button onClick={selectRecurrance}>Never</button>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              // Collapsed View
+              <div className="post__topRightPoints">
+                <p>Repeats: {schedule.schedule_recurrence_type}</p>
+              </div>
+            )}
+          </div>
+        ) : showGroup || !isAdmin ? (
+          <h4>{currentGroup.group_name}</h4>
+        ) : null}
       </div>
       {/*  ----- Chore Expanded Contents ----- */}
       <div

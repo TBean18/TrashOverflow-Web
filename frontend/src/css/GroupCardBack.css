@@ -47,6 +47,17 @@
     padding: 0 15px;
 }
 
+.groupCardBack__bodyDescription {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.groupCardBack__bodyDescription > p {
+    min-width: 80%;
+    max-width: 80%;
+}
+
 .groupCardBack__body-editing {
     height: 80%;
     width: 100%;

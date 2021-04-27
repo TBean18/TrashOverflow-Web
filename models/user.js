@@ -177,7 +177,11 @@ UserSchema.statics.getChoreList = function (user_ID, cb) {
         // console.log(group.group_chores);
         let memberChores = group.getChoresForMember(member);
         memberChores = group.populateChoreList(memberChores);
-        memberChores.forEach((chore) => ret.push(chore));
+        memberChores.forEach((chore) => {
+          const choreJSON = { ...chore, group_name: group.group_name };
+          // console.log(choreJSON);
+          ret.push(choreJSON);
+        });
       });
 
       return cb ? cb(null, ret) : ret;

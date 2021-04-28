@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import logo from "../public/images/Trash_Overflow_Icon_Test.svg";
+import logo from "../public/images/Textless_Trash_Overflow_Icon.svg";
 import "../css/Header.css";
 import { NavLink } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
@@ -28,7 +28,7 @@ function Header(props) {
   const { user, currentGroup } = useContext(GlobalContext);
   const logout = useLogout();
   const leaveGroup = useGroupLeave(GlobalContext);
-  
+
   const windowScreenSize = useMediaQuery("(min-width: 450px)");
 
   //Function used to leave the currently slected group
@@ -92,7 +92,7 @@ function Header(props) {
             color="grey"
             onClick={logout}
           />
-          ) : (
+        ) : (
           <MobileIcon onClick={blurBackground}>
             <FaBars onClick={menuOnClick} />
           </MobileIcon>

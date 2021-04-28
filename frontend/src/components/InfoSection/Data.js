@@ -9,7 +9,7 @@ export const homeObjOne = {
     "We've all had roommates who didn't do their fair-share. Our app rotates group members through chores so work is shared equally.",
   buttonLabel: "Get Started",
   imgStart: false,
-  img: require("../../public/images/svg-2.svg").default,
+  img: require("../../public/images/1_Trash_Overflow_Icon.svg").default,
   alt: "Laptop",
   dark: true,
   primary: true,

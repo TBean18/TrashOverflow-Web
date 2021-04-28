@@ -121,11 +121,11 @@ function SidebarRow({ src, name, admin, points, member_ID }) {
             <div className="sidebarRow__confirmPromote" onClick={promoteMember}>
               <p>Are You Sure?</p>
             </div>
-          ) : (
+          ) : !admin ? (
             <div className="sidebarRow__promote" onClick={confirmPromotion}>
               <p>Promote</p>
             </div>
-          )}
+          ) : null}
         </div>
       ) : null}
     </div>

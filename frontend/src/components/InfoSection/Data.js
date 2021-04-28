@@ -9,7 +9,7 @@ export const homeObjOne = {
     "We've all had roommates who didn't do their fair-share. Our app rotates group members through chores so work is shared equally.",
   buttonLabel: "Get Started",
   imgStart: false,
-  img: require("../../public/images/1_Trash_Overflow_Icon.svg").default,
+  img: require("../../public/images/Icon_Bigger.svg").default,
   alt: "Laptop",
   dark: true,
   primary: true,
@@ -30,7 +30,7 @@ export const homeObjTwo = {
     "A lot of hard work went into making this site. Please check out our repository and see for yourself!",
   buttonLabel: "View the Repo",
   imgStart: true,
-  img: require("../../public/images/svg-3.svg").default,
+  img: require("../../public/images/Bigger_Phone_Hand.svg").default,
   alt: "Laptop",
   // Controls font color within button. False is white
   dark: false,

@@ -50,7 +50,7 @@ export const homeObjThree = {
   description: "Sign up for an account and get started on your chores today.",
   buttonLabel: "Sign Up",
   imgStart: true,
-  img: require("../../public/images/svg-1.svg").default,
+  img: require("../../public/images/1_Dishes_Stack.svg").default,
   alt: "Laptop",
   dark: true,
   primary: true,
